@@ -15,3 +15,4 @@ stop editing stuff while I'm trying to edit it.
 
 
 No. I refuse.
+I agree, burn the bourgeoisie
