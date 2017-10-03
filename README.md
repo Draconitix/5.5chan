@@ -25,3 +25,8 @@ I agree, burn the bourgeoisie
 
 
 hey david
+
+
+
+
+You guys are idiots
