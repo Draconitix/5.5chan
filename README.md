@@ -32,4 +32,5 @@ hey david
 You guys are idiots
 
 ***NOTE***
-I moved the old files initially on here in the legacyFiles folder.
+
+I moved the old files initially on here in the legacyFiles folder. Also the bat file has been moved to the bin folder.
