@@ -43,7 +43,7 @@
   "devDependencies": {
     "grunt": "latest",
     "grunt-contrib-uglify": "latest",
-    "grunt-contrib-less": "latest",
+    "grunt-sass": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-watch": "latest",
     "colors": "*"
