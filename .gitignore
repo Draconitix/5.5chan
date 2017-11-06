@@ -1,2 +1,10 @@
 *.env
+*.jpg
+*.JPEG
+*.JPG
+*.jpeg
+*.png
+*.PNG
+*.gif
+*.GIF
 .node_modules
