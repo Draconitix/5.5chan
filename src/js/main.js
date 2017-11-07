@@ -1,4 +1,4 @@
-var app = angular.module('5.5Chan', ['ngResource', 'ui.router', 'ngCookies']);
+var app = angular.module('Chan', ['ngResource', 'ui.router', 'ngCookies']);
 
 app.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
@@ -9,14 +9,14 @@ app.config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 }]);
 
-app.run(function($http, userLogin, $cookies){
-    /*if($cookies.getObject('userSession') == undefined){
+/* app.run(function($http, userLogin, $cookies){
+    if($cookies.getObject('userSession') == undefined){
         userLogin.getSession();    
-    }*/
+    }
     userLogin.getSession().then(function(data){
         console.log('main' + data);
     }, function(err){
         console.log(err);
     });
     
-})
+})*/
