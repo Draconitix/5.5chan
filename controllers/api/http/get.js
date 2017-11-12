@@ -9,7 +9,7 @@ var methodPermission = function(mdlName){
         case 'user': 
             return users.httpMethods.get;
             break;
-        case 'chatrooms':
+        case 'chat':
             return chatrooms.httpMethods.get;
             break;
         case 'assets':

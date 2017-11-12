@@ -39,13 +39,14 @@ var setModel = function(mdlName){
             break;
         case 'assets':    
            currentModel = mdlAssets;
-            break;
+           break;
+        default: 
+           currentModel = false;
       }
 };
 
 exports.get = function(dataModel, query, callback){
-    setModel(dataModel);
-    
+    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
     
     if(query == null){
         client.get(dataModel + 'list', function(err, reply){
@@ -89,7 +90,7 @@ exports.get = function(dataModel, query, callback){
 };
 
 exports.getOne = function(dataModel, id, callback){
-    setModel(dataModel);
+    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
     
     
     client.get(dataModel + id, function(err, reply){
@@ -112,7 +113,7 @@ exports.getOne = function(dataModel, id, callback){
 };
 
 exports.post = function(dataModel, data, callback){
-    setModel(dataModel);
+    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
     var document = new currentModel(data);
     document.save(function(err, doc){
        if(err) { callback(err, null); } else {
@@ -124,7 +125,7 @@ exports.post = function(dataModel, data, callback){
 }; 
 
 exports.put = function(dataModel, query, data, callback){
-    setModel(dataModel);
+    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
     currentModel.update(query, {$set: data }, function(err, doc){
        if(err) { callback(err, null); } else {
             var cache = JSON.stringify(doc);
@@ -135,7 +136,7 @@ exports.put = function(dataModel, query, data, callback){
 };
 
 exports.delete = function(dataModel, query, callback){
-    setModel(dataModel);
+    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
     currentModel.remove(query, function(err, docs){
        if(err) { callback(err, null); } else {
             client.del(dataModel + query._id);

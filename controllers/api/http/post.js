@@ -9,7 +9,7 @@ var methodPermission = function(mdlName){
         case 'user': 
             return users.httpMethods.post;
             break;
-        case 'chatrooms':
+        case 'chat':
             return chatrooms.httpMethods.post;
             break;
         case 'assets':
@@ -22,9 +22,11 @@ var methodPermission = function(mdlName){
 
 exports.main = function(req, res){
     var defCall = function(err, docs){
-        if(err) { return res.end(JSON.stringify(err) )};
-        res.end(JSON.stringify(docs));
-    };
+        if(err) { return res.end(JSON.stringify(err))};
+        if(docs.length == 1){ res.end(JSON.stringify(docs[0]));} else {
+            res.end(JSON.stringify(docs))
+        }
+    }
     var query = req.body;
     var splc = req.query.q.split('_');
     var dbModel = splc[0];
