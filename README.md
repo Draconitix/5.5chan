@@ -36,5 +36,3 @@ You guys are idiots
 I moved the old files initially on here in the legacyFiles folder. Also the bat file has been moved to the bin folder.
 
 testingmlg
-
-austin is a faggot
