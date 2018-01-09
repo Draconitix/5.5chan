@@ -5,39 +5,23 @@
  */
 
 var app = require('../app');
-var socketIO = require('../config/socketIO');
-var debug = require('debug')('javascriptSite:server');
+var io = require('../config/socket_io').io;
+var debug = require('debug')('flexibleapidev:server');
 var http = require('http');
-var io = socketIO.io;
-var redis = require('socket.io-redis');
-var fs = require('fs');
-var path = require('path');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8080');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
- 
+
 var server = http.createServer(app);
 
-/**
- * Instantiate Socket.Io server.
- */
- 
- io.attach(server);
- io.adapter(redis({ host: process.env.REDIS_HOST, port: process.env.REDIS_PORT }));
- io.set('origins', 'http://*:*');
- io.of('/').adapter.on('error', function(err){
-    console.log(err);
- });
- 
- 
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -45,6 +29,8 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+io.attach(server);
+io.set('origins', 'http://*:*');
 
 /**
  * Normalize a port into a number, string, or false.

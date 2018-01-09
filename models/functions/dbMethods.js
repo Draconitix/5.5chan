@@ -1,31 +1,14 @@
 var exports = module.exports = {};
-var mongoose = require('mongoose'),
-client = require('../../config/client').client;
+var mongoose = require('mongoose');
 require('../../config/db');
 var chatroom = require('../chatrooms');
+var sfs = require('./$sfs');
 
 var mdlChat = require('../chatrooms'),
 mdlUser = require('../users'),
 mdlAssets = require('../assets');    
 
 // NOTE!!! Callback Function must have err, data, and client (in order of err, data, client) parameters that are handled. I.E set null for no error. Callback is required.
-
-// Strip data of fields with sensitive information
-
-var sfs = function(data){
-    var sfsArr = ['password', 'uploadsPath'];
-    for(var i=0; i < data.length; i++){
-        var currRep = data[i];
-        for(var x in currRep){
-            for(var y=0; y < sfsArr.length; y++){
-                if(x == sfsArr[y]){
-                    currRep[x] = undefined;
-                }
-            }
-        }   
-    }
-    return data;
-};
 
 var currentModel = null;
 
@@ -39,109 +22,73 @@ var setModel = function(mdlName){
             break;
         case 'assets':    
            currentModel = mdlAssets;
-           break;
-        default: 
-           currentModel = false;
+            break;
       }
 };
 
 exports.get = function(dataModel, query, callback){
-    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
-    
-    if(query == null){
-        client.get(dataModel + 'list', function(err, reply){
-            var cReply;
-            if(reply == null || reply == "[]"){ cReply = []; } else { cReply = reply; }
-            if(cReply.length != 0){
-               if(err) { callback(err, null); } else {
-                        callback(null, sfs(JSON.parse(cReply)));
-                }
-            } else {
-                currentModel.find({}, function(err, docs){
-                   if(err) { callback(err, null); } else {
-                        var cache = JSON.stringify(docs);
-                        client.set(dataModel + 'list', cache);
-                        callback(null, sfs(docs));
-                    }
-                });        
-            }
-        });
-   } else {
-       client.get(dataModel + 'list' + JSON.stringify(query), function(err, reply){
-           var cReply;
-           if(reply == null || reply == "[]"){ cReply = []; } else { cReply = reply; }
-           if(cReply.length != 0){
-               if(err) { callback(err, null); } else {   
-                        callback(null, sfs(JSON.parse(cReply)));
-                        console.log(reply + ' reply. ' + reply.length)
-                }
-           } else {
-            currentModel.find(query, function(err, docs){
-               if(err) { callback(err, null); } else {
-                    var cache = JSON.stringify(docs);
-                    client.set(dataModel + 'list' + JSON.stringify(query), cache);
-                    //console.log(docs)
-                    callback(null, sfs(docs));
-                }
-            });   
-           }
-       });
-   }
+    setModel(dataModel);
+            if(query == null || query == undefined || Object.keys(query).length == 0 ){
+                        currentModel.find({}, function(err, docs){
+                           if(err) { callback(400, err); } else {
+                                callback(200, docs);
+                            }
+                        });        
+           } else { 
+                    currentModel.find(query, function(err, docs){
+                       if(err) { callback(400, err); } else {
+                            callback(200, docs);
+                        }
+                    });     
+           }    
 };
 
-exports.getOne = function(dataModel, id, callback){
-    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
-    
+/* exports.getOne = function(dataModel, id, callback){
+    setModel(dataModel);
     
     client.get(dataModel + id, function(err, reply){
         var cReply;
         if(reply == null || reply == "[]"){ cReply = []; } else { cReply = reply; }
         if(cReply.length != 0){
-            if(err) { callback(err, null); } else {
-                    callback(null, sfs(JSON.parse(cReply)));   
+            if(err) { callback(400, err); } else {
+                    callback(200, sfs(JSON.parse(cReply)));   
                 }
         } else {
             currentModel.findOne({ _id: id }, function(err, doc){  
-               if(err) { callback(err, null); } else {
+               if(err) { callback(400, err); } else {
                     var cache = JSON.stringify(doc);
                     client.set(dataModel + ":" + id, cache);
-                    callback(null, sfs(docs));
+                    callback(200, sfs(docs));
                 }
             });
         }    
     });
-};
+};*/
 
 exports.post = function(dataModel, data, callback){
-    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
+    setModel(dataModel);
     var document = new currentModel(data);
     document.save(function(err, doc){
-       if(err) { callback(err, null); } else {
-            var cache = JSON.stringify(doc);
-            client.set(dataModel + doc._id, cache);
-            callback(null, sfs(doc));
+       if(err) { callback(400, err); } else {
+            callback(200, sfs(doc));
         }
     });
 }; 
 
 exports.put = function(dataModel, query, data, callback){
-    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
-    currentModel.update(query, {$set: data }, function(err, doc){
-       if(err) { callback(err, null); } else {
-            var cache = JSON.stringify(doc);
-            client.set(dataModel + doc._id, cache);
-            callback(null, sfs(docs));
-        }
-    });
+    setModel(dataModel);
+        currentModel.update(query, {$set: data }, {"multi": true}, function(err, doc){
+            if(err) { callback(400, err); } else {
+                callback(200, sfs(doc));
+            }
+        });    
 };
 
 exports.delete = function(dataModel, query, callback){
-    setModel(dataModel); if(currentModel == false){ callback('Collection does not exist.', null); }
+    setModel(dataModel);
     currentModel.remove(query, function(err, docs){
-       if(err) { callback(err, null); } else {
-            client.del(dataModel + query._id);
-            client.del(dataModel + 'list' + JSON.stringify(query));
-            callback(null, sfs(docs));
+       if(err) { callback(400, err); } else {
+            callback(200, sfs(docs));
         }
     });
 };

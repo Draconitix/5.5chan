@@ -4,7 +4,8 @@ Schema = mongo.Schema;
 var chatroomSchema = new Schema({
     name: String,
     private: Boolean,
-    users: Array
+    users: Array,
+    user: String
 });
 
 var chatroom = mongo.model('chatrooms', chatroomSchema);

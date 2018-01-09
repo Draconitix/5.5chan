@@ -4,12 +4,12 @@ Schema = mongo.Schema;
 /* Schemas *** var schemaName = new Schema({ propertyName: valueType(ie. String) }); *** */
 
 var userSchema = new Schema({
+    firstname: String,
+    lastname: String,
     username: String,
     password: String,
     email: String,
-    uploadsPath: String,
     desc: String,
-    admin: Boolean
 });
 
 /* Models *** var modelName = mongo.model('collectionName', schemaVarName); *** */ 

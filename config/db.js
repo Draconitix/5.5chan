@@ -5,9 +5,9 @@ require('dotenv').config();
     mongoose.connect(process.env.DB_URI);
     var db = mongoose.connection;
     db.on('error', function(err){
-        console.log(colors.red(err));
+        console.log(colors.red("###") + " " + err + " " + colors.red("###"));
     });
     db.once('open', function(){
-        console.log('Connected to mongodb server.'.rainbow);
+        console.log(colors.green('Connected to mongodb server ') + "@ " + colors.blue(process.env.DB_URI));
     });
 module.exports = db;

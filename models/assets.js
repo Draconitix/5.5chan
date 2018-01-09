@@ -4,11 +4,11 @@ Schema = mongo.Schema;
 /* Schemas *** var schemaName = new Schema({ propertyName: valueType(ie. String) }); *** */
 
 var assetsSchema = new Schema({
-    originalname: String,
-    dirName: String,
+    filename: String,
+    uri: String,
     user: String,
     type: String,
-    extension: String,
+    location: String,
     thumb: Boolean,
     default: Boolean,
     scaled: Boolean
