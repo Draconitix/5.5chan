@@ -8,3 +8,4 @@
 *.gif
 *.GIF
 .node_modules
+.public/uploads/**/
