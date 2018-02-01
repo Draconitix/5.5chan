@@ -1,0 +1,65 @@
+table {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-collapse: collapse;
+  font-family: "Myriad Pro";
+}
+
+td {
+  padding: 15px;
+}
+
+div {
+  display: inline-block;
+}
+
+#header {
+  height: 15%;
+  background-color: #262626;
+  font-size: 40px;
+  color: #FFFFFF;
+}
+
+#sidebar {
+  width: 15%;
+  background-color: #373636;
+  vertical-align: top;
+  font-size: 30px;
+  color: #FFFFFF;
+}
+
+#body {
+  background-color: #BCABAE;
+  font-size: 30px;
+  color: #000000;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.channel {
+  color: #38951B;
+}
+
+.user1 {
+  color: #6F43FF;
+}
+
+.user2 {
+  color: #53AD45;
+}
+
+.logout {
+  font-size: 30px;
+  text-align: right;
+}
