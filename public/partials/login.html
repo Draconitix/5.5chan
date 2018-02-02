@@ -6,6 +6,10 @@
 </head>
 
 <body bgcolor="#373636">
-
+<form ng-submit="loginMain(user)">
+<div><p>Username: </p><input type="text" name="UserName" ng-model="user.username"></div>
+<div><p>Password: </p><input type="text" name="Password" ng-model="user.password"></div>
+<div><input type="submit"></div>
+</form>
 </body>
 </html>
