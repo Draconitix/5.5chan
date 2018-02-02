@@ -14,7 +14,7 @@ module.exports = function(grunt) {
             },
             
             libs: {
-                files: { 'public/js/code.libs.min.js' : ['node_modules/angular/angular.min.js', 'node_modules/angular-resource/angular-resource.min.js', 'node_modules/angular-ui-router/release/angular-ui-router.min.js', 'node_modules/js-sha256/build/sha256.min.js', 'node_modules/angular-cookies/angular-cookies.min.js']}
+                files: { 'public/js/code.libs.min.js' : ['node_modules/angular/angular.min.js', 'node_modules/angular-resource/angular-resource.min.js', 'node_modules/angular-ui-router/release/angular-ui-router.min.js', 'node_modules/js-sha256/build/sha256.min.js', 'node_modules/angular-cookies/angular-cookies.min.js', 'node_modules/angular-jwt/dist/angular-jwt.min.js']}
             }
         },
         

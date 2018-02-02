@@ -7,5 +7,6 @@
 *.PNG
 *.gif
 *.GIF
-.node_modules
-.public/uploads/**/
+node_modules
+public/uploads/**/
+package-lock.json
