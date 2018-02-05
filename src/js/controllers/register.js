@@ -24,6 +24,7 @@ app.controller('registerState', function($scope, $state, register, formInputVali
         if(errs.num > 0){
             $scope.errors[field] = errs[field];
         }
+		$scope.$apply();
     };
     $scope.register = function(){
         var errors = formInputValidate($scope.user);
