@@ -24,6 +24,7 @@ app.controller('registerState', function($scope, $state, register, formInputVali
             $scope.errors.profile = 'Profile image must be a image file';
         }
         if(errors.num == 0){
+            formDataSetup();
             register(formData).then(function(response){
                 $state.go('profile');
             }, function(error){
