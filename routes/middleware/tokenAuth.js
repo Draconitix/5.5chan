@@ -4,7 +4,7 @@ var colors = require('colors');
 require('dotenv');
 exp.main = function(req, res, next, rFunc){
     var header = req.headers["authorization"];
-    if(rFunc == "login" || rFunc == "register"){
+    if(rFunc == "login" || rFunc == "register" || rFunc == "list"){
         if(header == undefined){
             next();
         } else {
