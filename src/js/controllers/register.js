@@ -17,6 +17,14 @@ app.controller('registerState', function($scope, $state, register, formInputVali
     $scope.changeFile(files){
         $scope.currentFile = files[0];
     }
+    $scope.validate = function(input, field){
+        var obj = {};
+        obj[field] = input;
+        var errs = formInputValidate(obj);
+        if(errs.num > 0){
+            $scope.errors[field] = errs[field];
+        }
+    };
     $scope.register = function(){
         var errors = formInputValidate($scope.user);
         if(/(\.jpg|\.JPG|\.JPEG|\.jpeg|\.png|\.PNG|\.gif|\.GIF)$/g.test($scope.currentFile.name) == false && $scope.currentFile != ""){
