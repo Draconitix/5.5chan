@@ -1,8 +1,8 @@
 app.config(function($stateProvider){
-    $stateProvider.state('test', {
-        url: '/test',
-        templateUrl: '/partials/test.html',
-        controller: 'test'
+    $stateProvider.state('login', {
+        url: '/login',
+        templateUrl: '/partials/login.html',
+        controller: 'loginState'
     }).state('register', {
 		url: '/register',
 		templateUrl: '/partials/register.html',
