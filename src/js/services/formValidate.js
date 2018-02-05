@@ -3,12 +3,12 @@ app.service('formInputValidate', function(){
     var data;
     var errorNum = 0;
     var errors = {
-       username: null,
-       password: null,
-       email: null,
-       firstname: null,
-       lastname: null,
-       desc: null
+       username: "",
+       password: "",
+       email: "",
+       firstname: "",
+       lastname: "",
+       desc: ""
     }; 
     
     var checkSwitch = function(field){
@@ -61,7 +61,7 @@ app.service('formInputValidate', function(){
         //console.log(fields)
         for(var i = 0; i < fields.length; i++){
         		//console.log(obj)
-            if(data[fields[i]].length == 0 || data[fields[i]] == null || data[fields[i]] == undefined){
+            if(data[fields[i]].length == 0 || data[fields[i]] == "" || data[fields[i]] == undefined){
                 errorNum++;
                 var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
                 errors[fields[i]] = cap + ' must not be empty.'; 
