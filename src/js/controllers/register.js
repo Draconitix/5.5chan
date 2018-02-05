@@ -9,8 +9,8 @@ app.controller('registerState', function($scope, $state, register, formInputVali
         formData.append('firstname', $scope.user.firstname)
         formData.append('lastname', $scope.user.lastname)
         formData.append('desc', $scope.user.desc)
-        formData.append('profile', $scope.currentFile)
-    }
+        if($scope.currentFile != ""){ formData.append('profile', $scope.currentFile) }
+    };
     $scope.currentFile = "";
     $scope.user = {};
     $scope.errors = {};
