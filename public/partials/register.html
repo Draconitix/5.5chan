@@ -1,8 +1,10 @@
 <form enctype="multipart/form-data">
-<div><p>Username: </p><input type="text" name="username"></div>
-<div><p>Password: </p><input type="password" name="password"></div>
+<div><input type="text" name="username" placeholder="Username" ng-model="user.username"></div>
+<div><input type="password" name="password" placeholder="Password" ng-model="user.password"></div>
+<div><input type="text" name="email" placeholder="Email" ng-model="user.email"></div>
+<div><textarea type="text" name="desc" placeholder="Description" ng-model="user.desc"></textarea></div>    
 <!-- We could overlay our own div over the input field or make the input invisible and usable to make our own design for it. -->
-<i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile }]}</p>   
+<i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>   
 <div><input type="submit"></div>
 </form>
 
