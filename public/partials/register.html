@@ -1,5 +1,8 @@
-<form>
-<div><p>Username: </p><input type="text" name="UserName"></div>
-<div><p>Password: </p><input type="password" name="Password"></div>
+<form enctype="multipart/form-data">
+<div><p>Username: </p><input type="text" name="username"></div>
+<div><p>Password: </p><input type="password" name="password"></div>
+<!-- We could overlay our own div over the input field or make the input invisible and usable to make our own design for it. -->
+<i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile }]}</p>   
 <div><input type="submit"></div>
 </form>
+
