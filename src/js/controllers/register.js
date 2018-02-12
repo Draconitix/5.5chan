@@ -1,7 +1,10 @@
 // I set this controller up because the file uploads are tricky to setup, so to save you from ripping your hair out, I made it for you.
 
 app.controller('registerState', function($scope, $state, register, formInputValidate){
-    var formData = new FormData();
+    if($cookies.get('accessToken') != undefined){
+		$state.go('interface');
+	};
+	var formData = new FormData();
     var formDataSetup = function(){
         formData.append('username', $scope.user.username)
         formData.append('password', $scope.user.password)

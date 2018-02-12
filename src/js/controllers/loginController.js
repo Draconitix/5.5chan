@@ -1,5 +1,8 @@
 // JavaScript Document
 app.controller('loginCon', function(login, $scope, $state, formInputValidate){
+if($cookies.get('accessToken') != undefined){
+		$state.go('interface');
+	};
 $scope.loginMain = function(){
 	var errors = formInputValidate($scope.user);
 	if(errors.num == 0){
