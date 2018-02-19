@@ -15,15 +15,14 @@ $scope.loginMain = function(){
             $scope.errors = errors;
 		}
 };
-	$scope.user = {};
-	$scope.errors = {};
+$scope.user = {};
+$scope.errors = {};
 $scope.validate = function(input, field){
         var obj = {};
         obj[field] = input;
         var errs = formInputValidate(obj);
         if(errs.num > 0){
             $scope.errors[field] = errs[field];
-
-}
+        }
+};
 });
-

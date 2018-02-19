@@ -11,6 +11,7 @@ app.config(function($stateProvider){
 		url: '/interface',
 		templateUrl: '/partials/interface.html',
 		controller: 'interfaceState'
+    })
 }).run(function($state){
     $state.go('test');
 });

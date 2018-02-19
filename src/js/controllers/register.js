@@ -17,7 +17,7 @@ app.controller('registerState', function($scope, $state, register, formInputVali
     $scope.currentFile = "";
     $scope.user = {};
     $scope.errors = {};
-    $scope.changeFile(files){
+    $scope.changeFile = function(files){
         $scope.currentFile = files[0];
     }
     $scope.validate = function(input, field){

@@ -18,9 +18,9 @@ module.exports = function(grunt) {
             }
         },
         
-        sass: {
+        less: {
             build: {
-                files: { 'src/css/code.css' : 'src/sass/*.scss'}
+                files: { 'src/css/code.css' : 'src/less/*.less'}
             }
         },
         
@@ -47,8 +47,8 @@ module.exports = function(grunt) {
     // Tasks
     
       grunt.loadNpmTasks('grunt-contrib-uglify');
-      grunt.loadNpmTasks('grunt-sass');
+      grunt.loadNpmTasks('grunt-contrib-less');
       grunt.loadNpmTasks('grunt-contrib-cssmin');
       grunt.loadNpmTasks('grunt-contrib-watch');
-      grunt.registerTask('default', ['sass', 'cssmin', 'uglify', 'watch']);
+      grunt.registerTask('default', ['less', 'cssmin', 'uglify', 'watch']);
 };
