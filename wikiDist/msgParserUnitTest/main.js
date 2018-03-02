@@ -46,7 +46,7 @@ var append = function(parts){
             case 'text':
                 inHTMLString += '<p>' + parts[i].text + '</p>';
                 break;
-            case 'img':
+            case 'image':
                 inHTMLString += '<img src="' + parts[i].url + '" width="200px"/>';
                 break;
             case 'video':
