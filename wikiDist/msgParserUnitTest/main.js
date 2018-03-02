@@ -52,6 +52,9 @@ var append = function(parts){
             case 'video':
                 inHTMLString += '<iframe width="560" height="315" src="' + parts[i].url + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
                 break;
+            case 'hyperlink':
+                inHTMLString += '<a target="_blank" href="' + parts[i].url + '">' + parts[i].url + '</a>';
+                break;
         }
         if(i == parts.length - 1){
             chatDiv.innerHTML += inHTMLString;
