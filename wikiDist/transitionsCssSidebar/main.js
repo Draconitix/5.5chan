@@ -1,10 +1,13 @@
 // Script
-var element = document.getElementById('sidebar');
+var sidebar = document.getElementById('sidebar');
+var chat = document.getElementById('chat');
 
 var toggle = function(){
-    if(element.getAttribute("class") == "sidebar open"){
-        element.setAttribute("class", "sidebar closed")
+    if(sidebar.getAttribute("class") == "sidebar open"){
+        sidebar.setAttribute("class", "sidebar closed")
+        chat.setAttribute("class", "chatArea full");
     } else {
-        element.setAttribute("class", "sidebar open");
+        sidebar.setAttribute("class", "sidebar open");
+        chat.setAttribute("class", "chatArea default");
     }
 };

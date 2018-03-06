@@ -11,21 +11,46 @@ height: 60px;
 background-color: gray;
 }
 
+.navWrapper {
+    height: 100%;
+    width: 90%;
+    position: relative;
+    margin: 0 auto;
+}
+
 .sidebar{
 position: absolute;
 left: 0;
 height: 100%;
 z-index: 1;
-width: 400px;
+width: 20%;
 background-color: darkgray;
 }
 
 .closed {
-margin-left: -400px;
-transition: 0.5s all;    
+margin-left: -20%;
+transition: 0.7s margin-left;    
 }
 
 .open {
 margin-left: 0px;
-transition: 0.5s all;    
+transition: 0.7s margin-left;    
+}
+
+.chatArea {
+    height: 100%;
+    z-index: 0;
+    position: absolute;
+    right: 0;
+    background-color: aliceblue;
+}
+
+.default {
+    width: 80%;
+    transition: 0.7s width;
+}
+
+.full {
+    width: 100%;
+    transition: 0.7s width;    
 }
