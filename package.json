@@ -17,6 +17,7 @@
     "angular-resource": "*",
     "angular-ui-router": "*",
     "angular-jwt": "*",
+    "angular-cookies": "*",  
     "redis": "*",
     "mongoose": "*",
     "connect-redis": "*",

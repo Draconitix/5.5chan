@@ -13,5 +13,5 @@ app.config(function($stateProvider){
 		controller: 'interfaceState'
     })
 }).run(function($state){
-    $state.go('test');
+    $state.go('login');
 });
