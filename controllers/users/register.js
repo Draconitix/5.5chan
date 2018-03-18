@@ -25,7 +25,6 @@ exp.main = function(data, httpMethod, file, cb){
         }
         var usernameTaken = function(stat, response){
             if(stat == 200){
-                //console.log(response);
                 if(response != undefined && response.length > 0){ 
                     if(data.username == response[0].username){
                         cb(400, ['Username is already taken.']);

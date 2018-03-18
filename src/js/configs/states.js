@@ -11,6 +11,10 @@ app.config(function($stateProvider){
 		url: '/interface',
 		templateUrl: '/partials/interface.html',
 		controller: 'interfaceState'
+    }).state('profile', {
+        url: '/profile',
+        templateUrl: '/partials/profile.html',
+        controller: 'profileState'
     })
 }).run(function($state){
     $state.go('login');

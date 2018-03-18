@@ -1,4 +1,4 @@
-var app = angular.module('Chan', ['ngResource', 'ui.router', 'ngCookies']);
+var app = angular.module('Chan', ['ngResource', 'ui.router', 'ngCookies', 'angular-jwt']);
 
 app.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');

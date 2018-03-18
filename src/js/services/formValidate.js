@@ -56,25 +56,38 @@ app.service('formInputValidate', function(){
     };
     
     var check = function(obj){
+        errors = {
+           username: "",
+           password: "",
+           email: "",
+           firstname: "",
+           lastname: "",
+           desc: ""
+        }; 
+        errorNum = 0;
         fields = Object.keys(obj);
         data = obj;
-        //console.log(fields)
-        for(var i = 0; i < fields.length; i++){
+        if(fields.length > 0){
+          for(var i = 0; i < fields.length; i++){
         		//console.log(obj)
             if(data[fields[i]].length == 0 || data[fields[i]] == "" || data[fields[i]] == undefined){
-                errorNum++;
-                var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
-                errors[fields[i]] = cap + ' must not be empty.'; 
-            } else if(fields[i] == 'email' || fields[i] == 'desc') {
-                checkSwitch(fields[i]);  
-            } else {
-                checkSwitch(fields[i]);
-                if(/[.!@#$%^&*()_+-=]/g.test(data[fields[i]]) == true){
                     errorNum++;
                     var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
-                    errors[fields[i]] = cap + ' must not contain any special characters.'; 
-                }  
-            }
+                    errors[fields[i]] = cap + ' must not be empty.'; 
+                } else if(fields[i] == 'email' || fields[i] == 'desc') {
+                    checkSwitch(fields[i]);  
+                } else {
+                    checkSwitch(fields[i]);
+                    if(/[.!@#$%^&*()_\+\-\=]/g.test(data[fields[i]]) == true){
+                        errorNum++;
+                        var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
+                        errors[fields[i]] = cap + ' must not contain any special characters.'; 
+                    }  
+                }
+            }   
+        } else {
+            errorNum++;
+            errors.main = "Fields must not be empty.";
         }
         errors.num = errorNum;
         return errors;
