@@ -5,7 +5,7 @@ var remove = require('./remove');
 
 exp.exec = function(method, data, httpMethod, query, files, user, cb){
             switch(method){
-                case 'list':
+                case 'lst':
                     list.main(query, httpMethod, cb);
                     break;
                 case 'create':
