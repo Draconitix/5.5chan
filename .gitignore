@@ -9,4 +9,5 @@
 *.GIF
 node_modules
 public/uploads/**/
+public/js/*.js
 package-lock.json
