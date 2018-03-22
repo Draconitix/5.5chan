@@ -4,7 +4,12 @@ app.service('assets', function($cookies, $http, $q){
     var getAsset = function(username, locat){
         var deferred = $q.defer();
         $http({ method: 'GET', url: 'chat/asset/lst', params: { user: username, location: locat }, headers: { 'Authorization': 'Bearer ' + token }}).then(function(response){
-            deferred.resolve(response.uri);
+            console.log(response)
+            if(locat == 'profile'){
+                deferred.resolve(response.data[0]);
+            } else {
+                deferred.resolve(response.data);
+            }
         }, function(err){
             deferred.reject(err);
         });
