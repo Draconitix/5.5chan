@@ -1,0 +1,7 @@
+.userProfileImage {
+  width: 120px;
+  height: 120px;
+  background-size: cover;
+  border-radius: 100%;
+  background-position: center;
+}

@@ -18,6 +18,7 @@
     "angular-ui-router": "*",
     "angular-jwt": "*",
     "angular-cookies": "*",
+    "angular-image-cropper": "*",  
     "redis": "*",
     "mongoose": "*",
     "connect-redis": "*",
