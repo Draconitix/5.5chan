@@ -10,7 +10,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     
     assets.get($scope.user.username, 'profile').then(function(response){
         if(response.thumb == true){
-            $scope.userImgUri = response.uri + 'thumb.' + response.type; 
+            $scope.userImgUri = response.uri + 'default.' + response.type; 
             console.log(response);
         } else {
             $scope.userImgUri = response.uri + 'original.' + response.type;
