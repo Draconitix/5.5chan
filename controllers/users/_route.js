@@ -11,7 +11,7 @@ exp.main = function(req, res) {
     };
     profile(req, res, function(err){
         if(err) {
-            mainCallback(400, err);
+            mainCallback(400, err.stack);
         } else {
             methods.exec(req.params.function, req.body, req.method, req.query, req.file, req.user, mainCallback);    
         }
