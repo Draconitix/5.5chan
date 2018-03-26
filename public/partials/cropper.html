@@ -1,3 +1,3 @@
-<div class="profileCropper"><ui-cropper image="cropped.source" result-image="cropped.image"></ui-cropper></div>
-<img ng-if="cropped.image" ng-src="{[{ cropped.image }]}" class="cropResult"/> 
+<div class="profileCropper"><ui-cropper image="cropped.source" result-image="cropped.image" result-image-size="400"></ui-cropper></div>
+<div style="background-image: url({[{ cropped.image }]})" class="cropperResult"/> 
 <!-- <button class="sendCrop" ng-click="upload">Upload</button> -->  

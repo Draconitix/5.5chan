@@ -230,7 +230,17 @@ background: #ccc;
 }*/
 .profileCropper {
   height: 100%;
-  width: 50%;
+  width: 45vw;
+}
+.cropperResult {
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  position: absolute;
+  background-size: auto 100%;
+  top: 0;
+  right: 0;
+  margin: 20px 35vw 0px 0px;
 }
 
 .userProfileImage {
