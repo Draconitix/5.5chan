@@ -1,2 +1,8 @@
-<div class="userProfileImage" id="img" style="background-image: url({[{ userImgUri }]})"></div>
+<div class="userProfileImage" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-click="crop()"></i>
+<br />
+<ng-croppie src="cropped.source" ng-model="cropped.image" 
+boundary="cropped.options.boundary"
+viewport="cropped.options.viewport"
+orientation="true"        
+></ng-croppie>
 {[{ user }]}

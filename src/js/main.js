@@ -1,4 +1,4 @@
-var app = angular.module('Chan', ['ngResource', 'ui.router', 'ngCookies', 'angular-jwt']);
+var app = angular.module('Chan', ['ngResource', 'ui.router', 'ngCookies', 'angular-jwt', 'ngDialog', 'uiCropper']);
 
 app.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
@@ -8,6 +8,10 @@ app.config(function($interpolateProvider) {
 app.config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 }]);
+
+app.config(function (ngDialogProvider) {
+    ngDialogProvider.setForceBodyReload(true);
+});
 
 /* app.run(function($http, userLogin, $cookies){
     if($cookies.getObject('userSession') == undefined){
