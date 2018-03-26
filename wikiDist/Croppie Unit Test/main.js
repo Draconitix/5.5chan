@@ -7,7 +7,7 @@ var resize = new Croppie(ele, {
     enforceOrientation: true
 });
 
-resize.bind({ url: 'http://localhost:3000/14fee91a451b66fe1838977392f8e8bf9f188e62453522edd737afeebf4c60f8/scaled.jpg',
+resize.bind({ url: 'http://i0.kym-cdn.com/photos/images/original/001/315/341/c80.png',
 points: [0, 0, 10, 10]
 });
 

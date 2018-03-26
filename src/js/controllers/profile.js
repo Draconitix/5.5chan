@@ -12,7 +12,14 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.imgUriFolder = '';
     $scope.imgType = '';
     
-     
+    $scope.saveCrop = function(){
+		assets.crop({
+			image:$scope.cropped.image
+		});
+		ngDialog.closeAll();
+		$scope.userImgUri = $scope.cropped.image;
+	};
+	
     
     $scope.crop = function(){
         ngDialog.open({ template: 'partials/cropper.html', 
