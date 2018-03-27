@@ -11,7 +11,8 @@ var assetsSchema = new Schema({
     location: String,
     thumb: Boolean,
     default: Boolean,
-    scaled: Boolean
+    scaled: Boolean,
+    cropped: Boolean
 });
 
 /* Models *** var modelName = mongo.model('collectionName', schemaVarName); *** */ 

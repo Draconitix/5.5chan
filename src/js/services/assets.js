@@ -15,10 +15,21 @@ app.service('assets', function($cookies, $http, $q){
         });
         return deferred.promise;
     };
+    
+    var crop = function(username, data){
+        var deferred = $q.defer();
+        $http({ method: 'POST', url: 'chat/asset/crop', data: { user: username, data: data }, headers: { 'Authorization': 'Bearer ' + token }}).then(function(response){
+            console.log(response)
+            deferred.resolve(response.data);
+        }, function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    }
               
     if(token == undefined){
         return null;    
     } else {
-        return { get: getAsset }
+        return { get: getAsset, crop: crop }
     }
 });

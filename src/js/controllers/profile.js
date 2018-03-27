@@ -13,9 +13,11 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.imgType = '';
     
     $scope.saveCrop = function(){
-		assets.crop({
-			image:$scope.cropped.image
-		});
+		assets.crop($scope.user.username ,$scope.cropped.image).then(function(response){
+            console.log(response);
+        }, function(err){
+            console.log(err);
+        });
 		ngDialog.closeAll();
 		$scope.userImgUri = $scope.cropped.image;
 	};
@@ -41,18 +43,16 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     
     assets.get($scope.user.username, 'profile').then(function(response){
         if(response.thumb == true){
-            $scope.userImgUri = response.uri + 'default.' + response.type; 
+            if(response.cropped == true){
+                $scope.userImgUri = response.uri + 'cropped.png';     
+            } else {
+                $scope.userImgUri = response.uri + 'default.' + response.type; 
+            }
+            
             $scope.imgUriFolder = response.uri;
             $scope.imgType = response.type;
             $scope.cropped = {
-                source: response.uri + 'scaled.' + response.type,
-                options: {
-                    viewport: { width: 400, height: 400 },
-                    boundary: { width: 500, height: 500 },
-                    showZoomer: true,
-                    enableResize: false,
-                    enforceOrientation: true
-                }
+                source: response.uri + 'scaled.' + response.type
             };
             console.log(response);
         } else {
