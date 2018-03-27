@@ -9,7 +9,7 @@
 *.GIF
 node_modules
 public/uploads/**/
-public/js/code.min.js
-public/js/code.libs.min.js
+public/js/code.min.js/
+public/js/code.libs.min.js/
 public/js/*.js
 package-lock.json
