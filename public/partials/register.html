@@ -1,16 +1,16 @@
 <form enctype="multipart/form-data" ng-submit="register()">
 {[{ errors.main }]}
 <br />    
-<div><input  type="text" name="username" placeholder="Username" ng-model="user.username" ng-blur="validate(user.username, 'username')"><br>{[{ errors.username }]}</div>
+<div class="inputField" id="register"><input  type="text" name="username" placeholder="Username" ng-model="user.username" ng-blur="validate(user.username, 'username')"><br>{[{ errors.username }]}</div>
 <br />    
-<div><input  type="password" name="password" placeholder="Password" ng-model="user.password" ng-blur="validate(user.password, 'password')"><br>{[{ errors.password }]}</div>
+<div class="inputField" id="register"><input  type="password" name="password" placeholder="Password" ng-model="user.password" ng-blur="validate(user.password, 'password')"><br>{[{ errors.password }]}</div>
 <br />       
-<div><input  type="text" name="email" placeholder="Email" ng-model="user.email" ng-blur="validate(user.email, 'email')"><br>{[{ errors.email }]}</div>
+<div class="inputField" id="register"><input  type="text" name="email" placeholder="Email" ng-model="user.email" ng-blur="validate(user.email, 'email')"><br>{[{ errors.email }]}</div>
 <br />       
-<div><textarea type="text" name="desc" placeholder="Description" ng-model="user.desc" ng-blur="validate(user.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
+<div class="inputField" id="register"><textarea type="text" name="desc" placeholder="Description" ng-model="user.desc" ng-blur="validate(user.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
 <br />       
 <!-- We could overlay our own div over the input field or make the input invisible and usable to make our own design for it. -->
 <i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>
 <br />       
-<div><input class="submitBox" type="submit"></div>
+<div class="inputField submitBox" id="submit"><input type="submit" value="Register"></div>
 </form>

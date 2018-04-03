@@ -1,6 +1,6 @@
-<form ng-submit="loginMain()">
-<div><input type="text" name="username" placeholder="Username" ng-model="user.username" ng-blur="validate(user.username, 'username')">{[{ errors.username }]}</div>
-<div><input type="password" name="password" placeholder="Password" ng-model="user.password" ng-blur="validate(user.password, 'password')">{[{ errors.password }]}</div>
+<form id="loginForm" ng-submit="loginMain()">
+<div class="inputField" id="login"><input type="text" name="username" placeholder="Username" ng-model="user.username" ng-blur="validate(user.username, 'username')">{[{ errors.username }]}</div>
+<div class="inputField" id="login"><input type="password" name="password" placeholder="Password" ng-model="user.password" ng-blur="validate(user.password, 'password')">{[{ errors.password }]}</div>
 <!-- We could overlay our own div over the input field or make the input invisible and usable to make our own design for it. -->
-<div><input type="submit"></div>
+<div class="inputField" id="submit"><input type="submit" value="Login"></div>
 </form>
