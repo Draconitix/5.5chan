@@ -1,17 +1,19 @@
-app.controller('profileState', function($scope, $cookies, jwtHelper, $state, assets, ngDialog){
+app.controller('profileState', function($scope, $cookies, jwtHelper, $state, assets, ngDialog, profile, formInputValidate){
+	// Check if user is logged in and redirect to login if not.
     if($cookies.get('accessToken') == undefined){
         $state.go('login');
     }
     var token = $cookies.get('accessToken');
     
-    $scope.test = 'Injected String from controller outside directive';
-    
-    $scope.user = jwtHelper.decodeToken(token);
-    
+    // Scope vars for user data and profile img.
+	$scope.user = jwtHelper.decodeToken(token);
+	$scope.eUser = angular.copy($scope.user);
     $scope.userImgUri = '';
     $scope.imgUriFolder = '';
     $scope.imgType = '';
-    
+    $scope.editing = false;
+	
+	// Cropping functions for editing profile img
     $scope.saveCrop = function(){
 		assets.crop($scope.user.username ,$scope.cropped.image).then(function(response){
             console.log(response);
@@ -22,7 +24,6 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
 		$scope.userImgUri = $scope.cropped.image;
 	};
 	
-    
     $scope.crop = function(){
         ngDialog.open({ template: 'partials/cropper.html', 
             scope: $scope, 
@@ -30,16 +31,23 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
             height: '70vh',
             showClose: false           
         });
-        /*var h = window.innerHeight - 500;
-        var w = window.innerWidth - 800;    
-        $scope.cropPopup.position.top = h/2;
-        $scope.cropPopup.position.left = w/2;
-        if($scope.cropPopup.isShow == false){
-            $scope.cropPopup.isShow = true;
-        } else {
-            $scope.cropPopup.isShow = false; 
-        }*/
     }
+	
+	// Form validate function for editing profile
+	$scope.validate = function(input, field){
+        var obj = {};
+        obj[field] = input;
+        if(input != undefined){
+            var errs = formInputValidate(obj);
+            if(errs.num > 0){
+                $scope.errors[field] = errs[field];
+                console.log(JSON.stringify(errs[field]));
+                //$scope.$apply();
+            } else {
+                $scope.errors[field] = "";
+            }    
+        }
+     };
     
     assets.get($scope.user.username, 'profile').then(function(response){
         if(response.thumb == true){

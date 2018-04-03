@@ -1,3 +1,18 @@
 <div class="userProfileImage" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-click="crop()"></i>
 <br />
-{[{ user }]}
+<ul ng-if="editing == false">
+<li>Username: {[{ user.username }]}</li>
+<li>Email: {[{ user.email }]}</li>
+<li>Description: {[{ user.desc }]}</li>
+</ul>
+<form ng-submit="editProfile()" ng-if="editing == true">
+[{ errors.main }]}
+<br />    
+<div><input  type="text" name="username" placeholder="Username" ng-model="eUser.username" ng-blur="validate(user.username, 'username')"><br>{[{ errors.username }]}</div>
+<br />       
+<div><input  type="text" name="email" placeholder="Email" ng-model="eUser.email" ng-blur="validate(user.email, 'email')"><br>{[{ errors.email }]}</div>
+<br />       
+<div><textarea type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(user.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
+<br />             
+<div><input class="submitBox" type="submit"></div>
+</form>

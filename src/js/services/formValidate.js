@@ -1,5 +1,27 @@
-app.service('formInputValidate', function(){
-    var fields;
+app.service('formInputValidate', function($http, $q, $cookies){
+    
+	// $http functions for checking if email/username exists.
+	
+	var takenPromise = function(field, value){
+		var deferred = $q.defer();
+		if(field === 'username'){
+			$http({ method: 'GET', url: 'chat/user/list',  params: { username: value } }).then(function(res){
+				deferred.resolve(res.data);
+			}, function(err){
+				deferred.reject(err);
+			});
+		} else if(field === 'email'){
+			$http({ method: 'GET', url: 'chat/user/list',  params: { email: value } }).then(function(res){
+				deferred.resolve(res.data);
+			}, function(err){
+				deferred.reject(err);
+			});
+		}
+		return deferred.promise;
+	}
+	
+	// Vars tracking data from input
+	var fields;
     var data;
     var errorNum = 0;
     var errors = {
@@ -10,7 +32,8 @@ app.service('formInputValidate', function(){
        lastname: "",
        desc: ""
     }; 
-    
+	
+    // Checks specific field for errors
     var checkSwitch = function(field){
         switch(field){
             case 'username':
@@ -55,6 +78,7 @@ app.service('formInputValidate', function(){
         }
     };
     
+	// Main function for returning any errors with forms
     var check = function(obj){
         errors = {
            username: "",
