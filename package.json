@@ -42,6 +42,7 @@
     "grunt-contrib-less": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-watch": "latest",
+    "grunt-exec": "*",
     "colors": "*"
   }
 }

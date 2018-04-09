@@ -12,6 +12,17 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.imgUriFolder = '';
     $scope.imgType = '';
     $scope.editing = false;
+    $scope.errors = {};
+    
+    // Profile editng 
+    
+    $scope.toggleEdit = function(){
+        if($scope.editing == false){
+            $scope.editing = true;
+        } else {
+            $scope.editing = false;
+        }
+    }
 	
 	// Cropping functions for editing profile img
     $scope.saveCrop = function(){

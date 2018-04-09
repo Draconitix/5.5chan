@@ -4,9 +4,11 @@
 <li>Username: {[{ user.username }]}</li>
 <li>Email: {[{ user.email }]}</li>
 <li>Description: {[{ user.desc }]}</li>
+<button ng-click="toggleEdit()">Edit Profile</button>    
 </ul>
-<form ng-submit="editProfile()" ng-if="editing == true">
-[{ errors.main }]}
+<form ng-if="editing == true">
+<button ng-click="toggleEdit()">Stop Editing</button>    
+{[{ errors.main }]}
 <br />    
 <div><input  type="text" name="username" placeholder="Username" ng-model="eUser.username" ng-blur="validate(user.username, 'username')"><br>{[{ errors.username }]}</div>
 <br />       
@@ -14,5 +16,5 @@
 <br />       
 <div><textarea type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(user.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
 <br />             
-<div><input class="submitBox" type="submit"></div>
+<button ng-click="editProfile()">Edit</button>
 </form>

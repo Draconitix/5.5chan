@@ -6,10 +6,12 @@ sfs = require('../../models/functions/$sfs'),
 validator = require('./$validator');
 require('dotenv');
 
+
+// Query is data from jsonwebtoken
 exp.main = function(data, query, httpMethod, file, cb){
     if(httpMethod == "PUT"){
         var vResult = validator(data);
-        var q = { firstname: query.firstname, lastname: query.lastname, username: query.username, password: query.password, email: query.email, desc: query.desc };
+        var q = { username: query.username, email: query.email, desc: query.desc };
         //var d = { firstname: data.firstname, lastname: data.lastname, username: data.username, email: data.email, desc: data.desc };
         var imgCall = function(stat, response){
             console.log(response)

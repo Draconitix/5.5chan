@@ -43,6 +43,15 @@ module.exports = function(grunt) {
                 files: ['src/js/main.js', 'src/js/**/*.js'],
                 tasks: ['uglify:build']
             }
+        },
+        
+        exec: {
+            database: {
+                command: 'mongod'
+            },
+            runtime: {
+                command: 'node ./bin/www'
+            }
         }
     
     });
@@ -53,5 +62,7 @@ module.exports = function(grunt) {
       grunt.loadNpmTasks('grunt-contrib-less');
       grunt.loadNpmTasks('grunt-contrib-cssmin');
       grunt.loadNpmTasks('grunt-contrib-watch');
+      grunt.loadNpmTasks('grunt-exec');
       grunt.registerTask('default', ['less', 'cssmin', 'uglify', 'watch']);
+      grunt.registerTask('chat', ['exec']);
 };
