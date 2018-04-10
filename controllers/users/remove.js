@@ -15,9 +15,11 @@ exp.main = function(user, httpMethod, cb){
                         
                         cb(200, response);
                     }
-                    rimraf('public/uploads/' + iresponse[0].uri, function(err){
-                            if(err) { console.log(err) };
-                        })    
+                    if(typeof iresponse === "array" && iresponse.length > 0){
+                        rimraf('public/uploads/' + iresponse[0].uri, function(err){
+                                if(err) { console.log(err) };
+                        })       
+                    } 
                     db.delete('assets', { location: 'profile', user: user.username }, ic);
                     
                 };
