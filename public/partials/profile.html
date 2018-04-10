@@ -16,7 +16,7 @@
 <br />       
 <div><input  type="text" name="email" placeholder="Email" ng-model="eUser.email" ng-blur="validate(eUser.email, 'email')"><br>{[{ errors.email }]}</div>
 <br />       
-<div><textarea type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(eUser.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
+<div><textarea maxlength="150"  type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(eUser.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
 <br />             
 <i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>
 <p class="inputError">{[{ errors.profile }]}</p> 

@@ -9,7 +9,7 @@
 <p class="inputError">{[{ errors.password }]}</p>
 <input type="text" name="email" placeholder="Email" ng-model="user.email" ng-blur="validate(user.email, 'email')">
 <p class="inputError">{[{ errors.email }]}</p>
-<textarea type="text" name="desc" placeholder="Description" ng-model="user.desc" ng-blur="validate(user.desc, 'desc')"></textarea>
+<textarea maxlength="150" type="text" name="desc" placeholder="Description" ng-model="user.desc" ng-blur="validate(user.desc, 'desc')"></textarea>
 <p class="inputError">{[{ errors.desc }]}</p>    
 <i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>
 <p class="inputError">{[{ errors.profile }]}</p> 

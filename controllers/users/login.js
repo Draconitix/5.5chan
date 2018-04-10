@@ -10,7 +10,8 @@ exp.main = function(data, httpMethod, cb){
         var vResult = validator(data);
         var mainCall = function(stat, response){
             if(stat == 200 && response[0] != undefined && data.password == response[0].password && vResult.flags == 0){
-                var payload = JSON.stringify(response[0]);
+                var payload = sfs(JSON.stringify(response[0]));
+				console.log(payload);
                 jwt.sign(payload, process.env.JWT_SECRET, function(err, token){
                     cb(200, { token: token });
                 });
