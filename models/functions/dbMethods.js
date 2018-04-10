@@ -26,18 +26,22 @@ var setModel = function(mdlName){
       }
 };
 
-exports.get = function(dataModel, query, callback){
+exports.get = function(dataModel, query, loginBool, callback){
     setModel(dataModel);
             if(query == null || query == undefined || Object.keys(query).length == 0 ){
                         currentModel.find({}, function(err, docs){
                            if(err) { callback(400, err); } else {
-                                callback(200, docs);
+                                callback(200, sfs(docs));
                             }
                         });        
            } else { 
                     currentModel.find(query, function(err, docs){
                        if(err) { callback(400, err); } else {
-                            callback(200, docs);
+                            if(loginBool == true){
+                                callback(200, docs);
+                            } else {
+                                callback(200, sfs(docs));
+                            }
                         }
                     });     
            }    

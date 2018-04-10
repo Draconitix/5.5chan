@@ -4,28 +4,30 @@ if($cookies.get('accessToken') != undefined){
 		$state.go('interface');
 	};
 $scope.loginMain = function(){
-	var errors = formInputValidate($scope.user);
+	var errors = formInputValidate.check($scope.user);
 	if(errors.num == 0){
             login($scope.user).then(function(response){
                 $state.go('profile');
             }, function(error){
-                console.log(error);
+                $scope.errors.main = "User not found.";
             });
         } else {
             $scope.errors = errors;
 		}
 };
-$scope.user = {};
+$scope.user = { username: "", password: "" };
 $scope.errors = {};
 $scope.validate = function(input, field){
         var obj = {};
         obj[field] = input;
         if(input != undefined){
-            var errs = formInputValidate(obj);
+            var errs = formInputValidate.check(obj);
             if(errs.num > 0){
                 $scope.errors[field] = errs[field];
                 console.log(JSON.stringify(errs[field]));
                 //$scope.$apply();
+            } else {
+                $scope.errors[field] = "";
             }    
         }
 };

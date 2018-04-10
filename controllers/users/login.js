@@ -20,7 +20,7 @@ exp.main = function(data, httpMethod, cb){
                 cb(404, 'User not found.');
             }
         }
-        db.get('user', data, mainCall);
+        db.get('user', data, true, mainCall);
     } else {
         cb(400, 'Unknown Method.')
     }

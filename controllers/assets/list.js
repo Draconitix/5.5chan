@@ -1,7 +1,7 @@
 var exp = module.exports = {};
 var db = require('../../models/functions/dbMethods');
 
-exp.main = function(data, httpMethod, cb){
+exp.main = function(data, user, httpMethod, cb){
     if(httpMethod === "GET"){
         var mainCall = function(stat, response){
             if(stat == 200){

@@ -3,10 +3,11 @@
 <img src="../images/5.5chan logo.fw.png" alt="Fuck you, Dreamweaver. Making us use alt tags and shit." class="header" />
 <br>
 <br>
+{[{ errors.main }]}
 <input type="text" name="username" placeholder="Username" ng-model="user.username" ng-blur="validate(user.username, 'username')">
-<p class="inputError"></p>
+<p class="inputError">{[{ errors.username }]}</p>
 <input type="password" name="password" placeholder="Password" ng-model="user.password" ng-blur="validate(user.password, 'password')">
-<p class="inputError"></p>
+<p class="inputError">{[{ errors.password }]}</p>
 <!-- We could overlay our own div over the input field or make the input invisible and usable to make our own design for it. -->
 <input type="submit" value="Login">
 </div>

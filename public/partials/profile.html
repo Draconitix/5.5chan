@@ -4,17 +4,21 @@
 <li>Username: {[{ user.username }]}</li>
 <li>Email: {[{ user.email }]}</li>
 <li>Description: {[{ user.desc }]}</li>
-<button ng-click="toggleEdit()">Edit Profile</button>    
+<button ng-click="toggleEdit()">Edit Profile</button>
+<button ng-click="logout()">Logout</button>       
 </ul>
-<form ng-if="editing == true">
+<form enctype="multipart/form-data" ng-submit="put()" ng-if="editing == true">
 <button ng-click="toggleEdit()">Stop Editing</button>    
 {[{ errors.main }]}
 <br />    
-<div><input  type="text" name="username" placeholder="Username" ng-model="eUser.username" ng-blur="validate(user.username, 'username')"><br>{[{ errors.username }]}</div>
+<div><input type="text" name="username" placeholder="Username" ng-model="eUser.username" ng-blur="validate(eUser.username, 'username')"><br>{[{ errors.username }]}</div>
 <br />       
-<div><input  type="text" name="email" placeholder="Email" ng-model="eUser.email" ng-blur="validate(user.email, 'email')"><br>{[{ errors.email }]}</div>
+<div><input  type="text" name="email" placeholder="Email" ng-model="eUser.email" ng-blur="validate(eUser.email, 'email')"><br>{[{ errors.email }]}</div>
 <br />       
-<div><textarea type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(user.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
+<div><textarea type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(eUser.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
 <br />             
-<button ng-click="editProfile()">Edit</button>
+<i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>
+<p class="inputError">{[{ errors.profile }]}</p> 
+<br />    
+<input type="submit" />
 </form>

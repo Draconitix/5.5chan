@@ -11,7 +11,7 @@ exp.main = function(data, httpMethod, cb){
             }
         };
         if(data.password == undefined){
-           db.get('user', data, mainCall); 
+           db.get('user', data, false, mainCall); 
         } else {
            cb(400, 'Query must not contain sensitive information.')
         }

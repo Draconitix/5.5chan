@@ -3,7 +3,7 @@ app.service('editProfile', function($http, $q, $cookies){
     
    var main = function(userData){
        var deferred = $q.defer();
-       $http({ method: 'PUT', url: "chat/user/update", headers: { 'Authorization': 'Bearer ' + token }, data: userData }).then(function(response){
+       $http({ method: 'PUT', url: "chat/user/update", transformRequest: angular.identity, headers: { 'Content-Type': undefined, 'Authorization': 'Bearer ' + token }, data: userData }).then(function(response){
            deferred.resolve(response.data);
            $cookies.put('accessToken', response.data.token);
        }, function(err){

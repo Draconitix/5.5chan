@@ -117,6 +117,6 @@ app.service('formInputValidate', function($http, $q, $cookies){
         return errors;
     };
     
-    return check;
+    return { check: check, taken: takenPromise };
 
 });
