@@ -21,7 +21,7 @@ exp.main = function(user, httpMethod, cb){
                     db.delete('assets', { location: 'profile', user: user.username }, ic);
                     
                 };
-                db.get('assets', { location: 'profile', user: user.username }, imgCall)
+                db.get('assets', { location: 'profile', user: user.username }, false, imgCall)
             } else {
                 cb(404, 'User not found.');
             }

@@ -5,7 +5,8 @@
 <li>Email: {[{ user.email }]}</li>
 <li>Description: {[{ user.desc }]}</li>
 <button ng-click="toggleEdit()">Edit Profile</button>
-<button ng-click="logout()">Logout</button>       
+<button ng-click="logout()">Logout</button>   
+<button ng-click="del()">Delete Account</button>    
 </ul>
 <form enctype="multipart/form-data" ng-submit="put()" ng-if="editing == true">
 <button ng-click="toggleEdit()">Stop Editing</button>    

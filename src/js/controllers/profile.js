@@ -1,4 +1,4 @@
-app.controller('profileState', function($scope, $cookies, jwtHelper, $state, assets, ngDialog, profile, formInputValidate, editProfile){
+app.controller('profileState', function($scope, $cookies, jwtHelper, $state, assets, ngDialog, profile, formInputValidate, profile){
 	// Check if user is logged in and redirect to login if not.
     if($cookies.get('accessToken') == undefined){
         $state.go('login');
@@ -48,7 +48,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         }
         if(errors.num == 0){
             formDataSetup();
-            editProfile(formData).then(function(response){
+            profile.edit(formData).then(function(response){
                 $state.go('profile');
                 refresh();
             }, function(error){
@@ -72,6 +72,13 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
 		ngDialog.closeAll();
 		$scope.userImgUri = $scope.cropped.image;
 	};
+    
+    $scope.del = function(){
+        profile.remove().then(function(res){
+            console.log(res);
+            $state.go('login');
+        });
+    };
 	
     $scope.crop = function(){
         ngDialog.open({ template: 'partials/cropper.html', 

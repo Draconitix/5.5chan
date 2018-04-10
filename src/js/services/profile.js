@@ -1,15 +1,27 @@
 app.service('profile', function($http, $q, $cookies){
-	var token = $cookies.get('accessToken');
-	var main = function(data){
-		var deferred = $q.defer();
-		$http({ method: 'POST', url: 'chat/user/edit', data: data, headers: { 'Authorization': 'Bearer ' + token }}).then(function(response){
-			$cookies.remove('accessToken');
-			$cookies.put('accessToken', response.data.token);
-            deferred.resolve(response);
-		}, function(err){
-			deferred.reject(err);	
-		})
-		return deferred.promise;
-	};	 
-	return main;
+   var token = $cookies.get('accessToken');
+    
+   var edit = function(userData){
+       var deferred = $q.defer();
+       $http({ method: 'PUT', url: "chat/user/update", transformRequest: angular.identity, headers: { 'Content-Type': undefined, 'Authorization': 'Bearer ' + token }, data: userData }).then(function(response){
+           deferred.resolve(response.data);
+           $cookies.put('accessToken', response.data.token);
+       }, function(err){
+           deferred.reject(err);
+       });
+       return deferred.promise;
+   };
+    
+   var remove = function(){
+       var deferred = $q.defer();
+       $http({ method: "DELETE", url: "chat/user/remove", headers: { 'Authorization': 'Bearer ' + token }}).then(function(res){
+         deferred.resolve(res.data);
+         $cookies.remove('accessToken');
+       }, function(err){
+         deferred.reject(err);  
+       })
+       return deferred.promise;
+   };
+    
+   return { edit: edit, remove: remove};    
 });
