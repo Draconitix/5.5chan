@@ -61,6 +61,9 @@ app.service('formInputValidate', function($http, $q, $cookies){
                 if(data[field].length < 4){
                     errorNum++;
                     errors[field] = 'Description must be at least 4 characters.'; 
+                } else if(data[field].length > 250){
+                    errorNum++;
+                    errors[field] = 'Description must be less than 250 characters.'
                 }
                 break;
             case 'firstname':
