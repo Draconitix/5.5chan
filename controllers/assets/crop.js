@@ -17,7 +17,7 @@ exp.main = function(data, httpMethod, cb){
         }
         var mainCall = function(stat, response){
             if(stat == 200){
-                db.get('assets', { user: data.user, location: 'profile' }, saveImg);
+                db.get('assets', { user: data.user, location: 'profile' }, false, saveImg);
                 cb(200, response);
             } else {
                 cb(stat, response);
