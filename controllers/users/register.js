@@ -41,7 +41,7 @@ exp.main = function(data, httpMethod, file, cb){
         if(vResult.flags > 0) { 
             cb(400, vResult.errors);
         } else {
-            db.get('user', { username: data.username }, usernameTaken);
+            db.get('user', { username: data.username }, false, usernameTaken);
         } 
     } else {
         cb(400, 'Unknown Method.')

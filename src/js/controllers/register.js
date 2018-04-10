@@ -8,7 +8,7 @@ app.controller('registerState', function($scope, $state, register, formInputVali
     var formData = new FormData();
     var formDataSetup = function(){
         formData.append('username', $scope.user.username)
-        formData.append('password', $scope.user.password)
+        formData.append('password', sha256($scope.user.password))
         formData.append('email', $scope.user.email)
         formData.append('desc', $scope.user.desc)
         if($scope.currentFile != ""){ formData.append('profile', $scope.currentFile) }
