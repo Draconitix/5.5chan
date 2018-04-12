@@ -149,6 +149,49 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         $state.go('login');
     };
     
+    // Add images to gallery
+    $scope.galleryToggle = false;
+    $scope.gallery = [];
+    $scope.gCurrentFiles = ""
+    $scope.gChangeFile = function(files){
+        $scope.gCurrentFiles = files;
+    }
+    $scope.addToGallery = function(){
+        var fd = new FormData();
+        fd.append('file', $scope.gCurrentFiles)
+        assets.create(fd).then(function(res){
+            if(res.isArray() == true){
+                for(var i=0; i < res.length; i++){
+                    $scope.gallery.push(res[i]);
+                }
+            } else {
+                $scope.gallery.push(res);
+            }
+        }, function(err){
+            console.log(err);
+        })
+    }
+    
+    $scope.galleryToggle = function(){
+        if($scope.galleryToggle == false){
+            $scope.galleryToggle = true;
+        } else {
+            $scope.galleryToggle = false;
+        }
+    }
+    
+    assets.get($scope.user.username, 'gallery').then(function(res){
+         if(res.isArray() == true){
+                for(var i=0; i < res.length; i++){
+                    $scope.gallery.push(res[i]);
+                }
+            } else {
+                $scope.gallery.push(res);
+            }
+    }, function(err){
+        console.log(err);
+    })
+    
     // Get new profile data
     
     var refresh = function(){
