@@ -150,44 +150,66 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     };
     
     // Add images to gallery
-    $scope.galleryToggle = false;
+    $scope.galleryT = false;
     $scope.gallery = [];
-    $scope.gCurrentFiles = ""
+    $scope.gCurrentFiles = [];
+    var gCurrentFiles = "";
     $scope.gChangeFile = function(files){
         $scope.gCurrentFiles = files;
+        gCurrentFiles = files;
+        $scope.$apply();
     }
     $scope.addToGallery = function(){
-        var fd = new FormData();
-        fd.append('file', $scope.gCurrentFiles)
-        assets.create(fd).then(function(res){
-            if(res.isArray() == true){
-                for(var i=0; i < res.length; i++){
-                    $scope.gallery.push(res[i]);
-                }
-            } else {
-                $scope.gallery.push(res);
+        var maxLimit = gCurrentFiles.length;
+        var i = 0;
+        console.log($scope.gCurrentFiles);
+        var main = function(){
+            var fd = new FormData();    
+            fd.append('file', gCurrentFiles[i]);
+            assets.create(fd).then(function(res){
+                    $scope.gallery.push(res);
+                    loop();
+                }, function(err){
+                    console.log(err);
+            })    
+            i++;
+        };
+        var loop = function(){
+            if(i <= maxLimit - 1){
+                main();
+                //loop();
             }
-        }, function(err){
-            console.log(err);
-        })
-    }
+        }
+        if($scope.gCurrentFiles.length > 0){
+            main();
+        }
+    };
     
     $scope.galleryToggle = function(){
-        if($scope.galleryToggle == false){
-            $scope.galleryToggle = true;
+        if($scope.galleryT == false){
+            $scope.galleryT = true;
         } else {
-            $scope.galleryToggle = false;
+            $scope.galleryT = false;
         }
     }
     
-    assets.get($scope.user.username, 'gallery').then(function(res){
-         if(res.isArray() == true){
+    var cb = function(res){
+           console.log(res);
+           if(Array.isArray(res)){
                 for(var i=0; i < res.length; i++){
                     $scope.gallery.push(res[i]);
+                    console.log(res[i].uri)
+                    if(i == res.length - 1){ /*console.log(JSON.stringify($scope.gallery))*/ }
                 }
             } else {
                 $scope.gallery.push(res);
+                console.log("notArray")
+                $scope.$apply();
             }
+    }
+    
+    assets.get($scope.user.username, 'gallery').then(function(res){
+        cb(res);
     }, function(err){
         console.log(err);
     })

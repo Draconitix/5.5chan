@@ -1,11 +1,11 @@
 <div class="userProfileImage" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-click="crop()"></i>
 <br />
-<ul ng-if="editing == false && galleryToggle == false">
+<ul ng-if="editing == false && galleryT == false">
 <li>Username: {[{ user.username }]}</li>
 <li>Email: {[{ user.email }]}</li>
 <li>Description: {[{ user.desc }]}</li>
 <button ng-click="toggleEdit()">Edit Profile</button>
-<button ng-click="toggleGallery()">Gallery</button>    
+<button ng-click="galleryToggle()">Gallery</button>    
 <button ng-click="logout()">Logout</button>   
 <button ng-click="del()">Delete Account</button>    
 </ul>
@@ -24,17 +24,17 @@
 <br />    
 <input type="submit" />
 </form>
-<div ng-if="galleryToggle == true">
-<button ng-click="toggleEdit()">Close Gallery</button>       
-<ul>
+<ul ng-if="galleryT == true">
+<button ng-click="galleryToggle()">Close Gallery</button>       
+<ul ng-if="gallery.length > 0">
 <li ng-repeat="img in gallery">
-    <img ng-if="img.default == true" src="{[{ img.uri }]}default.{[{ img.type }]}" />
-    <img ng-if="img.default == false" src="{[{ img.uri }]}original.{[{ img.type }]}" />
+    <img ng-if="img.thumb == true" ng-src="{[{ img.uri }]}thumb.{[{ img.type }]}" />
+    <img ng-if="img.thumb == false" src="/{[{ img.uri }]}original.{[{ img.type }]}" />
 </li>    
 </ul>
-<input name='file' type="file" onchange="angular.element(this).scope().gChangeFile(this.files)" />
+<input id="fileArr" name='file' type="file" multiple onchange="angular.element(this).scope().gChangeFile(this.files)" />
 <ul>
 <li ng-repeat="file in gCurrentFiles">{[{ file.name }]}</li>
 </ul>
-<button ng-click="addToGallery()">Add Files to Gallery</button>    
-</div>
+<button ng-if="gCurrentFiles.length != ''" ng-click="addToGallery()">Add Files to Gallery</button>    
+</ul>

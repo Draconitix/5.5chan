@@ -14,7 +14,7 @@ app.service('profile', function($http, $q, $cookies){
     
    var remove = function(){
        var deferred = $q.defer();
-       $http({ method: "DELETE", url: "chat/user/remove", headers: { 'Authorization': 'Bearer ' + token }}).then(function(res){
+       $http({ method: "DELETE", url: "chat/user/remove", transformRequest: angular.identity, headers: { 'Authorization': 'Bearer ' + token }}).then(function(res){
          deferred.resolve(res.data);
          $cookies.remove('accessToken');
        }, function(err){
