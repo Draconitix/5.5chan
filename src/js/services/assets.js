@@ -50,6 +50,6 @@ app.service('assets', function($cookies, $http, $q){
     if(token == undefined){
         return null;    
     } else {
-        return { get: getAsset, crop: crop, create: create }
+        return { get: getAsset, crop: crop, create: create, remove: remove }
     }
 });

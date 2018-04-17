@@ -151,6 +151,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     
     // Add images to gallery
     $scope.galleryT = false;
+    $scope.galleryD = false;
     $scope.gallery = [];
     $scope.gCurrentFiles = [];
     var gCurrentFiles = "";
@@ -213,6 +214,30 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     }, function(err){
         console.log(err);
     })
+    
+    $scope.galleryDelToggle = function(){
+        if($scope.galleryD == false){
+            $scope.galleryD = true;
+        } else {
+            $scope.galleryD = false;
+        }
+    }
+    
+    $scope.galleryDel = function(){
+        var delArray = [];
+        //var iArray = [];
+        for(var i = $scope.gallery.length; i > 0; i--){
+            if($scope.gallery[i].delete == true){
+                delArray.push({ uri: $scope.gallery[i].uri });
+                $scope.gallery.splice(i, 1);
+            }
+        }
+        assets.remove(delArray).then(function(res){
+            console.log(res);
+        }, function(err){
+            console.log(err);
+        })
+    };
     
     // Get new profile data
     

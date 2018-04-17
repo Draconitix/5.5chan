@@ -26,15 +26,18 @@
 </form>
 <ul ng-if="galleryT == true">
 <button ng-click="galleryToggle()">Close Gallery</button>       
+<button ng-click="galleryDelToggle()">Remove Images from Gallery</button>    
 <ul ng-if="gallery.length > 0">
 <li ng-repeat="img in gallery">
     <img ng-if="img.thumb == true" ng-src="{[{ img.uri }]}thumb.{[{ img.type }]}" />
     <img ng-if="img.thumb == false" src="/{[{ img.uri }]}original.{[{ img.type }]}" />
+    <input ng-if="galleryD == true" type="checkbox" ng-model="img.delete" />
 </li>    
 </ul>
 <input id="fileArr" name='file' type="file" multiple onchange="angular.element(this).scope().gChangeFile(this.files)" />
 <ul>
 <li ng-repeat="file in gCurrentFiles">{[{ file.name }]}</li>
 </ul>
-<button ng-if="gCurrentFiles.length != ''" ng-click="addToGallery()">Add Files to Gallery</button>    
+<button ng-if="gCurrentFiles.length != ''" ng-click="addToGallery()">Add Files to Gallery</button>
+<button ng-if="galleryD == true" onclick="galleryDel()">Delete Images</button>    
 </ul>
