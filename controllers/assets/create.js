@@ -127,7 +127,7 @@ var main = function(originalName, buffer, user, location, httpMethod, cb){
                         }
                     });    
                 } else {
-                    cb(400, "File already exists");
+                    cb(403, "File already exists");
                 }
             }
             db.get('assets', { filename: Asset.filename, user: Asset.user, location: Asset.location }, false, fileExistCall);

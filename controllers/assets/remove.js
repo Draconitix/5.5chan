@@ -4,7 +4,7 @@ fs = require('fs'),
 rimraf = require('rimraf');
 
 exp.main = function(data, user, httpMethod, cb){
-    if(httpMethod == "DELETE"){
+    if(httpMethod == "DELETE" && data.length != undefined){
         var currentFile = 0;
         var isArray = Array.isArray(data);
         var max = isArray ? data.length : 1;
@@ -27,7 +27,7 @@ exp.main = function(data, user, httpMethod, cb){
             var mainCall = function(stat, response){
                 //console.log(stat + ' ' + max);
                 if(stat == 200){
-                    if(response.length > 0){
+                    if(response.n > 0){
                         rimraf('public/uploads/' + fileData.uri, function(err){
                             if(err) { console.log(err) };
                         })    
@@ -46,7 +46,11 @@ exp.main = function(data, user, httpMethod, cb){
             db.delete('assets', fileData, mainCall);
          };
     loop();    
+    } else if(typeof data == null || typeof data == undefined || data.length == undefined){
+        cb(403, "No query sent.")      
     } else {
         cb(400, 'Unknown method.');
+        console.log(data.length);
+        console.log('fail')
     }
 };
