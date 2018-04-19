@@ -7,6 +7,9 @@ db = require('../../models/functions/dbMethods');
 var randomString = require('randomstring');    
 var colors = require('colors');
 var Asset = {};
+var fileArray = [];
+var currentFile = 0;
+var completeResponse = [];
 var checkExtension = function(extension){
     var ext = extension.toLowerCase();
     var flags = 0;
@@ -67,17 +70,24 @@ var imageDupes = function(src, dest, ext, asset, cb){
     });
 };  
 
-/*var loop = function(user, location, httpMethod, cb){
+var loop = function(user, location, httpMethod, cb){
     if(currentFile != fileArray.length){
         currentFile++;
     	main(fileArray[currentFile - 1].originalname, fileArray[currentFile - 1].buffer, user, location, httpMethod, cb);
   }  else {
       //console.log('done')
   }
-};*/
+};
 
-exp.main = function(file, user, location, httpMethod, cb){
-    main(file.originalname, file.buffer, user, location, httpMethod, cb);
+exp.main = function(files, user, location, httpMethod, cb){
+    if(Array.isArray(files) == true){
+        fileArray = files;
+        loop(user, location, httpMethod, cb);
+    } else {
+        //console.log('not array')
+        fileArray.push(files);
+        loop(user, location, httpMethod, cb);
+    }
 }
 
 var main = function(originalName, buffer, user, location, httpMethod, cb){
@@ -100,37 +110,61 @@ var main = function(originalName, buffer, user, location, httpMethod, cb){
             }
         }
         if(check.flags == 0){
-            var fileExistCall = function(stat, response){
-                if(stat == 200 && response.length == 0){
-                    fs.mkdirSync('public/uploads/' + Asset.uri);
-                    var src = 'public/uploads/' + Asset.uri + 'original.'  + extension;
-                    fs.writeFile(src, buffer, function(err){
-                        if(err) {
-                            cb(400, err);
-                        } else {
-                            var onComplete = function(){
-                                if(location == 'profile'){
-                                    db.put('assets', { user: user, location: 'profile'}, { location: 'gallery' }, putCall);    
-                                } else {
-                                    //console.log(colors.green(JSON.stringify(Asset)) + '\n');
-                                    var mainCall = function(stat, response){
-                                        if(stat == 200){
-                                            cb(200, response)
-                                        } else {
-                                            cb(stat, response)
-                                        }
-                                    };
-                                    db.post('assets', Asset, mainCall);
-                                }
-                            };
-                            imageDupes(src, 'public/uploads/' + Asset.uri, extension, Asset, onComplete);
-                        }
-                    });    
+            fs.mkdirSync('public/uploads/' + Asset.uri);
+            var src = 'public/uploads/' + Asset.uri + 'original.'  + extension;
+            fs.writeFile(src, buffer, function(err){
+                if(err) {
+                    cb(400, err);
                 } else {
-                    cb(400, "File already exists");
+                    var onComplete = function(){
+                        if(location == 'profile'){
+                            db.put('assets', { user: user, location: 'profile'}, { location: 'gallery' }, putCall);    
+                        } else {
+                            //console.log(colors.green(JSON.stringify(Asset)) + '\n');
+                            var mainCall = function(stat, response){
+                                //console.log(colors.green(response))
+                                //console.log(colors.green(JSON.stringify(Asset)) + '\n');
+                                if(currentFile != fileArray.length){
+                                        completeResponse.push(response);
+                                        console.log(stat);
+                                        //console.log(colors.green(JSON.stringify(Asset)) + '\n');
+                                } else {
+                                    //console.log(stat)
+                                    if(stat == 200){
+                                        //console.log('last \n' + colors.green(JSON.stringify(Asset)) + '\n');
+                                        if(completeResponse.length == 0){
+                                            cb(200, response);
+                                        } else {
+                                            completeResponse.push(response);
+                                            //console.log('pushing to response array.');
+                                            cb(200, completeResponse);
+                                        }
+                                        completeResponse = [];
+                                        Asset = {};
+                                        currentFile = 0;
+                                        fileArray = []; 
+                                    } else {
+                                        if(completeResponse.length == 0){
+                                            cb(stat, response);
+                                        } else {
+                                            completeResponse.push(response);
+                                            //console.log('pushing to response array.');
+                                            cb(stat, completeResponse);
+                                        }
+                                    completeResponse = [];
+                                    Asset = {};  
+                                    currentFile = 0;
+                                    fileArray = [];    
+                                    }
+                                }
+                                loop(user, location, httpMethod, cb);
+                            };
+                            db.post('assets', Asset, mainCall);
+                        }
+                    };
+                    imageDupes(src, 'public/uploads/' + Asset.uri, extension, Asset, onComplete);
                 }
-            }
-            db.get('assets', { filename: Asset.filename, user: Asset.user }, false, fileExistCall);
+            });
         } else {
             cb(400, check.errors);
         };

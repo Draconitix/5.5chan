@@ -1,6 +1,6 @@
 var exp = module.exports = {},
 multer = require('multer'),
-file = multer().array('file'),
+file = multer().single('file'),
 methods = require('./_methods');
 
 exp.main = function(req, res) {

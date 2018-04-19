@@ -273,14 +273,14 @@ body {
 }
 #loginForm {
   margin: 0 auto;
-  margin-top: calc(25vh);
+  margin-top: calc(40vh - 125px);
   height: 100px;
   width: 20%;
   text-align: center;
 }
 #registerForm {
   margin: 0 auto;
-  margin-top: calc(20vh);
+  margin-top: calc(40vh - 175px);
   height: 100px;
   width: 20%;
   text-align: center;
@@ -300,15 +300,17 @@ textarea {
   border-radius: 4px;
   font-family: "Myriad Pro";
 }
-input[type="submit"] {
-  width: 75%;
+input[type="submit"],
+input[type="button"] {
+  width: 100%;
   padding: 7px;
   border: 2px solid #262626;
   border-radius: 4px;
   font-family: "Myriad Pro";
 }
-input[type="submit"]:hover {
-  width: 75%;
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  width: 100%;
   padding: 7px;
   border: 2px solid #262626;
   border-radius: 4px;
