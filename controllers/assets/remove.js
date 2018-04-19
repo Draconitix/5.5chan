@@ -27,7 +27,7 @@ exp.main = function(data, user, httpMethod, cb){
             var mainCall = function(stat, response){
                 //console.log(stat + ' ' + max);
                 if(stat == 200){
-                    if(response.result.n > 0){
+                    if(response.length > 0){
                         rimraf('public/uploads/' + fileData.uri, function(err){
                             if(err) { console.log(err) };
                         })    

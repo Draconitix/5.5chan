@@ -1,4 +1,4 @@
-<div class="userProfileImage" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-click="crop()"></i>
+<div class="userProfileImage" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-if="canCrop == true" ng-click="crop()"></i>
 <br />
 <ul ng-if="editing == false && galleryT == false">
 <li>Username: {[{ user.username }]}</li>
@@ -39,5 +39,5 @@
 <li ng-repeat="file in gCurrentFiles">{[{ file.name }]}</li>
 </ul>
 <button ng-if="gCurrentFiles.length != ''" ng-click="addToGallery()">Add Files to Gallery</button>
-<button ng-if="galleryD == true" onclick="galleryDel()">Delete Images</button>    
+<button ng-if="galleryD == true" ng-click="galleryDel()">Delete Images</button>    
 </ul>

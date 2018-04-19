@@ -13,7 +13,7 @@ exp.main = function(req, res) {
         if(err) {
             mainCallback(400, err);
         } else {
-            methods.exec(req.params.function, req.body, req.method, req.query, req.files, req.user, mainCallback);    
+            methods.exec(req.params.function, req.body, req.method, req.query, req.file, req.user, mainCallback);    
         }
     });
 };

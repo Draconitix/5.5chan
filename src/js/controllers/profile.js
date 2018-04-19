@@ -117,7 +117,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
      };
     
     // Get profile image
-    
+    $scope.canCrop = false;
     assets.get($scope.user.username, 'profile').then(function(response){
         if(response.thumb == true){
             if(response.cropped == true){
@@ -130,6 +130,12 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
             
             $scope.imgUriFolder = response.uri;
             $scope.imgType = response.type;
+			console.log(response.scaled)
+			if(response.scaled == true){
+				$scope.canCrop = true;
+			} else {
+				$scope.canCrop = false;
+			}
             $scope.cropped = {
                 source: response.uri + 'scaled.' + response.type
             };
@@ -153,20 +159,18 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.galleryT = false;
     $scope.galleryD = false;
     $scope.gallery = [];
-    $scope.gCurrentFiles = [];
     var gCurrentFiles = "";
     $scope.gChangeFile = function(files){
         $scope.gCurrentFiles = files;
-        gCurrentFiles = files;
         $scope.$apply();
     }
     $scope.addToGallery = function(){
-        var maxLimit = gCurrentFiles.length;
+        var maxLimit = $scope.gCurrentFiles.length;
         var i = 0;
         console.log($scope.gCurrentFiles);
         var main = function(){
             var fd = new FormData();    
-            fd.append('file', gCurrentFiles[i]);
+            fd.append('file', $scope.gCurrentFiles[i]);
             assets.create(fd).then(function(res){
                     $scope.gallery.push(res);
                     loop();
@@ -208,6 +212,8 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
                 $scope.$apply();
             }
     }
+	
+	// Gallery
     
     assets.get($scope.user.username, 'gallery').then(function(res){
         cb(res);
@@ -226,14 +232,15 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.galleryDel = function(){
         var delArray = [];
         //var iArray = [];
-        for(var i = $scope.gallery.length; i > 0; i--){
+        for(var i = $scope.gallery.length - 1; i > 0; i--){
             if($scope.gallery[i].delete == true){
-                delArray.push({ uri: $scope.gallery[i].uri });
+                delArray.push({ uri: $scope.gallery[i].uri, user: $scope.gallery[i].user, filename: $scope.gallery[i].filename });
                 $scope.gallery.splice(i, 1);
             }
         }
         assets.remove(delArray).then(function(res){
             console.log(res);
+			console.log(delArray)
         }, function(err){
             console.log(err);
         })
@@ -261,6 +268,14 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
 
                 $scope.imgUriFolder = response.uri;
                 $scope.imgType = response.type;
+				if(response.scaled == true){
+				$scope.canCrop = true;
+				} else {
+					$scope.canCrop = false;
+				}
+				$scope.cropped = {
+					source: response.uri + 'scaled.' + response.type
+				};
                 $scope.cropped = {
                     source: response.uri + 'scaled.' + response.type
                 };

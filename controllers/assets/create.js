@@ -130,7 +130,7 @@ var main = function(originalName, buffer, user, location, httpMethod, cb){
                     cb(400, "File already exists");
                 }
             }
-            db.get('assets', { filename: Asset.filename, user: Asset.user }, false, fileExistCall);
+            db.get('assets', { filename: Asset.filename, user: Asset.user, location: Asset.location }, false, fileExistCall);
         } else {
             cb(400, check.errors);
         };

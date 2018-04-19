@@ -4,13 +4,13 @@ var list = require('./list');
 var remove = require('./remove');    
 var crop = require('./crop');
 
-exp.exec = function(method, data, httpMethod, query, files, user, cb){
+exp.exec = function(method, data, httpMethod, query, file, user, cb){
             switch(method){
                 case 'lst':
                     list.main(query, httpMethod, cb);
                     break;
                 case 'create':
-                    create.main(files, user.username, 'gallery', httpMethod, cb);
+                    create.main(file, user.username, 'gallery', httpMethod, cb);
                     break;    
                 case 'remove':
                     remove.main(data, user.username, httpMethod, cb);
