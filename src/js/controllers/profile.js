@@ -234,7 +234,8 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         //var iArray = [];
         for(var i = $scope.gallery.length - 1; i > 0; i--){
             if($scope.gallery[i].delete == true){
-                delArray.push({ uri: $scope.gallery[i].uri, user: $scope.gallery[i].user, filename: $scope.gallery[i].filename });
+                console.log(delArray)
+                delArray.push({ uri: $scope.gallery[i].uri, user: $scope.gallery[i].user, filename: $scope.gallery[i].filename })
                 $scope.gallery.splice(i, 1);
             }
         }

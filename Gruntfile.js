@@ -46,12 +46,7 @@ module.exports = function(grunt) {
         },
         
         exec: {
-            database: {
-                command: 'mongod'
-            },
-            runtime: {
-                command: 'node ./bin/www'
-            }
+            batfile: "start bin/startup.bat"
         }
     
     });
