@@ -158,6 +158,8 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     
     // Add images to gallery
     var gAdding = false;
+    $scope.galleryLoading = true;
+    $scope.galleryDText = 'Remove images from gallery';
     $scope.galleryT = false;
     $scope.galleryD = false;
     $scope.gallery = [];
@@ -170,6 +172,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     }
     $scope.addToGallery = function(){
         gAdding = true;
+        $scope.galleryLoading = true;
         var maxLimit = $scope.gCurrentFiles.length;
         var currentFiles = $scope.gCurrentFiles;
         var i = 0;
@@ -195,13 +198,8 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
                     gAdding = false;
                     console.log('rn')
                     setTimeout(function(){
-                        console.log(fullRes);
-                        for(var a = fullRes.length - 1; a >= 0; a--){
-                            $scope.gallery.push(fullRes[a]);
-                            if(a == 0){
-                                $scope.$apply();
-                            }
-                        }
+                        galleryData();
+                        $scope.galleryLoading = false;
                     }, 2000);
             }
         }
@@ -240,6 +238,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         }
         assets.get($scope.user.username, 'gallery').then(function(res){
             cb(res);
+            $scope.galleryLoading = false;
         }, function(err){
             console.log(err);
         })
@@ -250,8 +249,10 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.galleryDelToggle = function(){
         if($scope.galleryD == false){
             $scope.galleryD = true;
+            $scope.galleryDText = 'Stop removing images from gallery';
         } else {
             $scope.galleryD = false;
+            $scope.galleryDText = 'Remove images from gallery';
         }
     }
     
@@ -289,6 +290,10 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
                             $scope.gallery.splice(s, 1);
                         }
                     }
+                    if($scope.gallery.length == 0){
+                       $scope.galleryD = false;
+                       $scope.galleryDText = 'Remove images from gallery';
+                    }
                 }
                 //loop();
             }
@@ -298,15 +303,32 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         }
     }
     
+    var all = false;
+    $scope.gallerySAText = "Select All";
+    $scope.galleryDelSelectAll = function(){
+        if(all == false){
+            all = true;
+            $scope.gallerySAText = "Deselect All";
+        } else {
+            all = false;
+            $scope.gallerySAText = "Select All";
+        }
+        for(var w=0; w < $scope.gallery.length; w++){
+            $scope.gallery[w].delete = all;
+        }
+    }
+    
     // Gallery set to profile picture
     
     $scope.setAsProfile = function(imgData){
-        assets.editProfile(imgData).then(function(res){
-            refresh();
-            galleryData();
-        }, function(err){
-            console.log(err);
-        })
+        if($scope.profileLoading == false && $scope.galleryD == false && gAdding == false){
+            assets.editProfile(imgData).then(function(res){
+                refresh();
+                galleryData();
+            }, function(err){
+                console.log(err);
+            })    
+        }
     };
     
     // Get new profile data

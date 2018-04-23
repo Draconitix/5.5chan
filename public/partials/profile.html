@@ -25,20 +25,22 @@
 <br />    
 <input type="submit" />
 </form>
-<ul ng-if="galleryT == true">
+<ul ng-if="galleryT == true && galleryLoading == false">
 <button ng-click="galleryToggle()">Close Gallery</button>       
-<button ng-click="galleryDelToggle()">Remove Images from Gallery</button>    
+<button ng-if="gallery.length > 0" ng-click="galleryDelToggle()">{[{ galleryDText }]}</button>    
+<button ng-if="galleryD == true" ng-click="galleryDelSelectAll()">{[{ gallerySAText }]}</button>    
 <ul ng-if="gallery.length > 0">
-<li ng-repeat="img in gallery" ng-click="setAsProfile(img)">
-    <img ng-if="img.thumb == true" ng-src="{[{ img.uri }]}thumb.{[{ img.type }]}" />
-    <img ng-if="img.thumb == false" src="/{[{ img.uri }]}original.{[{ img.type }]}" />
+<li ng-repeat="img in gallery">
+    <img ng-click="setAsProfile(img)" ng-if="img.thumb == true" ng-src="{[{ img.uri }]}thumb.{[{ img.type }]}" />
+    <img ng-click="setAsProfile(img)" ng-if="img.thumb == false" src="/{[{ img.uri }]}original.{[{ img.type }]}" />
     <input ng-if="galleryD == true" type="checkbox" ng-model="img.delete" />
 </li>    
 </ul>
-<input id="fileArr" name='file' type="file" multiple onchange="angular.element(this).scope().gChangeFile(this.files)" />
+<input ng-if="galleryD == false" id="fileArr" name='file' type="file" multiple onchange="angular.element(this).scope().gChangeFile(this.files)" />
 <ul>
-<li ng-repeat="file in gCurrentFiles">{[{ file.name }]}</li>
+<li ng-if="galleryD == false" ng-repeat="file in gCurrentFiles">{[{ file.name }]}</li>
 </ul>
 <button ng-if="gCurrentFiles.length != undefined && galleryD == false" ng-click="addToGallery()">Add Files to Gallery</button>
 <button ng-if="galleryD == true" ng-click="galleryDel()">Delete Images</button>    
 </ul>
+<p ng-if="galleryLoading == true">Loading...</p>
