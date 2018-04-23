@@ -156,21 +156,26 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     };
     
     // Add images to gallery
+    var gAdding = false;
     $scope.galleryT = false;
     $scope.galleryD = false;
     $scope.gallery = [];
     var gCurrentFiles = "";
     $scope.gChangeFile = function(files){
-        $scope.gCurrentFiles = files;
-        $scope.$apply();
+        if(gAdding == false){
+            $scope.gCurrentFiles = files;
+            $scope.$apply();    
+        }
     }
     $scope.addToGallery = function(){
+        gAdding = true;
         var maxLimit = $scope.gCurrentFiles.length;
+        var currentFiles = $scope.gCurrentFiles;
         var i = 0;
         var fullRes = [];
         var main = function(){
             var fd = new FormData();
-            fd.append('file', $scope.gCurrentFiles[i]);
+            fd.append('file', currentFiles[i]);
             assets.create(fd).then(function(res){
                     fullRes.push(res);
                     loop();
@@ -185,7 +190,8 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
                 main();
                 //loop();
             }
-			if(i == maxLimit){
+            if(i == maxLimit){
+                    gAdding = false;
                     console.log('rn')
                     setTimeout(function(){
                         console.log(fullRes);
@@ -196,7 +202,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
                             }
                         }
                     }, 2000);
-                }
+            }
         }
         if($scope.gCurrentFiles.length > 0){
             main();
@@ -294,7 +300,12 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     // Gallery set to profile picture
     
     $scope.setAsProfile = function(imgData){
-        
+        assets.editProfile(imgData).then(function(res){
+            refresh();
+            galleryData();
+        }, function(err){
+            console.log(err);
+        })
     };
     
     // Get new profile data

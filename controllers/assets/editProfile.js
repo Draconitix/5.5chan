@@ -2,7 +2,8 @@ var exp = module.exports = {};
 var db = require('../../models/functions/dbMethods');
 
 exp.main = function(data, user, httpMethod, cb){
-    if(httpMethod === "PUT" && data.length != undefined){
+    console.log();
+    if(httpMethod === "PUT" && typeof data === "object" && Object.keys(data).length > 0){
         var changeToProfileCb = function(stat, res){
             if(stat == 200){
                 cb(200, res)
@@ -21,7 +22,7 @@ exp.main = function(data, user, httpMethod, cb){
             }
         };
         db.put('assets', { user: user.username, location: 'profile' }, { location: 'gallery'}, prevProfileCb);
-    } else if(data.length != undefined){
+    } else if(typeof data === "object" && Object.keys(data).length == undefined){
         cb(400, 'No query given.')          
     } else {
         cb(400, 'Unknown Method.');
