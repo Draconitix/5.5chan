@@ -1,6 +1,16 @@
 app.service('assets', function($cookies, $http, $q){
     var token = $cookies.get('accessToken');
     
+    var editProfile = function(data){
+        var deferred = $q.defer();
+        $http({ method: 'PUT', url: 'chat/asset/update', headers: { 'Authorization': 'Bearer ' + token }, data: data }).then(function(response){
+            deferred.resolve(response.data)
+        }, function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    
     var getAsset = function(username, locat){
         var deferred = $q.defer();
         $http({ method: 'GET', url: 'chat/asset/lst', params: { user: username, location: locat }, headers: { 'Authorization': 'Bearer ' + token }}).then(function(response){
@@ -28,7 +38,7 @@ app.service('assets', function($cookies, $http, $q){
     
     var remove = function(query) {
         var deferred = $q.defer();
-        $http({ method: 'DELETE', url: "chat/asset/remove", headers: { 'Authorization': 'Bearer ' + token  }, data: query }).then(function(res){
+        $http({ method: 'DELETE', url: "chat/asset/remove", transformRequest: angular.identity, headers: { 'Content-Type': "application/json;charset=utf-8", 'Authorization': 'Bearer ' + token  }, data: query }).then(function(res){
             deferred.resolve(res.data);
         }, function(err){
             deferred.reject(err);
@@ -50,6 +60,6 @@ app.service('assets', function($cookies, $http, $q){
     if(token == undefined){
         return null;    
     } else {
-        return { get: getAsset, crop: crop, create: create, remove: remove }
+        return { get: getAsset, crop: crop, create: create, remove: remove, editProfile: editProfile }
     }
 });

@@ -1,3 +1,3 @@
 start cmd /k "mongod"
 start cmd /k "grunt"
-start cmd /k "nodemon ./www"
+start cmd /k "node ./www"

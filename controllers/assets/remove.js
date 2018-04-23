@@ -46,11 +46,11 @@ exp.main = function(data, user, httpMethod, cb){
             db.delete('assets', fileData, mainCall);
          };
     loop();    
-    } else if(typeof data == null || typeof data == undefined || data.length == undefined){
-        cb(403, "No query sent.")      
+    } else if(data.length == undefined && typeof data === "object"){
+        cb(403, "No query sent. Query = " + JSON.stringify(data))      
     } else {
         cb(400, 'Unknown method.');
-        console.log(data.length);
+        console.log(data.length + " " + JSON.stringify(data));
         console.log('fail')
     }
 };

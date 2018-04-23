@@ -167,21 +167,34 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.addToGallery = function(){
         var maxLimit = $scope.gCurrentFiles.length;
         var i = 0;
-        console.log($scope.gCurrentFiles);
+        var fullRes = [];
         var main = function(){
-            var fd = new FormData();    
+            var fd = new FormData();
             fd.append('file', $scope.gCurrentFiles[i]);
             assets.create(fd).then(function(res){
-                    $scope.gallery.push(res);
+                    fullRes.push(res);
                     loop();
                 }, function(err){
                     console.log(err);
+                    loop();
             })    
             i++;
         };
         var loop = function(){
             if(i <= maxLimit - 1){
                 main();
+                if(i == maxLimit){
+                    console.log('rn')
+                    setTimeout(function(){
+                        console.log(fullRes);
+                        for(var a = fullRes.length - 1; a >= 0; a--){
+                            $scope.gallery.push(fullRes[a]);
+                            if(a == 0){
+                                $scope.$apply();
+                            }
+                        }
+                    }, 2000);
+                }
                 //loop();
             }
         }
@@ -198,28 +211,34 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         }
     }
     
-    var cb = function(res){
+    
+	
+	// Gallery
+    var galleryData = function(){
+        var cb = function(res){
            console.log(res);
            if(Array.isArray(res)){
+               $scope.gallery = [];
                 for(var i=0; i < res.length; i++){
                     $scope.gallery.push(res[i]);
                     console.log(res[i].uri)
                     if(i == res.length - 1){ /*console.log(JSON.stringify($scope.gallery))*/ }
                 }
             } else {
+                $scope.gallery = [];
                 $scope.gallery.push(res);
                 console.log("notArray")
                 $scope.$apply();
             }
+        }
+        assets.get($scope.user.username, 'gallery').then(function(res){
+            cb(res);
+        }, function(err){
+            console.log(err);
+        })
     }
-	
-	// Gallery
     
-    assets.get($scope.user.username, 'gallery').then(function(res){
-        cb(res);
-    }, function(err){
-        console.log(err);
-    })
+    // Gallery Delete
     
     $scope.galleryDelToggle = function(){
         if($scope.galleryD == false){
@@ -229,22 +248,53 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         }
     }
     
+    galleryData();
+    
     $scope.galleryDel = function(){
-        var delArray = [];
-        //var iArray = [];
-        for(var i = $scope.gallery.length - 1; i > 0; i--){
-            if($scope.gallery[i].delete == true){
-                console.log(delArray)
-                delArray.push({ uri: $scope.gallery[i].uri, user: $scope.gallery[i].user, filename: $scope.gallery[i].filename })
-                $scope.gallery.splice(i, 1);
+        var maxLimit = $scope.gallery.length;
+        //var delArray = [];
+        var i = 0;
+        var main = function(){
+           if($scope.gallery[i].delete == true){
+            assets.remove(JSON.stringify([{ uri: $scope.gallery[i].uri, user: $scope.gallery[i].user, filename: $scope.gallery[i].filename }])).then(function(res){
+                console.log(res);
+                //console.log($scope.gallery[i]);
+        
+                //$scope.gallery.splice(i, 1);
+                loop();
+            }, function(err){
+                console.log(err);
+                loop();
+            })
+            i++;
+        } else {
+            console.log(i + ' not deleting')
+            i++;
+            loop();
+        }
+        }
+        var loop = function(){
+            if(i <= maxLimit - 1){
+                main();
+                if(i == maxLimit){
+                    for(var s = maxLimit - 1; s >= 0; s--){
+                        if($scope.gallery[s].delete == true){
+                            $scope.gallery.splice(s, 1);
+                        }
+                    }
+                }
+                //loop();
             }
         }
-        assets.remove(delArray).then(function(res){
-            console.log(res);
-			console.log(delArray)
-        }, function(err){
-            console.log(err);
-        })
+        if(maxLimit > 0){
+            main();
+        }
+    }
+    
+    // Gallery set to profile pick
+    
+    $scope.setAsProfile = function(imgData){
+        
     };
     
     // Get new profile data
@@ -288,6 +338,9 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
             }, function(err){
                 console.log(err);
             })  
+            if(formData.get('profile') != ""){
+                    galleryData();
+            }
         }, 3000)
         
     };
