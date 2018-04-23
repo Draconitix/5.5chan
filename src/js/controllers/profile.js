@@ -31,15 +31,16 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
             $scope.editing = false;
         }
     }
-    var formData = new FormData();
-    var formDataSetup = function(){
-        formData.append('username', $scope.eUser.username)
-        formData.append('email', $scope.eUser.email)
-        formData.append('desc', $scope.eUser.desc)
-        if($scope.currentFile != ""){ formData.append('profile', $scope.currentFile) }
-    };
+   
     
     $scope.put = function(){
+        var formData = new FormData();
+        var formDataSetup = function(){
+            formData.append('username', $scope.eUser.username)
+            formData.append('email', $scope.eUser.email)
+            formData.append('desc', $scope.eUser.desc)
+            if($scope.currentFile != ""){ formData.append('profile', $scope.currentFile) }
+        };
         var errors = formInputValidate.check($scope.eUser);
         console.log(errors);
         if(/(\.jpg|\.JPG|\.JPEG|\.jpeg|\.png|\.PNG|\.gif|\.GIF)$/g.test($scope.currentFile.name) == false && $scope.currentFile != ""){
@@ -200,6 +201,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
                     setTimeout(function(){
                         galleryData();
                         $scope.galleryLoading = false;
+                        $scope.gCurrentFiles = [];
                     }, 2000);
             }
         }

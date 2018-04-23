@@ -40,7 +40,7 @@
 <ul>
 <li ng-if="galleryD == false" ng-repeat="file in gCurrentFiles">{[{ file.name }]}</li>
 </ul>
-<button ng-if="gCurrentFiles.length != undefined && galleryD == false" ng-click="addToGallery()">Add Files to Gallery</button>
+<button ng-if="gCurrentFiles.length > 0 && galleryD == false" ng-click="addToGallery()">Add Files to Gallery</button>
 <button ng-if="galleryD == true" ng-click="galleryDel()">Delete Images</button>    
 </ul>
 <p ng-if="galleryLoading == true">Loading...</p>
