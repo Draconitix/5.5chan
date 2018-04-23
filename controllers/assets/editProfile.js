@@ -3,7 +3,7 @@ var db = require('../../models/functions/dbMethods');
 
 exp.main = function(data, user, httpMethod, cb){
     if(httpMethod === "PUT" && data.length != undefined){
-        var changeToProfileCb = ffunction(stat, res){
+        var changeToProfileCb = function(stat, res){
             if(stat == 200){
                 cb(200, res)
             } else {

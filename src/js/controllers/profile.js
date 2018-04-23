@@ -183,7 +183,9 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         var loop = function(){
             if(i <= maxLimit - 1){
                 main();
-                if(i == maxLimit){
+                //loop();
+            }
+			if(i == maxLimit){
                     console.log('rn')
                     setTimeout(function(){
                         console.log(fullRes);
@@ -195,8 +197,6 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
                         }
                     }, 2000);
                 }
-                //loop();
-            }
         }
         if($scope.gCurrentFiles.length > 0){
             main();
@@ -291,7 +291,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
         }
     }
     
-    // Gallery set to profile pick
+    // Gallery set to profile picture
     
     $scope.setAsProfile = function(imgData){
         
