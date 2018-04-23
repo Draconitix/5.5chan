@@ -1,4 +1,5 @@
-<div class="userProfileImage" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-if="canCrop == true" ng-click="crop()"></i>
+<div class="userProfileImage" ng-if="profileLoading == false" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-if="canCrop == true && profileLoading == false" ng-click="crop()"></i>
+<p ng-if="profileLoading == true">Loading... </p>
 <br />
 <ul ng-if="editing == false && galleryT == false">
 <li>Username: {[{ user.username }]}</li>

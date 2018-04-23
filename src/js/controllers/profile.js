@@ -15,6 +15,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     $scope.errors = {};
     
     // Profile img edit
+    $scope.profileLoading = false;
     $scope.currentFile = "";
     $scope.changeFile = function(files){
         $scope.currentFile = files[0];
@@ -311,6 +312,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     // Get new profile data
     
     var refresh = function(){
+        $scope.profileLoading = true;
         token = $cookies.get('accessToken');
         $scope.user = jwtHelper.decodeToken(token);
         $scope.editing = false;
@@ -352,6 +354,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
             if(formData.get('profile') != ""){
                     galleryData();
             }
+            $scope.profileLoading = false;
         }, 3000)
         
     };
