@@ -10,6 +10,7 @@ exp.main = function(data, user, httpMethod, cb){
                  cb(stat, response);
             }
         };
+        // user parameter is user.username passes as string
         data.user = user;
         db.post('chat', data, mainCall);
     } else {

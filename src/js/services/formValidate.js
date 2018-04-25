@@ -30,7 +30,10 @@ app.service('formInputValidate', function($http, $q, $cookies){
        email: "",
        firstname: "",
        lastname: "",
-       desc: ""
+       desc: "",
+       name: "",
+       users: "",
+       private: ""    
     }; 
 	
     // Checks specific field for errors
@@ -40,9 +43,9 @@ app.service('formInputValidate', function($http, $q, $cookies){
                 if(data[field].length < 4){
                     errorNum++;
                     errors[field] = 'Username must have at least 4 characters.'; 
-                } else if(data[field].length > 12) {
+                } else if(data[field].length > 15) {
                     errorNum++;
-                    errors[field] = 'Username must be less than 13 characters.';       
+                    errors[field] = 'Username must be less than 16 characters.';       
                 }
                 break;
             case 'password':
@@ -77,7 +80,49 @@ app.service('formInputValidate', function($http, $q, $cookies){
                     errorNum++;
                     errors[field] = 'Lastname must be less than 13 characters.'; 
                 }
-                break;    
+                break;   
+            case 'name':    
+                if(data[field].length < 4){
+                    errorNum++;
+                    errors[field] = 'Username must have at least 4 characters.'; 
+                } else if(data[field].length > 20) {
+                    errorNum++;
+                    errors[field] = 'Username must be less than 21 characters.';       
+                }
+                break;
+            case 'private':
+                if(typeof data[field] != "Boolean"){
+                    errorNum++;
+                    errors[field] = 'Private must be true or false';   
+                }
+                break;
+            case 'users':
+                var usrs = data[field];
+                for(var u; u < data[field].length; u++){
+                    if(/[.!@#$%^&*()_\+\-\=]/g.test(usrs[u]) == true){
+                        errorNum++;
+                        errors[field] = "Usernames must not contain any special characters"
+                    }
+                }
+                if(typeof data['private'] == "Boolean"){
+                    if(Array.isArray(usrs) == true){
+                        if(usrs.length == undefined || usrs.length == 0){
+                            errorNum++;
+                            errors[field] = "Users must be added in private chatroom";
+                        }
+                    } else {
+                        errorNum++;
+                        errors[field] = "Users field must be an array.";
+                    }
+                } else {
+                    errorNum++;
+                    errors[field] = "Users must be validated with private boolean."
+                }
+                break;
+            default:
+                errorNum++;
+                errors['main'] = "No field passed."
+                break;
         }
     };
     
@@ -89,15 +134,19 @@ app.service('formInputValidate', function($http, $q, $cookies){
            email: "",
            firstname: "",
            lastname: "",
-           desc: ""
+           desc: "",
+           name: "",
+           users: "",
+           private: ""
         }; 
         errorNum = 0;
         fields = Object.keys(obj);
         data = obj;
         if(fields.length > 0){
           for(var i = 0; i < fields.length; i++){
-        		//console.log(obj)
-            if(data[fields[i]].length == 0 || data[fields[i]] == "" || data[fields[i]] == undefined){
+             
+            //console.log(obj)
+            if(data[fields[i]].length == 0 || data[fields[i]] == "" || data[fields[i]] == undefined && fields[i] != "private" && fields[i] != "users"){
                     errorNum++;
                     var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
                     errors[fields[i]] = cap + ' must not be empty.'; 
@@ -105,7 +154,7 @@ app.service('formInputValidate', function($http, $q, $cookies){
                     checkSwitch(fields[i]);  
                 } else {
                     checkSwitch(fields[i]);
-                    if(/[.!@#$%^&*()_\+\-\=]/g.test(data[fields[i]]) == true){
+                    if(/[.!@#$%^&*()_\+\-\=]/g.test(data[fields[i]]) == true && fields[i] != "users"){
                         errorNum++;
                         var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
                         errors[fields[i]] = cap + ' must not contain any special characters.'; 

@@ -1,0 +1,11 @@
+<ul ng-if="joined == false && adding == false">
+<li ng-repeat="room in chatrooms"><button ng-click="joinChat(room.name)">{[{ room.name }]}</button></li>
+<button ng-click="toggleCreate()">+</button>    
+</ul>
+<div ng-if="joined != false">
+<button ng-click="leaveChat()">Leave Chat Room</button>
+</div>
+<div ng-if="adding == true && joined == false">
+<button ng-click="toggleCreate()">Stop Adding</button>    
+<input type="text" ng-model="newroom.name" placeholder="Chat Name" />{[{ addErrs.name }]}
+</div>

@@ -10,7 +10,7 @@ exp.main = function(data, httpMethod, cb){
                  cb(stat, response);
             }
         };
-        db.get('chat', data, mainCall);
+        db.get('chat', data, false, mainCall);
     } else {
          cb(400, 'Unknown Method.');
     }

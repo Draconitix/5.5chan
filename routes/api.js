@@ -5,6 +5,7 @@ var router = express.Router();
 var user = require('../controllers/users/_route');
 var asset = require('../controllers/assets/_route');
 var chatroom = require('../controllers/chatrooms/_route');
+require('../controllers/posts/main')
 
 /* JWT Auth Middleware */
 
