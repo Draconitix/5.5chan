@@ -101,6 +101,16 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
 		}
     };
     
+    // Delete room
+    
+    $scope.deleteRoom = function(name){
+        userSocket.deleteRoom({ name: name }).then(function(res){
+            refrRooms();
+        }, function(err){
+            console.log(err);
+        })
+    };
+    
     // Join chat if already inc cookie
     if($scope.joined != false){
         userSocket.join($scope.joined);

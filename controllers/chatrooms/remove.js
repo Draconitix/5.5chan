@@ -10,8 +10,8 @@ exp.main = function(data, user, httpMethod, cb){
                  cb(stat, response);
             }
         };
-        data.user = user;
-        db.delete('chat', data, mainCall);
+        console.log(data);
+        db.delete('chat', { name: data.name, user: user }, mainCall);
     } else {
          cb(400, 'Unknown Method.');
     }

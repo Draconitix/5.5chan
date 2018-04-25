@@ -1,5 +1,5 @@
 <ul ng-if="joined == false && adding == false">
-<li ng-repeat="room in chatrooms"><button ng-click="joinChat(room.name)">{[{ room.name }]}</button><button ng-if="room.user == user.username">-</button></li>
+<li ng-repeat="room in chatrooms"><button ng-click="joinChat(room.name)">{[{ room.name }]}</button><button ng-click="deleteRoom(room.name)" ng-if="room.user == user.username">-</button></li>
 <button ng-click="toggleCreate()">+</button>    
 </ul>
 <div ng-if="joined != false">

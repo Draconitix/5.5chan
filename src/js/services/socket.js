@@ -18,7 +18,6 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
     };
     
     var createRoom = function(roomData){
-        console.log(roomData)
         var deferred = $q.defer();
         $http({ method: 'POST', url: 'chat/chatroom/create', headers: { 'Authorization': 'Bearer ' + token}, data: roomData }).then(function(res){
             deferred.resolve(res.data)
@@ -28,6 +27,21 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
         });
         return deferred.promise;
     }
+    
+    var deleteRoom = function(roomData){
+        var deferred = $q.defer();
+        console.log(roomData)
+        $http({ method: 'DELETE', url: 'chat/chatroom/remove', headers: { 'Authorization': 'Bearer ' + token }, params: { name: roomData.name, user: user.username } }).then(function(res){
+            deferred.resolve(res.data)
+            // Using Posting room event will cause everybody's listing to referesh
+            socket.emit('postRoom', res.data);
+        }, function(err){
+            deferred.reject(err)
+        });
+        return deferred.promise;
+    }
+    
+    // User methods
     
     var getUsers = function(){
         var deferred = $q.defer();
@@ -73,5 +87,5 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
         errorCb();
     });
     
-    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, getUsers: getUsers, leave: leaveChat };
+    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, getUsers: getUsers, leave: leaveChat };
 });
