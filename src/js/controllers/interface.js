@@ -30,6 +30,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
             console.log(err);
         } else {
             refreshJoined();
+            refrRooms();
         }
     };
     // Promises and db resources
@@ -84,17 +85,17 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
 			injectUsers();
 			data = src;	
 		} else {
-			data = { name:  $scope.newroom.name, private:  $scope.newroom.private, users: [] }
+			data = { name: $scope.newroom.name, private:  $scope.newroom.private, users: [] };
 		}
 		var errs = formInputValidate.check(data);
 		if(errs.num == 0){
 			console.log(data)
-			/*userSocket.createRoom(data).then(function(res){
+			userSocket.createRoom(data).then(function(res){
 				refrRooms();
 				$scope.adding = false;
 			}, function(err){
 				console.log(err);
-			})*/	
+			})
 		} else {
 			console.log(errs);	
 		}

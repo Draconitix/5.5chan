@@ -13,10 +13,11 @@ io.on('connection', function(socket){
     };
     chatListMain({}, 'GET', cb);
     var chatList;
+    var chatrooms;
     var joinedChat;
     socket.on('chatJoin', function(data){
         if(data.chatroom != undefined && data.user != undefined){
-            var chatrooms = JSON.parse(chatList);
+            chatrooms = JSON.parse(chatList);
             var chatExistsFunc = function(){
                 var exists = false;
                 var index = 0;
@@ -61,4 +62,8 @@ io.on('connection', function(socket){
     socket.on('sendMessage', function(data){
         socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: data.user });
     });
+    socket.on('postRoom', function(data){
+        chatListMain({}, 'GET', cb);
+        socket.broadcast.emit('postRoom', data);
+    })
 });

@@ -18,9 +18,11 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
     };
     
     var createRoom = function(roomData){
+        console.log(roomData)
         var deferred = $q.defer();
-        $http({ method: 'POST', url: 'chat/chatroom/create', headers: { 'Authorization': 'Bearer ' + token, data: roomData }}).then(function(res){
+        $http({ method: 'POST', url: 'chat/chatroom/create', headers: { 'Authorization': 'Bearer ' + token}, data: roomData }).then(function(res){
             deferred.resolve(res.data)
+            socket.emit('postRoom', res.data);
         }, function(err){
             deferred.reject(err)
         });
@@ -65,6 +67,10 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
             $cookies.put('chatroom', data.name);
             errorCb();
         }
+    });
+    
+    socket.on('postRoom', function(data){
+        errorCb();
     });
     
     return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, getUsers: getUsers, leave: leaveChat };
