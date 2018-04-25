@@ -119,10 +119,6 @@ app.service('formInputValidate', function($http, $q, $cookies){
                     errors[field] = "Users must be validated with private boolean."
                 }
                 break;
-            default:
-                errorNum++;
-                errors['main'] = "No field passed."
-                break;
         }
     };
     

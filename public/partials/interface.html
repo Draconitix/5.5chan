@@ -10,8 +10,11 @@
 <form>   
 <input type="text" ng-model="newroom.name" placeholder="Chat Name" ng-bind="validate(newroom.name, 'name')" />{[{ addErrs.name }]}
 <br />    
-Private Chat Room:<input type="checkbox" ng-model="newroom.private" placeholder="Chat Name" ng-bind="validate(newroom.private, 'private')" />{[{ addErrs.private }]}
+Private Chat Room:<input type="checkbox" ng-model="newroom.private" ng-bind="validate(newroom.private, 'private')" />{[{ addErrs.private }]}
 <br />
-    
-</form> 
+<ul ng-if="newroom.private == true">
+<li ng-repeat="user in addUsers"><p>{[{ user.username }]}</p><input ng-if="user.creator == false" type="checkbox" ng-model="user.included" /></li>
+</ul>
+</form>
+<button ng-click="createRoom()">Create Room</button>
 </div>    

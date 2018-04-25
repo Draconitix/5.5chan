@@ -12,7 +12,11 @@ exp.main = function(data, user, httpMethod, cb){
         };
         // user parameter is user.username passes as string
         data.user = user;
-        db.post('chat', data, mainCall);
+		if(data.name.length < 4){
+			cb(400, 'No name sent');
+		} else {
+			db.post('chat', data, mainCall);
+		}
     } else {
          cb(400, 'Unknown Method.');
     }

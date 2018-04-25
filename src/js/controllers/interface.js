@@ -52,7 +52,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
                     usrArr.push({ username: res[i].username, creator: false, included: false });
                 }
             }
-            $scope.addUsers = res;
+            $scope.addUsers = usrArr;
         }, function(err){
             console.log(err);
         });
@@ -67,12 +67,37 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
         $scope.adding = $scope.adding == true ? false : true;
     };
     refrUsers();
+	var injectUsers = function(){
+		for(var i=0; i < $scope.addUsers.length; i++){
+			if($scope.addUsers[i].included == true){
+				$scope.newroom.users.push($scope.addUsers[i].username);	
+			} else if($scope.addUsers[i].creator == true){
+				$scope.newroom.creator = $scope.addUsers[i].username;
+			}	
+		};
+	};
     $scope.createRoom = function(){
-        userSocket.createRoom($scope.newroom).then(function(res){
-            $scope.adding = false;
-        }, function(err){
-            console.log(err);
-        })
+		// Grab all added users
+		var data;
+		var src = $scope.newroom;
+		if($scope.newroom.private == true){
+			injectUsers();
+			data = src;	
+		} else {
+			data = { name:  $scope.newroom.name, private:  $scope.newroom.private, users: [] }
+		}
+		var errs = formInputValidate.check(data);
+		if(errs.num == 0){
+			console.log(data)
+			/*userSocket.createRoom(data).then(function(res){
+				refrRooms();
+				$scope.adding = false;
+			}, function(err){
+				console.log(err);
+			})*/	
+		} else {
+			console.log(errs);	
+		}
     };
     
     // Join chat if already inc cookie
