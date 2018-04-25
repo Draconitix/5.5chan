@@ -84,14 +84,14 @@ app.service('formInputValidate', function($http, $q, $cookies){
             case 'name':    
                 if(data[field].length < 4){
                     errorNum++;
-                    errors[field] = 'Username must have at least 4 characters.'; 
+                    errors[field] = 'Name must have at least 4 characters.'; 
                 } else if(data[field].length > 20) {
                     errorNum++;
-                    errors[field] = 'Username must be less than 21 characters.';       
+                    errors[field] = 'Name must be less than 21 characters.';       
                 }
                 break;
             case 'private':
-                if(typeof data[field] != "Boolean"){
+                if(typeof data[field] != "boolean"){
                     errorNum++;
                     errors[field] = 'Private must be true or false';   
                 }
@@ -146,10 +146,12 @@ app.service('formInputValidate', function($http, $q, $cookies){
           for(var i = 0; i < fields.length; i++){
              
             //console.log(obj)
-            if(data[fields[i]].length == 0 || data[fields[i]] == "" || data[fields[i]] == undefined && fields[i] != "private" && fields[i] != "users"){
-                    errorNum++;
-                    var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
-                    errors[fields[i]] = cap + ' must not be empty.'; 
+            if(data[fields[i]].length == 0 || data[fields[i]] == "" || data[fields[i]] == undefined){
+                    if(fields[i] != 'private' && fields[i] != "users"){
+                        errorNum++;
+                        var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
+                        errors[fields[i]] = cap + ' must not be empty.'; 
+                    }
                 } else if(fields[i] == 'email' || fields[i] == 'desc') {
                     checkSwitch(fields[i]);  
                 } else {

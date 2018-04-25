@@ -27,6 +27,16 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
         return deferred.promise;
     }
     
+    var getUsers = function(){
+        var deferred = $q.defer();
+        $http({ method: 'GET', url: 'chat/user/list'}).then(function(res){
+            deferred.resolve(res.data)
+        }, function(err){
+            deferred.reject(err)
+        });
+        return deferred.promise;
+    }
+    
     var joinChat = function(room){
         socket.emit('chatJoin', { chatroom: room, user: user.username });
     };
@@ -57,5 +67,5 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
         }
     });
     
-    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, leave: leaveChat };
+    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, getUsers: getUsers, leave: leaveChat };
 });
