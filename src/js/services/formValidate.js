@@ -104,7 +104,7 @@ app.service('formInputValidate', function($http, $q, $cookies){
                         errors[field] = "Usernames must not contain any special characters"
                     }
                 }
-                if(typeof data['private'] == "Boolean"){
+                if(typeof data['private'] == "boolean"){
                     if(Array.isArray(usrs) == true){
                         if(usrs.length == undefined || usrs.length == 0){
                             errorNum++;
@@ -143,7 +143,7 @@ app.service('formInputValidate', function($http, $q, $cookies){
              
             //console.log(obj)
             if(data[fields[i]].length == 0 || data[fields[i]] == "" || data[fields[i]] == undefined){
-                    if(fields[i] != 'private' && fields[i] != "users"){
+                    if(fields[i] != 'private' && fields[i] != "users" && fields[i] != "__v"){
                         errorNum++;
                         var cap = fields[i].charAt(0).toUpperCase() + fields[i].slice(1);
                         errors[fields[i]] = cap + ' must not be empty.'; 

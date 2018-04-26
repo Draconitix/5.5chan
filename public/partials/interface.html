@@ -29,5 +29,6 @@ Private Chat Room:<input type="checkbox" ng-model="editroom.private" ng-bind="va
 <li ng-repeat="user in editUsers"><p>{[{ user.username }]}</p><input ng-if="user.creator == false" type="checkbox" ng-model="user.included" /></li>
 </ul>
 </form>
+<button ng-click="deleteRoom(editInitial.name)">Delete Room</button>    
 <button ng-click="editRoom()">Edit Room</button>
 </div>    

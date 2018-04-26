@@ -69,12 +69,17 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
         $scope.adding = $scope.adding == true ? false : true;
     };
     refrUsers('add');
-	var injectUsers = function(){
-		for(var i=0; i < $scope.addUsers.length; i++){
-			if($scope.addUsers[i].included == true){
-				$scope.newroom.users.push($scope.addUsers[i].username);	
-			} else if($scope.addUsers[i].creator == true){
-				$scope.newroom.creator = $scope.addUsers[i].username;
+	var injectUsers = function(type){
+        var arr;
+        var array;
+        var obj;
+        if(type == 'add'){ $scope.newroom.users = []; array = $scope.newroom.users; obj = $scope.newroom; arr = $scope.addUsers }
+        if(type == 'edit'){ $scope.editroom.users = []; array = $scope.editroom.users; obj = $scope.editroom; arr = $scope.editUsers }
+		for(var i=0; i < arr.length; i++){
+			if(arr[i].included == true){
+				array.push(arr[i].username);	
+			} else if(arr[i].creator == true){
+				obj.creator = arr[i].username;
 			}	
 		};
 	};
@@ -83,7 +88,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
 		var data;
 		var src = $scope.newroom;
 		if($scope.newroom.private == true){
-			injectUsers();
+			injectUsers('add');
 			data = src;	
 		} else {
 			data = { name: $scope.newroom.name, private:  $scope.newroom.private, users: [] };
@@ -107,6 +112,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
     $scope.deleteRoom = function(name){
         userSocket.deleteRoom({ name: name }).then(function(res){
             refrRooms();
+            $scope.editing = false;
         }, function(err){
             console.log(err);
         })
@@ -137,11 +143,25 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
         }
     };
     $scope.editRoom = function(){
-        userSocket.editRoom($scope.editInitial, $scope.editroom).then(function(res){
-            $scope.editing = false;
-        }, function(err){
-            console.log(err);
-        })
+        var data;
+		var src = $scope.editroom;
+		if(src.private == true){
+			injectUsers('edit');
+			data = src;
+            console.log(data);
+		} else {
+			data = { name: src.name, private:  src.private, users: [], user: $scope.user.username };
+		}
+        var errs = formInputValidate.check(data);
+        if(errs.num == 0){
+            userSocket.editRoom($scope.editInitial, $scope.editroom).then(function(res){
+                $scope.editing = false;
+            }, function(err){
+                console.log(err);
+            })    
+        } else {
+            console.log(errs);
+        }
     }
     
     // Join chat if already inc cookie
