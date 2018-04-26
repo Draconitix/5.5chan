@@ -28,6 +28,9 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
     var promCb = function(err){
         if(err){
             console.log(err);
+			if(err == 'update') {
+				refrRooms();
+			} 
         } else {
             refreshJoined();
             refrRooms();

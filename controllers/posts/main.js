@@ -6,7 +6,7 @@ io.on('connection', function(socket){
     var cb = function(stat, response){
         if(stat == 200){
             chatList = JSON.stringify(response);
-            console.log(response);
+            chatrooms = JSON.parse(chatList);
         } else {
             return [];
         }    
@@ -16,6 +16,7 @@ io.on('connection', function(socket){
     var chatrooms;
     var joinedChat;
     socket.on('chatJoin', function(data){
+		chatListMain({}, 'GET', cb);
         if(data.chatroom != undefined && data.user != undefined){
             chatrooms = JSON.parse(chatList);
             var chatExistsFunc = function(){
@@ -63,7 +64,10 @@ io.on('connection', function(socket){
         socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: data.user });
     });
     socket.on('postRoom', function(data){
-        chatListMain({}, 'GET', cb);
+		console.log('posted')
+        setTimeout(function(){ chatListMain({}, 'GET', cb) }, 100);
+		//console.log(chatList)
+		chatrooms.push(data)
         socket.broadcast.emit('postRoom', data);
     })
 });

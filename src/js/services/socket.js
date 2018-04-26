@@ -95,7 +95,7 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
     });
     
     socket.on('postRoom', function(data){
-        errorCb();
+        errorCb('update');
     });
     
     return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat };
