@@ -1,11 +1,11 @@
-<ul ng-if="joined == false && adding == false">
-<li ng-repeat="room in chatrooms"><button ng-click="joinChat(room.name)">{[{ room.name }]}</button><button ng-click="deleteRoom(room.name)" ng-if="room.user == user.username">-</button></li>
+<ul ng-if="joined == false && adding == false && editing == false">
+<li ng-repeat="room in chatrooms track by $index"><button ng-click="joinChat(room.name)">{[{ room.name }]}</button><button ng-click="toggleEdit($index)" ng-if="room.user == user.username">Edit Room</button></li>
 <button ng-click="toggleCreate()">+</button>    
 </ul>
 <div ng-if="joined != false">
 <button ng-click="leaveChat()">Leave Chat Room</button>
 </div>
-<div ng-if="adding == true && joined == false">
+<div ng-if="adding == true && joined == false && editing == false">
 <button ng-click="toggleCreate()">Stop Adding</button>    
 <form>   
 <input type="text" ng-model="newroom.name" placeholder="Chat Name" ng-bind="validate(newroom.name, 'name')" />{[{ addErrs.name }]}
@@ -17,4 +17,17 @@ Private Chat Room:<input type="checkbox" ng-model="newroom.private" ng-bind="val
 </ul>
 </form>
 <button ng-click="createRoom()">Create Room</button>
+</div>    
+<div ng-if="editing == true && joined == false && adding == false">
+<button ng-click="toggleEdit()">Stop Editing</button>    
+<form>   
+<input type="text" ng-model="editroom.name" placeholder="Chat Name" ng-bind="validate(editroom.name, 'name')" />{[{ editErrs.name }]}
+<br />    
+Private Chat Room:<input type="checkbox" ng-model="editroom.private" ng-bind="validate(editroom.private, 'private')" />{[{ editErrs.private }]}
+<br />
+<ul ng-if="editroom.private == true">
+<li ng-repeat="user in editUsers"><p>{[{ user.username }]}</p><input ng-if="user.creator == false" type="checkbox" ng-model="user.included" /></li>
+</ul>
+</form>
+<button ng-click="editRoom()">Edit Room</button>
 </div>    

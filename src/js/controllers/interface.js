@@ -42,7 +42,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
             console.log(err);
         });
     }
-    var refrUsers = function(){
+    var refrUsers = function(type){
         userSocket.getUsers().then(function(res){
             var usrArr = [];
             usrArr[0] = 'wait';
@@ -53,7 +53,8 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
                     usrArr.push({ username: res[i].username, creator: false, included: false });
                 }
             }
-            $scope.addUsers = usrArr;
+            if(type == 'add'){ $scope.addUsers = usrArr; }
+            if(type == 'edit'){ $scope.editUsers = usrArr; }
         }, function(err){
             console.log(err);
         });
@@ -67,7 +68,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
     $scope.toggleCreate = function(){
         $scope.adding = $scope.adding == true ? false : true;
     };
-    refrUsers();
+    refrUsers('add');
 	var injectUsers = function(){
 		for(var i=0; i < $scope.addUsers.length; i++){
 			if($scope.addUsers[i].included == true){
@@ -110,6 +111,38 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
             console.log(err);
         })
     };
+    
+    // Edit Room
+    $scope.editInitial = {};
+    $scope.editroom = {};
+    $scope.editing = false;
+    $scope.editUsers = []
+    $scope.toggleEdit = function(index){
+        if($scope.editing == false){
+            $scope.editing = true;
+            $scope.editroom = $scope.chatrooms[index];
+            $scope.editInitial = angular.copy($scope.chatrooms[index]);
+            refrUsers('edit');
+            if($scope.editroom.users != []){
+                for(var i=0; i < $scope.editUsers.length; i++){
+                    if($scope.editroom.users[i] != undefined){
+                        if($scope.editroom.users[i] == $scope.editUsers.username){
+                            $scope.editUsers[i].included = true;    
+                        }
+                    }
+                }    
+            }
+        } else {
+            $scope.editing = false;
+        }
+    };
+    $scope.editRoom = function(){
+        userSocket.editRoom($scope.editInitial, $scope.editroom).then(function(res){
+            $scope.editing = false;
+        }, function(err){
+            console.log(err);
+        })
+    }
     
     // Join chat if already inc cookie
     if($scope.joined != false){

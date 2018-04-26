@@ -41,6 +41,17 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
         return deferred.promise;
     }
     
+    var editRoom = function(query, data){
+        var deferred = $q.defer();
+        $http({ method: 'PUT', url: 'chat/chatroom/update', headers: { 'Authorization': 'Bearer ' + token}, params: { name: query.name, user: user.username }, data: data }).then(function(res){
+            deferred.resolve(res.data)
+            socket.emit('postRoom', data);
+        }, function(err){
+            deferred.reject(err)
+        });
+        return deferred.promise;
+    }
+    
     // User methods
     
     var getUsers = function(){
@@ -87,5 +98,5 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
         errorCb();
     });
     
-    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, getUsers: getUsers, leave: leaveChat };
+    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat };
 });
