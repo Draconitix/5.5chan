@@ -12,7 +12,7 @@ app.controller('mainCon', function($scope, $sce){
     };
 });
 
-app.directive('chatMessage', function(){
+app.directive('chatMessages', function(){
     return {
         restrict: 'E',
         scope: {

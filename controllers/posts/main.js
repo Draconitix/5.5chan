@@ -47,7 +47,7 @@ io.on('connection', function(socket){
         joinedChat = undefined; 
     })
     socket.on('sendMessage', function(data){
-        socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: data.user });
+        socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: user.username });
     });
     socket.on('postRoom', function(data){
         socket.broadcast.emit('postRoom', data);

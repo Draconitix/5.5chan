@@ -83,7 +83,7 @@ app.controller('profileState', function($scope, $cookies, jwtHelper, $state, ass
     };
 	
     $scope.crop = function(){
-        ngDialog.open({ template: 'partials/cropper.html', 
+        ngDialog.open({ template: 'partials/directives/cropper.html', 
             scope: $scope, 
             width: '100vw', 
             height: '70vh',

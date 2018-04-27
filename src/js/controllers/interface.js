@@ -1,5 +1,5 @@
 // JavaScript Document
-app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate){
+app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser){
 	// User data
     var token = $cookies.get('accessToken');
     if(typeof token === 'undefined'){ $state.go('login'); };
@@ -19,6 +19,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     $scope.leaveChat = function(){
         interface.leave($scope.joined);
         $scope.joined = false;
+        $scope.messages = [];
     };
     // Cht error handling
     var refreshJoined = function(){ 
@@ -179,11 +180,18 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     
     // Messaging
     $scope.messages = [];
-    $scope.sendMessage = function(text){
-        interface.send(text);
+    $scope.trustUrl = function(url){
+        return $sce.trustAsResourceUrl(url);
+    };
+    $scope.message = { text: "" };
+    $scope.sendMessage = function(){
+        interface.send($scope.message.text);
+        var parts = messageParser($scope.message.text)
+        $scope.messages.push({ parts: parts, user: $scope.user.username });
     }
     var msgCb = function(msgData){
         $scope.messages.push(msgData);
+        $scope.$apply();
     };
     interface.incoming(msgCb);
     // Form validation
