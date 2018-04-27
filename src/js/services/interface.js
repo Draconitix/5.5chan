@@ -1,9 +1,32 @@
-app.service('userSocket', function($cookies, $http, $q, jwtHelper){
+app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser){
     var token = $cookies.get('accessToken');
     var user = jwtHelper.decodeToken(token);
     var socket = io.connect('', {
         'query': 'token=' + token
     });
+    
+    // Messaging methods
+    
+    var sendMessage = function(text){
+        var parts = messageParser(text);
+        socket.emit('sendMessage', { parts: parts, user: user.username });
+    }
+    
+    // Messaging callback
+    
+     var messageMain = function(cb){
+        cbMsg = cb;
+    };
+    
+    var cbMsg;
+    
+    var msgCb = function(msgData){
+        cbMsg(msgData);
+    };
+    
+    socket.on('message', function(data){
+        msgCb(data);
+    })
     
    // Chatroom methods
     
@@ -98,5 +121,5 @@ app.service('userSocket', function($cookies, $http, $q, jwtHelper){
         errorCb('update');
     });
     
-    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat };
+    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain };
 });

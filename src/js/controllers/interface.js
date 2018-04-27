@@ -1,5 +1,5 @@
 // JavaScript Document
-app.controller('interfaceState', function($scope, $state, $cookies, userSocket, jwtHelper, formInputValidate){
+app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate){
 	// User data
     var token = $cookies.get('accessToken');
     if(typeof token === 'undefined'){ $state.go('login'); };
@@ -14,10 +14,10 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
     $scope.joined = $cookies.get('chatroom') != undefined ? $cookies.get('chatroom') : false;
 	$scope.posts = [];
     $scope.joinChat = function(name){
-        userSocket.join(name);
+        interface.join(name);
     };
     $scope.leaveChat = function(){
-        userSocket.leave($scope.joined);
+        interface.leave($scope.joined);
         $scope.joined = false;
     };
     // Cht error handling
@@ -37,16 +37,16 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
         }
     };
     // Promises and db resources
-    userSocket.promise(promCb);
+    interface.promise(promCb);
     var refrRooms = function(){
-        userSocket.getRooms().then(function(res){
+        interface.getRooms().then(function(res){
             $scope.chatrooms = res;
         }, function(err){
             console.log(err);
         });
     }
     var refrUsers = function(type){
-        userSocket.getUsers().then(function(res){
+        interface.getUsers().then(function(res){
             var usrArr = [];
             usrArr[0] = 'wait';
             for(var i=0; i < res.length; i++){
@@ -111,7 +111,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
 		var errs = formInputValidate.check(data);
 		if(errs.num == 0){
 			console.log(data)
-			userSocket.createRoom(data).then(function(res){
+			interface.createRoom(data).then(function(res){
 				refrRooms();
 				$scope.adding = false;
 			}, function(err){
@@ -125,7 +125,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
     // Delete room
     
     $scope.deleteRoom = function(name){
-        userSocket.deleteRoom({ name: name }).then(function(res){
+        interface.deleteRoom({ name: name }).then(function(res){
             refrRooms();
             $scope.editing = false;
         }, function(err){
@@ -162,7 +162,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
 		}
         var errs = formInputValidate.check(data);
         if(errs.num == 0){
-            userSocket.editRoom($scope.editInitial, $scope.editroom).then(function(res){
+            interface.editRoom($scope.editInitial, $scope.editroom).then(function(res){
                 $scope.editing = false;
             }, function(err){
                 console.log(err);
@@ -172,10 +172,20 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
         }
     }
     
-    // Join chat if already inc cookie
+    // Join chat if already in cookie
     if($scope.joined != false){
-        userSocket.join($scope.joined);
+        interface.join($scope.joined);
     }
+    
+    // Messaging
+    $scope.messages = [];
+    $scope.sendMessage = function(text){
+        interface.send(text);
+    }
+    var msgCb = function(msgData){
+        $scope.messages.push(msgData);
+    };
+    interface.incoming(msgCb);
     // Form validation
     $scope.validate = function(input, field){
         var obj = {};
