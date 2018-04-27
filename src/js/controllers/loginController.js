@@ -6,8 +6,9 @@ if($cookies.get('accessToken') != undefined){
 $scope.loginMain = function(){
 	var errors = formInputValidate.check($scope.user);
 	if(errors.num == 0){
-			$scope.user.password = sha256($scope.user.password);
-            login($scope.user).then(function(response){
+            var loginData = { username: $scope.user.username, password: $scope.user.password };
+			loginData.password = sha256(loginData.password);
+            login(loginData).then(function(response){
                 $state.go('profile');
             }, function(error){
                 $scope.errors.main = "User not found.";
