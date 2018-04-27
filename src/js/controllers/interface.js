@@ -57,7 +57,19 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
                 }
             }
             if(type == 'add'){ $scope.addUsers = usrArr; }
-            if(type == 'edit'){ $scope.editUsers = usrArr; }
+            if(type == 'edit'){ 
+				$scope.editUsers = usrArr; 
+				if($scope.editroom.users != []){
+					for(var i=0; i < $scope.editUsers.length; i++){
+						if($scope.editroom.users[i] != undefined){
+							if($scope.editroom.users[i] == $scope.editUsers[i].username){
+								$scope.editUsers[i].included = true;
+								
+							}
+						}
+					}    
+				}
+			}
         }, function(err){
             console.log(err);
         });
@@ -132,17 +144,10 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
             $scope.editroom = $scope.chatrooms[index];
             $scope.editInitial = angular.copy($scope.chatrooms[index]);
             refrUsers('edit');
-            if($scope.editroom.users != []){
-                for(var i=0; i < $scope.editUsers.length; i++){
-                    if($scope.editroom.users[i] != undefined){
-                        if($scope.editroom.users[i] == $scope.editUsers.username){
-                            $scope.editUsers[i].included = true;    
-                        }
-                    }
-                }    
-            }
+			//$scope.$apply();
         } else {
             $scope.editing = false;
+			refrRooms();
         }
     };
     $scope.editRoom = function(){
@@ -196,5 +201,5 @@ app.controller('interfaceState', function($scope, $state, $cookies, userSocket, 
                 $scope.addErrs[field] = "";
             }    
         }
-     };
+     }
 });
