@@ -31,14 +31,22 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
             console.log(err);
 			if(err == 'update') {
 				refrRooms();
-			} 
+			}
         } else {
             refreshJoined();
             refrRooms();
         }
     };
+    var msgPromise = function(msgs){
+        if(msgs){
+            $scope.messages = msgs;
+            $scope.$apply();
+            console.log(msgs);
+        }
+    }
     // Promises and db resources
     interface.promise(promCb);
+    interface.msgPromise(msgPromise)
     var refrRooms = function(){
         interface.getRooms().then(function(res){
             $scope.chatrooms = res;
@@ -175,10 +183,13 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     
     // Join chat if already in cookie
     if($scope.joined != false){
+        console.log('hey')
         interface.join($scope.joined);
+        interface.getMessages($scope.joined)
     }
     
     // Messaging
+    
     $scope.messages = [];
     $scope.trustUrl = function(url){
         return $sce.trustAsResourceUrl(url);
@@ -187,7 +198,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     $scope.sendMessage = function(){
         interface.send($scope.message.text);
         var parts = messageParser($scope.message.text)
-        $scope.messages.push({ parts: parts, user: $scope.user.username });
+        $scope.messages.push({ parts: parts, user: $scope.user.username, sentAt: Date.now() });
     }
     var msgCb = function(msgData){
         $scope.messages.push(msgData);

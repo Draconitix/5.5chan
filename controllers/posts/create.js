@@ -2,7 +2,7 @@ var exp = module.exports = {};
 db = require('../../models/functions/dbMethods');
 
 exp.main = function(data, user, cb){
-    if(httpMethod === "DELETE"){
+    if(typeof data == "object"){
         var mainCall = function(stat, response){
             if(stat == 200){
                  cb(200, response);
@@ -10,9 +10,11 @@ exp.main = function(data, user, cb){
                  cb(stat, response);
             }
         };
-        console.log(data);
-        db.delete('chat', { name: data.name, user: user }, mainCall);
+        // user parameter is user.username passes as string
+        data.user = user;
+        data.sentAt = Date.now();
+        db.post('posts', data, mainCall);
     } else {
-         cb(400, 'Unknown Method.');
+         cb(400, 'No data given');
     }
 };

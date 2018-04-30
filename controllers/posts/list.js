@@ -1,8 +1,8 @@
 var exp = module.exports = {};
 db = require('../../models/functions/dbMethods');
 
-exp.main = function(data, user, cb){
-    if(httpMethod === "DELETE"){
+exp.main = function(query, cb){
+    if(typeof query == "object"  && typeof query.chatroom == "string"){
         var mainCall = function(stat, response){
             if(stat == 200){
                  cb(200, response);
@@ -10,9 +10,8 @@ exp.main = function(data, user, cb){
                  cb(stat, response);
             }
         };
-        console.log(data);
-        db.delete('chat', { name: data.name, user: user }, mainCall);
+        db.get('posts', query, false, mainCall);
     } else {
-         cb(400, 'Unknown Method.');
+         cb(400, 'No chatroom given');
     }
 };

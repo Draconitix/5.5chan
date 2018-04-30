@@ -29,7 +29,7 @@
     "gm": "*",
     "jsonwebtoken": "*",
     "socket.io": "*",
-    "socketio-jwt": "*",
+    "socketio-jwt-auth": "*",
     "cors": "*",
     "multer": "*",
     "js-sha256": "*",

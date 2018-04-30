@@ -1,20 +1,27 @@
 app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser){
     var token = $cookies.get('accessToken');
     var user = jwtHelper.decodeToken(token);
-    var socket = io.connect('', {
-        'query': 'token=' + token
+    var socket = io.connect('http://localhost:3000/', {
+        'query': 'auth_token=' + token
     });
     
     // Messaging methods
     
     var sendMessage = function(text){
         var parts = messageParser(text);
-        socket.emit('sendMessage', { parts: parts, user: user.username });
+        socket.emit('sendMessage', { parts: parts, user: user.username, text: text });
     }
     
-    // Messaging callback
+    var getMessages = function(chatroom){
+        socket.emit('getMessages', { chatroom: chatroom });
+    };
     
-     var messageMain = function(cb){
+    
+    
+    // Messaging callback
+    var chatRoomUsers;
+    
+    var messageMain = function(cb){
         cbMsg = cb;
     };
     
@@ -89,6 +96,7 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
     
     var joinChat = function(room){
         socket.emit('chatJoin', { chatroom: room, user: user.username });
+        
     };
     
     var leaveChat = function(room){
@@ -96,30 +104,53 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         $cookies.remove('chatroom');
     }
     
-    // Error handling
+    // Promise handling
     
-    var errorMain = function(cb){
-        cbErr = cb;
+    var promiseMain = function(cb){
+        cbPromise = cb;
     };
     
-    var cbErr;
+    var cbPromise;
     
-    var errorCb = function(err){
-        cbErr(err)
+    var promiseCb = function(err){
+        cbPromise(err)
     };
     
     socket.on('chatPromise', function(data){
         if(data.error){
-            errorCb(data.error);
+            promiseCb(data.error);
         } else {
             $cookies.put('chatroom', data.name);
-            errorCb();
+            chatRoomUsers = data.users;
+            console.log(chatRoomUsers);
+            promiseCb();
         }
     });
     
     socket.on('postRoom', function(data){
-        errorCb('update');
+        promiseCb('update');
     });
     
-    return { promise: errorMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain };
+    socket.on('roomUpdate', function(data){
+        if(data.addUser == true) { if(chatRoomUsers.indexOf(data.user) == -1){ chatRoomUsers.push(data.user) } };
+        if(data.addUser == false){ chatRoomUsers.map(function(e, i){ if(e == data.user){ chatRoomUsers.splice(i, 1) } }); }
+    });
+    socket.on('getMessagesPromise', function(data){
+            //console.log('on promise 4 users')
+            if(data.messages){
+                msgPromiseCb(data.messages)    
+            }
+    });
+    
+     var msgPromiseMain = function(cb){
+        msgCbPromise = cb;
+    };
+    
+    var msgCbPromise;
+    
+    var msgPromiseCb = function(msgs){
+        msgCbPromise(msgs)
+    };
+    
+    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, users: chatRoomUsers, getMessages: getMessages, msgPromise: msgPromiseMain };
 });

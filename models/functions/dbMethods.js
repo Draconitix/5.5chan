@@ -6,7 +6,8 @@ var sfs = require('./$sfs');
 
 var mdlChat = require('../chatrooms'),
 mdlUser = require('../users'),
-mdlAssets = require('../assets');    
+mdlAssets = require('../assets'),
+mdlPosts = require('../posts');    
 
 // NOTE!!! Callback Function must have err, data, and client (in order of err, data, client) parameters that are handled. I.E set null for no error. Callback is required.
 
@@ -23,6 +24,8 @@ var setModel = function(mdlName){
         case 'assets':    
            currentModel = mdlAssets;
             break;
+        case 'posts':
+            currentModel = mdlPosts;
       }
 };
 
