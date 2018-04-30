@@ -1,7 +1,7 @@
 app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser){
     var token = $cookies.get('accessToken');
     var user = jwtHelper.decodeToken(token);
-    var socket = io.connect('http://localhost:3000/', {
+    var socket = io.connect('', {
         'query': 'auth_token=' + token
     });
     
