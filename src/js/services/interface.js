@@ -12,11 +12,16 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         socket.emit('sendMessage', { parts: parts, user: user.username, text: text });
     }
     
+    // Must make routing in backend though
     var getMessages = function(chatroom){
-        socket.emit('getMessages', { chatroom: chatroom });
+        var deferred = $q.defer();
+        $http({ method: 'GET', url: 'chat/post/list', params: { chatroom: chatroom }}).then(function(res){
+            deferred.resolve(res.data);
+        }, function(err){
+            deferred.reject(err);
+        })
+        return deferred.promise;
     };
-    
-    
     
     // Messaging callback
     var chatRoomUsers;
@@ -134,12 +139,6 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
     socket.on('roomUpdate', function(data){
         if(data.addUser == true) { if(chatRoomUsers.indexOf(data.user) == -1){ chatRoomUsers.push(data.user) } };
         if(data.addUser == false){ chatRoomUsers.map(function(e, i){ if(e == data.user){ chatRoomUsers.splice(i, 1) } }); }
-    });
-    socket.on('getMessagesPromise', function(data){
-            //console.log('on promise 4 users')
-            if(data.messages){
-                msgPromiseCb(data.messages)    
-            }
     });
     
      var msgPromiseMain = function(cb){

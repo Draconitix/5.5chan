@@ -80,7 +80,7 @@ io.on('connection', function(socket){
                 socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: socket.request.user.username, text: data.text, sentAt: res.sentAt, chatroom: joinedChat });    
             }
         };
-        methods('create', { parts: data.parts, user: socket.request.user.username, text: data.text, chatroom: joinedChat }, null, socket.request.user.username, cb)
+        methods('create', { parts: data.parts, user: socket.request.user.username, text: data.text, chatroom: joinedChat }, null, socket.request.user, 'POST', cb)
     });
     socket.on('postRoom', function(data){
         socket.broadcast.emit('postRoom', data);

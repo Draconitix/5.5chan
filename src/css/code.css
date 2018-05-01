@@ -328,6 +328,10 @@ img {
   width: 75%;
 }
 
+.messageChatArea img {
+  max-width: 300px;
+}
+
 .userProfileImage {
   width: 120px;
   height: 120px;

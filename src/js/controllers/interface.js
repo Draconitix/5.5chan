@@ -15,6 +15,10 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
 	$scope.posts = [];
     $scope.joinChat = function(name){
         interface.join(name);
+        interface.getMessages(name).then(function(res){
+            $scope.messages = res;
+            //$scope.$apply();
+        })
     };
     $scope.leaveChat = function(){
         interface.leave($scope.joined);
@@ -37,16 +41,9 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
             refrRooms();
         }
     };
-    var msgPromise = function(msgs){
-        if(msgs){
-            $scope.messages = msgs;
-            $scope.$apply();
-            console.log(msgs);
-        }
-    }
+   
     // Promises and db resources
     interface.promise(promCb);
-    interface.msgPromise(msgPromise)
     var refrRooms = function(){
         interface.getRooms().then(function(res){
             $scope.chatrooms = res;
@@ -84,6 +81,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         });
     }
     refrRooms();
+    
     // Create chatroom
     $scope.newroom = { name: '', private: false, users: []};
     $scope.addErrs = { name: '', private: '', users: '' };
@@ -185,7 +183,10 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     if($scope.joined != false){
         console.log('hey')
         interface.join($scope.joined);
-        interface.getMessages($scope.joined)
+        interface.getMessages($scope.joined).then(function(res){
+            $scope.messages = res;
+            //$scope.$apply();
+        })
     }
     
     // Messaging

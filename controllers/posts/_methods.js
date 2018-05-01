@@ -4,19 +4,19 @@ var list = require('./list');
 var remove = require('./remove');  
 var update = require('./update');
 
-exp.exec = function(method, data, query, user, cb){
+exp.exec = function(method, data, query, user, httpMethod, cb){
             switch(method){
                 case 'list':
-                    list.main(query, cb);
+                    list.main(query, httpMethod, cb);
                     break;
                 case 'create':
-                    create.main(data, user, cb);
+                    create.main(data, user.username, httpMethod, cb);
                     break;    
                 case 'remove':
-                    remove.main(data, user, cb);
+                    remove.main(data, user.username, httpMethod, cb);
                     break;
                 case 'update':
-                    update.main(data, query, user, cb);
+                    update.main(data, query, user.username, httpMethod, cb);
                     break;    
                 default: 
                     cb(400, 'Unknown Method.');

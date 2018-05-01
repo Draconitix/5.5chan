@@ -2,7 +2,8 @@ var exp = module.exports = {};
 db = require('../../models/functions/dbMethods');
 
 exp.main = function(data, query, user, httpMethod, cb){
-    if(typeof data == "object" && typeof query == "object"){
+    if(httpMethod == "PUT"){
+       if(typeof data == "object" && typeof query == "object"){
         var mainCall = function(stat, response){
             if(stat == 200){
                  cb(200, response);
@@ -13,7 +14,10 @@ exp.main = function(data, query, user, httpMethod, cb){
         query.user = user;
         data.user = user;
         db.put('posts', query, data, mainCall);
+        } else {
+             cb(400, 'No query or data given.');
+        }
     } else {
-         cb(400, 'No query or data given.');
+        cb(400, "Unknown method.")
     }
 };
