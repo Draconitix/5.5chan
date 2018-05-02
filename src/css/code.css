@@ -258,10 +258,6 @@ background: #ccc;
   transform: translateX(50%) translateY(50%);
 }
 
-body {
-  background-color: #373636;
-  margin: 0 auto;
-}
 .inputField {
   margin-top: 20px;
   padding: 20px;
@@ -328,8 +324,54 @@ img {
   width: 75%;
 }
 
+body {
+  background-color: #373636;
+  margin: 0;
+}
+.stateView {
+  width: 100%;
+  height: 100%;
+}
+
 .messageChatArea img {
   max-width: 300px;
+}
+.messageChatArea ul {
+  list-style: none;
+}
+.messageChatArea {
+  text-align: left;
+  color: #fff;
+  list-style-type: none;
+  width: 100%;
+  margin: 0;
+  position: absolute;
+  left: 0;
+  padding-left: 20px;
+  z-index: 0;
+  top: 0;
+}
+.messageChatArea p {
+  text-align: left;
+}
+.chatUsername {
+  color: green;
+}
+.chatInputArea {
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  background-color: aqua;
+}
+.chatInputArea .wrapper {
+  width: 90%;
+  margin: 0 auto;
+  position: relative;
+  transform: translateX(-50%) translateY(-50%);
+  left: 50%;
+  top: 50%;
 }
 
 .userProfileImage {
