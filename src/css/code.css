@@ -350,6 +350,7 @@ body {
   padding-left: 20px;
   z-index: 0;
   top: 0;
+  padding-bottom: 60px;
 }
 .messageChatArea p {
   text-align: left;
