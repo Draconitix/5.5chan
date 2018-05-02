@@ -56,7 +56,10 @@ var parse = function(part){
             txt.add();
             partsArray.push({ type: 'hyperlink', url: part });
         }
-    } else {
+    } else if(/data:image\/([a-zA-Z]*);base64,([^\"]*)/g.test(part) == true){
+			txt.add();
+            partsArray.push({ type: 'image', url: part });
+	} else {
         txt.group.push(part);
     }
 };
