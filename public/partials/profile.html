@@ -1,18 +1,31 @@
-<div class="userProfileImage" ng-if="profileLoading == false" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-if="canCrop == true && profileLoading == false" ng-click="crop()"></i>
 <p ng-if="profileLoading == true">Loading... </p>
 <br />
-<ul ng-if="editing == false && galleryT == false">
-<li>Username: {[{ user.username }]}</li>
-<li>Email: {[{ user.email }]}</li>
-<li>Description: {[{ user.desc }]}</li>
-<button ng-click="toggleEdit()">Edit Profile</button>
-<button ng-click="galleryToggle()">Gallery</button>    
-<button ng-click="logout()">Logout</button>   
-<button ng-click="del()">Delete Account</button>    
-</ul>
+<div ng-if="editing == false && galleryT == false" class="profile">
+<table width="100%">
+<tr>
+<td width="50%" style="text-align: right">
+<div class="userProfileImage" ng-if="profileLoading == false" id="img" style="background-image: url({[{ userImgUri }]})"></div><i class="cropIcon fas fa-crop" ng-if="canCrop == true && profileLoading == false" ng-click="crop()"></i>
+</td>
+<td width="50%" style="text-align: left">
+Username: {[{ user.username }]}
+<br>Email: {[{ user.email }]}
+<br>Description: {[{ user.desc }]}
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<center>
+<input type="button" ng-click="toggleEdit()" value="Edit Profile">
+<input type="button" ng-click="galleryToggle()" value="Gallery">
+<input type="button" ng-click="logout()" value="Logout">
+<input type="button" ng-click="del()" value="Delete Account">
+</center>
+</td>
+</tr>
+</table>
+</div>
+<div class="editProfile">
 <form enctype="multipart/form-data" ng-submit="put()" ng-if="editing == true">
-<button ng-click="toggleEdit()">Stop Editing</button>    
-{[{ errors.main }]}
 <br />    
 <div><input type="text" name="username" placeholder="Username" ng-model="eUser.username" ng-blur="validate(eUser.username, 'username')"><br>{[{ errors.username }]}</div>
 <br />       
@@ -20,15 +33,19 @@
 <br />       
 <div><textarea maxlength="150"  type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(eUser.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
 <br />             
-<i class="fas fa-file-image"><input style="opacity: 0" name='profile' type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>
+<i class="fas fa-file-image"><input style="opacity: 0" name="profile" type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>
 <p class="inputError">{[{ errors.profile }]}</p> 
-<br />    
+<br />   
+<input type="button" ng-click="toggleEdit()" value="Stop Editing ">
+{[{ errors.main }]}
 <input type="submit" />
 </form>
+</div>
+<div class="gallery">
 <ul ng-if="galleryT == true && galleryLoading == false">
-<button ng-click="galleryToggle()">Close Gallery</button>       
-<button ng-if="gallery.length > 0" ng-click="galleryDelToggle()">{[{ galleryDText }]}</button>    
-<button ng-if="galleryD == true" ng-click="galleryDelSelectAll()">{[{ gallerySAText }]}</button>    
+<input type="button" ng-click="galleryToggle()" value="Close Gallery">       
+<input type="button" ng-if="gallery.length > 0" ng-click="galleryDelToggle()" value="{[{ galleryDText }]}">
+<input type="button" ng-if="galleryD == true" ng-click="galleryDelSelectAll()" value="{[{ gallerySAText }]}">
 <ul ng-if="gallery.length > 0">
 <li ng-repeat="img in gallery">
     <img ng-click="setAsProfile(img)" ng-if="img.thumb == true" ng-src="{[{ img.uri }]}thumb.{[{ img.type }]}" />
@@ -36,11 +53,12 @@
     <input ng-if="galleryD == true" type="checkbox" ng-model="img.delete" />
 </li>    
 </ul>
-<input ng-if="galleryD == false" id="fileArr" name='file' type="file" multiple onchange="angular.element(this).scope().gChangeFile(this.files)" />
+<input ng-if="galleryD == false" id="fileArr" name="file" type="file" multiple onchange="angular.element(this).scope().gChangeFile(this.files)" />
 <ul>
 <li ng-if="galleryD == false" ng-repeat="file in gCurrentFiles">{[{ file.name }]}</li>
 </ul>
-<button ng-if="gCurrentFiles.length > 0 && galleryD == false" ng-click="addToGallery()">Add Files to Gallery</button>
-<button ng-if="galleryD == true" ng-click="galleryDel()">Delete Images</button>    
+<input type="button" ng-if="gCurrentFiles.length > 0 && galleryD == false" value="Add Files to Gallery">
+<input type="button" ng-if="galleryD == true" value="Delete Images">    
 </ul>
+</div>
 <p ng-if="galleryLoading == true">Loading...</p>

@@ -381,3 +381,80 @@ body {
   border-radius: 100%;
   background-position: center;
 }
+.profile {
+  margin-top: 20px;
+  padding: 20px;
+  border: 2px solid #262626;
+  border-radius: 10px;
+  font-family: 'Molengo', Georgia, Times, serif;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.editProfile {
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  border: 2px solid #262626;
+  border-radius: 10px;
+  font-family: 'Molengo', Georgia, Times, serif;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.gallery {
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  border: 2px solid #262626;
+  border-radius: 10px;
+  font-family: 'Molengo', Georgia, Times, serif;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.userProfileImage {
+  width: 120px;
+  height: 120px;
+  background-size: cover;
+  border-radius: 100%;
+  background-position: center;
+}
+input[type="text"],
+input[type="password"] {
+  width: 20%;
+  padding: 7px;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  font-family: 'Molengo', Georgia, Times, serif;
+}
+textarea {
+  width: 20%;
+  padding: 7px;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  font-family: 'Molengo', Georgia, Times, serif;
+}
+input[type="submit"],
+input[type="button"] {
+  width: 20%;
+  padding: 7px;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  font-family: 'Molengo', Georgia, Times, serif;
+}
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  width: 20%;
+  padding: 7px;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  font-family: 'Molengo', Georgia, Times, serif;
+  font-weight: bold;
+  background-color: #808080;
+}
+p {
+  font-family: 'Molengo', Georgia, Times, serif;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+img {
+  width: 10%;
+}
