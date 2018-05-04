@@ -347,10 +347,23 @@ body {
   margin: 0;
   position: absolute;
   left: 0;
-  padding-left: 20px;
   z-index: 0;
   top: 0;
-  padding-bottom: 60px;
+  padding-left: 0px;
+  padding-bottom: 80px;
+  /*height: 100%;*/
+}
+.msgAreaParent {
+  position: absolute;
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow-y: scroll;
+  height: calc(100% - 60px);
+}
+.messageChatArea li {
+  margin-left: 20px;
 }
 .messageChatArea p {
   text-align: left;

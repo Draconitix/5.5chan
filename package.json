@@ -34,7 +34,8 @@
     "multer": "*",
     "js-sha256": "*",
     "randomstring": "*",
-    "rimraf": "*"
+    "rimraf": "*",
+    "jquery": "*"
   },
   "devDependencies": {
     "grunt": "latest",

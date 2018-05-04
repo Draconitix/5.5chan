@@ -6,7 +6,7 @@
 <div class="chatInputArea">
 <div class="wrapper">   
 <input type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><button ng-click="sendMessage()">Send Message</button><button ng-click="leaveChat()">Leave Chat Room</button></div></div>        
-<chat-messages messages="messages" authorize="trustUrl(url)"></chat-messages>        
+<chat-messages id="msgAreaParent" class="msgAreaParent" messages="messages" authorize="trustUrl(url)"></chat-messages>        
 </div>
 <div ng-if="adding == true && joined == false && editing == false">
 <button ng-click="toggleCreate()">Stop Adding</button>    

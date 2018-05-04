@@ -1,6 +1,6 @@
 // JavaScript Document
-app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser){
-	// User data
+app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser, $window){
+    // User data
     var token = $cookies.get('accessToken');
     if(typeof token === 'undefined'){ $state.go('login'); };
     $scope.user = jwtHelper.decodeToken(token);
@@ -181,11 +181,17 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     
     // Join chat if already in cookie
     if($scope.joined != false){
-        console.log('hey')
+        /*var go = function(){
+           window.scroll({
+              top: 1000,
+              behavior: "smooth"
+            });
+        };*/
         interface.join($scope.joined);
         interface.getMessages($scope.joined).then(function(res){
             $scope.messages = res;
-            //$scope.$apply();
+            //go()
+            $window.scrollTo(0, 999999999999);
         })
     }
     
