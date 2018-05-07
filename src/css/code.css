@@ -334,7 +334,11 @@ body {
 }
 
 .messageChatArea img {
-  max-width: 300px;
+  max-width: 560px;
+}
+.messageChatArea iframe {
+  width: 560px;
+  height: 315px;
 }
 .messageChatArea ul {
   list-style: none;
@@ -350,7 +354,7 @@ body {
   z-index: 0;
   top: 0;
   padding-left: 0px;
-  padding-bottom: 80px;
+  padding: 20px 0px 20px 0px;
   /*height: 100%;*/
 }
 .msgAreaParent {
@@ -362,14 +366,70 @@ body {
   overflow-y: scroll;
   height: calc(100% - 60px);
 }
-.messageChatArea li {
+.message {
+  text-align: left;
   margin-left: 20px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-family: sans-serif;
+}
+.msgParts li {
+  padding: 0;
+}
+.editMsgIcon {
+  opacity: 0.04;
+  transition: opacity 0.4s;
+}
+.editMsgIcon:hover {
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+.deleteMsgIcon {
+  opacity: 0.02;
+  margin-left: 20px;
+  transition: opacity 0.4s;
+}
+.deleteMsgIcon:hover {
+  opacity: 1;
+  margin-left: 20px;
+  transition: opacity 0.4s;
+}
+.message p {
+  margin: 0px 0px 20px 0px;
+}
+.chatInfo {
+  display: inline-block;
+  margin: 0px 20px 20px 0px;
+}
+.msgEditArea textarea {
+  border: none ;
+  background-color: gray;
+  border-radius: 5px;
+  color: white;
+  max-width: 560px;
+  max-height: 200px;
+  min-height: 60px;
+  min-width: 400px;
+  font-family: sans-serif;
+  padding: 10px;
+  font-size: 14px;
+}
+.msgEditArea button {
+  margin-left: 20px;
+}
+.message h4 {
+  color: #7e7e7e;
+}
+.msgParts {
+  margin: 0;
+  padding: 0;
 }
 .messageChatArea p {
   text-align: left;
 }
 .chatUsername {
   color: green;
+  text-align: left;
 }
 .chatInputArea {
   width: 100%;
@@ -431,8 +491,7 @@ body {
   border-radius: 100%;
   background-position: center;
 }
-input[type="text"],
-input[type="password"] {
+.profileInput {
   width: 20%;
   padding: 7px;
   border: 2px solid #000000;
@@ -464,11 +523,11 @@ input[type="button"]:hover {
   font-weight: bold;
   background-color: #808080;
 }
-p {
+.profileText {
   font-family: 'Molengo', Georgia, Times, serif;
   font-size: 20px;
   color: #FFFFFF;
 }
-img {
+.galleryImg {
   width: 10%;
 }

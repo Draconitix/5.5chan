@@ -12,6 +12,8 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         socket.emit('sendMessage', { parts: parts, user: user.username, text: text });
     }
     
+    
+    
     // Must make routing in backend though
     var getMessages = function(chatroom){
         var deferred = $q.defer();
@@ -22,6 +24,26 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         })
         return deferred.promise;
     };
+    
+    var delMessage = function(query){
+        var deferred = $q.defer();
+        $http({ method: 'DELETE', url: 'chat/post/remove', params: { chatroom: query.chatroom, sentAt: query.sentAt, user: user.username }, headers: { 'Authorization': 'Bearer ' + token}}).then(function(res){
+            deferred.resolve(res.data);
+        }, function(err){
+            deferred.reject(err);
+        })
+        return deferred.promise;
+    }
+    
+    var editMessage = function(query, data){
+        var deferred = $q.defer();
+        $http({ method: 'PUT', url: 'chat/post/update', params: { chatroom: query.chatroom, text: query.text, user: user.username }, data: data, headers: { 'Authorization': 'Bearer ' + token}}).then(function(res){
+            deferred.resolve(res.data);
+        }, function(err){
+            deferred.reject(err);
+        })
+        return deferred.promise;
+    }
     
     // Messaging callback
     var chatRoomUsers;
@@ -151,5 +173,5 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         msgCbPromise(msgs)
     };
     
-    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, users: chatRoomUsers, getMessages: getMessages, msgPromise: msgPromiseMain };
+    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, users: chatRoomUsers, getMessages: getMessages, msgPromise: msgPromiseMain, editMessage: editMessage, delMessage: delMessage  };
 });

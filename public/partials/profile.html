@@ -1,4 +1,4 @@
-<p ng-if="profileLoading == true">Loading... </p>
+<p class="profileText" ng-if="profileLoading == true">Loading... </p>
 <br />
 <div ng-if="editing == false && galleryT == false" class="profile">
 <table width="100%">
@@ -27,14 +27,14 @@ Username: {[{ user.username }]}
 <div class="editProfile">
 <form enctype="multipart/form-data" ng-submit="put()" ng-if="editing == true">
 <br />    
-<div><input type="text" name="username" placeholder="Username" ng-model="eUser.username" ng-blur="validate(eUser.username, 'username')"><br>{[{ errors.username }]}</div>
+<div><input class="profileInput" type="text" name="username" placeholder="Username" ng-model="eUser.username" ng-blur="validate(eUser.username, 'username')"><br>{[{ errors.username }]}</div>
 <br />       
-<div><input  type="text" name="email" placeholder="Email" ng-model="eUser.email" ng-blur="validate(eUser.email, 'email')"><br>{[{ errors.email }]}</div>
+<div><input class="profileInput" type="text" name="email" placeholder="Email" ng-model="eUser.email" ng-blur="validate(eUser.email, 'email')"><br>{[{ errors.email }]}</div>
 <br />       
 <div><textarea maxlength="150"  type="text" name="desc" placeholder="Description" ng-model="eUser.desc" ng-blur="validate(eUser.desc, 'desc')"></textarea><br>{[{ errors.desc }]}</div>
 <br />             
 <i class="fas fa-file-image"><input style="opacity: 0" name="profile" type="file" onchange="angular.element(this).scope().changeFile(this.files)" /></i>&shy;&shy;<p>{[{ currentFile.name }]}</p>
-<p class="inputError">{[{ errors.profile }]}</p> 
+<p class="profileText" class="inputError">{[{ errors.profile }]}</p> 
 <br />   
 <input type="button" ng-click="toggleEdit()" value="Stop Editing ">
 {[{ errors.main }]}
@@ -48,8 +48,8 @@ Username: {[{ user.username }]}
 <input type="button" ng-if="galleryD == true" ng-click="galleryDelSelectAll()" value="{[{ gallerySAText }]}">
 <ul ng-if="gallery.length > 0">
 <li ng-repeat="img in gallery">
-    <img ng-click="setAsProfile(img)" ng-if="img.thumb == true" ng-src="{[{ img.uri }]}thumb.{[{ img.type }]}" />
-    <img ng-click="setAsProfile(img)" ng-if="img.thumb == false" src="/{[{ img.uri }]}original.{[{ img.type }]}" />
+    <img class="galleryImg" ng-click="setAsProfile(img)" ng-if="img.thumb == true" ng-src="{[{ img.uri }]}thumb.{[{ img.type }]}" />
+    <img class="galleryImg" ng-click="setAsProfile(img)" ng-if="img.thumb == false" src="/{[{ img.uri }]}original.{[{ img.type }]}" />
     <input ng-if="galleryD == true" type="checkbox" ng-model="img.delete" />
 </li>    
 </ul>
@@ -61,4 +61,4 @@ Username: {[{ user.username }]}
 <input type="button" ng-if="galleryD == true" value="Delete Images">    
 </ul>
 </div>
-<p ng-if="galleryLoading == true">Loading...</p>
+<p class="profileText" ng-if="galleryLoading == true">Loading...</p>

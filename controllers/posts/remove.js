@@ -1,7 +1,8 @@
 var exp = module.exports = {};
-db = require('../../models/functions/dbMethods');
+var db = require('../../models/functions/dbMethods');
+var ObjectId = require('mongodb').ObjectID;
 
-exp.main = function(data, user, httpMethod, cb){
+exp.main = function(query, user, httpMethod, cb){
     if(httpMethod == "DELETE"){
         if(typeof query == "object"){
         var mainCall = function(stat, response){
@@ -11,8 +12,9 @@ exp.main = function(data, user, httpMethod, cb){
                  cb(stat, response);
             }
         };
-        //console.log(data);
-        db.delete('chat', { chatroom: data.chatroom, user: user, text: data.text }, mainCall);
+        console.log(query);
+        query.user = user;
+        db.delete('posts', query, mainCall);
         } else {
              cb(400, 'No data given');
         }

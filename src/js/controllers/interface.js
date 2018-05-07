@@ -190,28 +190,113 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         interface.join($scope.joined);
         interface.getMessages($scope.joined).then(function(res){
             $scope.messages = res;
-            //go()
-            $window.scrollTo(0, 999999999999);
+            $scope.$apply();
         })
     }
     
     // Messaging
-    
+   
     $scope.messages = [];
     $scope.trustUrl = function(url){
         return $sce.trustAsResourceUrl(url);
     };
     $scope.message = { text: "" };
+    $scope.atBottom = false;
     $scope.sendMessage = function(){
         interface.send($scope.message.text);
         var parts = messageParser($scope.message.text)
-        $scope.messages.push({ parts: parts, user: $scope.user.username, sentAt: Date.now() });
+        var dt = new Date(Date.now());
+        $scope.messages.push({ parts: parts, user: $scope.user.username, sentAt: Date.now(), date: getDate(dt) });
+        $('.msgAreaParent, .messageChatArea, .messages').ready(function(){
+            var elem = document.getElementsByClassName('msgAreaParent')[0];
+            $('.msgAreaParent').scroll(function(){
+                  var y = elem.scrollTop;
+                  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+                  var h = Math.round(hInit);
+                  var range = h - 200;
+                  $scope.atBottom = range <= y && y <= h;
+            });
+            if($scope.atBottom == true){
+                $(".msgAreaParent").animate({
+                     scrollTop: elem.scrollHeight
+                 }, 600);
+            }
+        })
     }
+    var getDate = function (date) {
+              var year = date.getFullYear();
+              var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+              var month = (1 + date.getMonth()).toString();
+              month = month.length > 1 ? month : '0' + month;
+              var day = date.getDate().toString();
+              day = day.length > 1 ? day : '0' + day;
+              var hours = date.getHours();
+              var minutes = date.getMinutes();
+              var ampm = hours >= 12 ? 'pm' : 'am';
+              hours = hours % 12;
+              hours = hours ? hours : 12; // the hour '0' should be '12'
+              minutes = minutes < 10 ? '0'+minutes : minutes;
+              var strTime = hours + ':' + minutes + ' ' + ampm;
+              return monthNames[month - 1] + ' ' + Math.round(day) + ', ' + year + ' ' + strTime;
+    };
     var msgCb = function(msgData){
+        var dt = new Date(Date.now());
+        msgData.date = getDate(dt);
         $scope.messages.push(msgData);
         $scope.$apply();
-    };
+        $('.msgAreaParent, .messageChatArea, .messages').ready(function(){
+            var elem = document.getElementsByClassName('msgAreaParent')[0];
+            $('.msgAreaParent').scroll(function(){
+                  var y = elem.scrollTop;
+                  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+                  var h = Math.round(hInit);
+                  var range = h - 200;
+                  $scope.atBottom = range <= y && y <= h;
+            });
+            if($scope.atBottom == true){
+                $(".msgAreaParent").animate({
+                     scrollTop: elem.scrollHeight
+                 }, 600);
+            }
+    })
+    }
+ 
+  
+    $('#msgAreaParent').scroll(function(){
+        var elem = document.getElementById('msgAreaParent');
+    })
     interface.incoming(msgCb);
+    $scope.editMessage = function(query, pos){
+        var m = $scope.messages[pos];
+        var newParts = messageParser(query.edit);
+        //console.log(query);
+        /*$scope.messages[pos].editing = false;
+        var newParts = messageParser(query.edit);
+        $scope.messages[pos].parts = newParts;
+        $scope.messages[pos].text = query.edit;*/
+        var q = { chatroom: m.chatroom, text: m.text };
+        var d = { parts: newParts, user: m.user, chatroom: m.chatroom, sentAt: m.sentAt, text: query.edit }
+        interface.editMessage(q, d).then(function(res){
+            m.parts = newParts;
+            m.text = query.edit;
+            m.editing = false;
+            console.log(newParts)
+        }, function(err){
+            console.log(err);
+        });
+    };    
+    
+    $scope.deleteMessage = function(query){
+        interface.delMessage(query).then(function(res){
+        $scope.messages.map(function(e, i){
+            if(query == e){
+                $scope.messages.splice(i, 1);
+            }
+        })
+        }, function(err){
+            console.log(err);
+        })
+    }
     // Form validation
     $scope.validate = function(input, field){
         var obj = {};

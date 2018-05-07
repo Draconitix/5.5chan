@@ -35,7 +35,8 @@
     "js-sha256": "*",
     "randomstring": "*",
     "rimraf": "*",
-    "jquery": "*"
+    "jquery": "*",
+    "mongodb": "*"
   },
   "devDependencies": {
     "grunt": "latest",

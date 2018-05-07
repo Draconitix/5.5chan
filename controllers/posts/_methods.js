@@ -13,7 +13,7 @@ exp.exec = function(method, data, query, user, httpMethod, cb){
                     create.main(data, user.username, httpMethod, cb);
                     break;    
                 case 'remove':
-                    remove.main(data, user.username, httpMethod, cb);
+                    remove.main(query, user.username, httpMethod, cb);
                     break;
                 case 'update':
                     update.main(data, query, user.username, httpMethod, cb);

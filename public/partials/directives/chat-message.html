@@ -1,5 +1,8 @@
 <ul id="messageChatArea" class="messageChatArea">
-    <li class="message" ng-repeat="msg in messages track by $index"><p class="chatUsername">{[{ msg.user }]}</p><ul><li ng-repeat="part in msg.parts">
+    <li class="message" ng-repeat="msg in messages track by $index">
+    <h3 class="chatUsername chatInfo">{[{ msg.user }]}</h3><h4 class="chatInfo">{[{ msg.date }]}</h4><i class="fas fa-edit editMsgIcon" ng-if="msg.user == user" ng-click="toggleEdit($index)"></i><i class="fas fa-trash-alt deleteMsgIcon" ng-if="msg.user == user && msg.editing == false" ng-click="delmessage({query: msg})"></i>
+    <div ng-if="msg.editing == true" class="msgEditArea"><textarea ng-model="msg.edit" type="text"></textarea><button ng-click="editmessage({ query: msg, pos: $index })">Edit</button></div> 
+    <ul ng-if="msg.editing == false" class="msgParts"><li ng-repeat="part in msg.parts">
     <p ng-if="part.type == 'text'">{[{ part.text }]}</p>
     <a ng-if="part.type == 'url'" target="_blank" href="{[{ part.href }]}">{[{ part.href }]}</a>
     <img ng-if="part.type == 'image'" ng-src="{[{ part.url }]}" />

@@ -93,9 +93,29 @@ exports.put = function(dataModel, query, data, callback){
 
 exports.delete = function(dataModel, query, callback){
     setModel(dataModel);
-    currentModel.remove(query, function(err, docs){
+    currentModel.find(query, function(err, docs){
+        console.log(docs)
        if(err) { callback(400, err); } else {
-            callback(200, sfs(docs));
+         currentModel.remove(docs[0], function(err, doc){
+            if(err) { callback(400, err); } else {
+                callback(200, sfs(doc));
+            }
+        }); 
+        }
+    });     
+    
+};
+
+exports.deleteId = function(dataModel, id, callback){
+    setModel(dataModel);
+    currentModel.findById(id, function(err, docs){
+        console.log(docs)
+       if(err) { callback(400, err); } else {
+            currentModel.remove(docs, function(err, doc){
+            if(err) { callback(400, err); } else {
+                callback(200, sfs(doc));
+            }
+        }); 
         }
     });
 };
