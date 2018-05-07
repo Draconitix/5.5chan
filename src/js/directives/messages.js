@@ -47,16 +47,7 @@ app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cook
                      }, 0);
                 })    
             }
-            scroll();
-             var mp = scope.messages.map(function(e, i){
-                 var time = new Date(e.sentAt)
-                 e.date = getDate(time);
-                 e.editing = false;
-                 if(i == scope.messages.length - 1){
-                     scope.$apply();
-                 }
-             })
-             
+            scroll();     
         }
     }
 });

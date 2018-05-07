@@ -14,7 +14,7 @@ exp.main = function(query, user, httpMethod, cb){
         };
         console.log(query);
         query.user = user;
-        db.delete('posts', query, mainCall);
+        db.deleteId('posts', query._id, mainCall);
         } else {
              cb(400, 'No data given');
         }

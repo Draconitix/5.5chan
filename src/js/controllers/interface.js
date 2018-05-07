@@ -14,10 +14,15 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     $scope.joined = $cookies.get('chatroom') != undefined ? $cookies.get('chatroom') : false;
 	$scope.posts = [];
     $scope.joinChat = function(name){
+        $scope.messages = [];
         interface.join(name);
         interface.getMessages(name).then(function(res){
             $scope.messages = res;
-            //$scope.$apply();
+            $scope.messages.map(function(e, i){
+                 var time = new Date(e.sentAt)
+                 e.date = getDate(time);
+                 e.editing = false;
+             })
         })
     };
     $scope.leaveChat = function(){
@@ -181,6 +186,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     
     // Join chat if already in cookie
     if($scope.joined != false){
+        $scope.messages = [];
         /*var go = function(){
            window.scroll({
               top: 1000,
@@ -190,7 +196,12 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         interface.join($scope.joined);
         interface.getMessages($scope.joined).then(function(res){
             $scope.messages = res;
-            $scope.$apply();
+            $scope.messages.map(function(e, i){
+                 var time = new Date(e.sentAt)
+                 e.date = getDate(time);
+                 e.editing = false;
+             })
+            //$scope.$apply();
         })
     }
     
@@ -203,10 +214,14 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     $scope.message = { text: "" };
     $scope.atBottom = false;
     $scope.sendMessage = function(){
-        interface.send($scope.message.text);
-        var parts = messageParser($scope.message.text)
-        var dt = new Date(Date.now());
-        $scope.messages.push({ parts: parts, user: $scope.user.username, sentAt: Date.now(), date: getDate(dt) });
+        var cb = function(res){
+            var dt = new Date(res.sentAt);
+            res.date = getDate(dt);
+            res.editing = false;
+            console.log(res)
+            $scope.messages.push(res);
+        }
+        interface.send($scope.message.text, cb);
         $('.msgAreaParent, .messageChatArea, .messages').ready(function(){
             var elem = document.getElementsByClassName('msgAreaParent')[0];
             $('.msgAreaParent').scroll(function(){
@@ -242,6 +257,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     var msgCb = function(msgData){
         var dt = new Date(Date.now());
         msgData.date = getDate(dt);
+        msgData.editing = false;
         $scope.messages.push(msgData);
         $scope.$apply();
         $('.msgAreaParent, .messageChatArea, .messages').ready(function(){
@@ -274,7 +290,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         var newParts = messageParser(query.edit);
         $scope.messages[pos].parts = newParts;
         $scope.messages[pos].text = query.edit;*/
-        var q = { chatroom: m.chatroom, text: m.text };
+        var q = { _id: m._id, chatroom: m.chatroom, text: m.text };
         var d = { parts: newParts, user: m.user, chatroom: m.chatroom, sentAt: m.sentAt, text: query.edit }
         interface.editMessage(q, d).then(function(res){
             m.parts = newParts;
@@ -287,6 +303,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     };    
     
     $scope.deleteMessage = function(query){
+        console.log(query)
         interface.delMessage(query).then(function(res){
         $scope.messages.map(function(e, i){
             if(query == e){
@@ -297,6 +314,33 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
             console.log(err);
         })
     }
+    
+    var msgDelCb = function(id){
+        console.log(id)
+        $scope.messages.map(function(e, i){
+            console.log(e._id + ' ' + id)
+            if(e._id == id){
+                $scope.messages.splice(i, 1);
+                $scope.$apply();
+            }
+        })
+    };
+    
+     var msgEditCb = function(id, text, parts){
+        console.log(id + '  ' + text + ' ' + parts) 
+        $scope.messages.map(function(e, i){
+            if(e._id == id){
+                e.parts = parts;
+                e.text = text;
+                $scope.$apply();
+            }
+        })
+    };
+    
+    interface.msgEditPromise(msgEditCb);
+    
+    interface.msgDelPromise(msgDelCb);
+    
     // Form validation
     $scope.validate = function(input, field){
         var obj = {};

@@ -7,12 +7,23 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
     
     // Messaging methods
     
-    var sendMessage = function(text){
+     var createMessage = function(data){
+        var deferred = $q.defer();
+        $http({ method: 'POST', url: 'chat/post/create', data: data, headers: { 'Authorization': 'Bearer ' + token}}).then(function(res){
+            deferred.resolve(res.data);
+        }, function(err){
+            deferred.reject(err);
+        })
+        return deferred.promise;
+    };
+    
+    var sendMessage = function(text, cb){
         var parts = messageParser(text);
-        socket.emit('sendMessage', { parts: parts, user: user.username, text: text });
+        createMessage({ parts: parts, user: user.username, text: text, chatroom: $cookies.get('chatroom') }).then(function(res){
+            cb(res);
+            socket.emit('sendMessage', res);
+        });
     }
-    
-    
     
     // Must make routing in backend though
     var getMessages = function(chatroom){
@@ -25,10 +36,13 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         return deferred.promise;
     };
     
+   
+    
     var delMessage = function(query){
         var deferred = $q.defer();
-        $http({ method: 'DELETE', url: 'chat/post/remove', params: { chatroom: query.chatroom, sentAt: query.sentAt, user: user.username }, headers: { 'Authorization': 'Bearer ' + token}}).then(function(res){
+        $http({ method: 'DELETE', url: 'chat/post/remove', params: { _id: query._id }, headers: { 'Authorization': 'Bearer ' + token}}).then(function(res){
             deferred.resolve(res.data);
+            socket.emit('messageUpdate', { msgId: query._id, method: 'DELETE'})
         }, function(err){
             deferred.reject(err);
         })
@@ -36,9 +50,12 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
     }
     
     var editMessage = function(query, data){
+        console.log('data.text ' + data.text)
         var deferred = $q.defer();
-        $http({ method: 'PUT', url: 'chat/post/update', params: { chatroom: query.chatroom, text: query.text, user: user.username }, data: data, headers: { 'Authorization': 'Bearer ' + token}}).then(function(res){
+        $http({ method: 'PUT', url: 'chat/post/update', params: { _id: query._id, chatroom: query.chatroom, text: query.text, user: user.username }, data: data, headers: { 'Authorization': 'Bearer ' + token}}).then(function(res){
             deferred.resolve(res.data);
+            console.log('data.text ' + data.text)
+            socket.emit('messageUpdate', { msgId: query._id, method: 'PUT', text: data.text, parts: data.parts})
         }, function(err){
             deferred.reject(err);
         })
@@ -143,6 +160,44 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         cbPromise(err)
     };
     
+    
+    // New Msg
+     
+    var msgPromiseMain = function(cb){
+        msgCbPromise = cb;
+    };
+    
+    var msgCbPromise;
+    
+    var msgPromiseCb = function(msgs){
+        msgCbPromise(msgs)
+    };
+    
+    // Del Msg
+    
+    var msgDeleteMain = function(cb){
+        msgDelPromise = cb;
+    };
+    
+    var msgDelPromise;
+    
+    var msgDelCb = function(msgId){
+        msgDelPromise(msgId)
+    };
+    
+    // Edit Msg
+    
+    var msgEditMain = function(cb){
+        msgEditPromise = cb;
+    };
+    
+    var msgEditPromise;
+    
+    var msgEditCb = function(msgId, text, parts){
+        msgEditPromise(msgId, text, parts)
+    };
+    
+    
     socket.on('chatPromise', function(data){
         if(data.error){
             promiseCb(data.error);
@@ -158,20 +213,19 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         promiseCb('update');
     });
     
+    socket.on('messageDelete', function(data){
+        msgDelCb(data._id)
+    })
+    
+    socket.on('messageEdit', function(data){
+        console.log('edit cb data.text = ' + data.text)
+        msgEditCb(data._id, data.text, data.parts);
+    })
+    
     socket.on('roomUpdate', function(data){
         if(data.addUser == true) { if(chatRoomUsers.indexOf(data.user) == -1){ chatRoomUsers.push(data.user) } };
         if(data.addUser == false){ chatRoomUsers.map(function(e, i){ if(e == data.user){ chatRoomUsers.splice(i, 1) } }); }
     });
     
-     var msgPromiseMain = function(cb){
-        msgCbPromise = cb;
-    };
-    
-    var msgCbPromise;
-    
-    var msgPromiseCb = function(msgs){
-        msgCbPromise(msgs)
-    };
-    
-    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, users: chatRoomUsers, getMessages: getMessages, msgPromise: msgPromiseMain, editMessage: editMessage, delMessage: delMessage  };
+    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, users: chatRoomUsers, getMessages: getMessages, msgPromise: msgPromiseMain, editMessage: editMessage, delMessage: delMessage, msgDelPromise: msgDeleteMain, msgEditPromise: msgEditMain };
 });

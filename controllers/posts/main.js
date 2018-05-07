@@ -12,7 +12,14 @@ io.on('connection', function(socket){
         for (var clientId in cl ) {
           //console.log('client: %s', clientId); //Seeing is believing 
           var client_socket = io.sockets.connected[clientId];//Do whatever you want with this
-          chatUserList.push(client_socket.request.user.username)
+          var waitUntilAuth = function(){
+            if(client_socket.request == undefined){
+                waitUntilAuth();  
+            } else {
+                chatUserList.push(client_socket.request.user.username)
+            }
+          }
+          waitUntilAuth();
         }
         return chatUserList;
     };
@@ -64,23 +71,17 @@ io.on('connection', function(socket){
         joinedChat = undefined; 
         socket.broadcast.to(joinedChat).emit('roomUpdate', { addUser: false, user: socket.request.user.username })
     })
-    socket.on('getMessages', function(data){
-        var cb = function(stat, res){
-            if(stat == 200){
-                socket.emit('getMessagesPromise', { messages: res });
-            } else {
-                console.log(res);
-            }
-        };
-        methods('list', null, { chatroom: data.chatroom }, socket.request.user.username, cb);
-    })
     socket.on('sendMessage', function(data){
-        var cb = function(stat, res){
-            if(stat == 200){
-                socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: socket.request.user.username, text: data.text, sentAt: res.sentAt, chatroom: joinedChat });    
-            }
-        };
-        methods('create', { parts: data.parts, user: socket.request.user.username, text: data.text, chatroom: joinedChat }, null, socket.request.user, 'POST', cb)
+        socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: socket.request.user.username, text: data.text, sentAt: data.sentAt, chatroom: joinedChat });    
+    });
+    socket.on('messageUpdate', function(data){
+        console.log('msgUpdate  ' + JSON.stringify(data));
+        if(data.method == "DELETE"){
+            socket.broadcast.to(joinedChat).emit('messageDelete', { _id: data.msgId });
+        } else if(data.method == "PUT"){
+            console.log(data.text)
+            socket.broadcast.to(joinedChat).emit('messageEdit', { _id: data.msgId, text: data.text, parts: data.parts });
+        }
     });
     socket.on('postRoom', function(data){
         socket.broadcast.emit('postRoom', data);
