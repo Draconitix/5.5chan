@@ -213,31 +213,34 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     };
     $scope.message = { text: "" };
     $scope.atBottom = false;
-    
-    $scope.sendMessage = function(){
-        var cb = function(res){
-            var dt = new Date(res.sentAt);
-            res.date = getDate(dt);
-            res.editing = false;
-            console.log(res)
-            $scope.messages.push(res);
-        }
-        interface.send($scope.message.text, cb);
-        $('.msgAreaParent, .messageChatArea, .messages').ready(function(){
-            var elem = document.getElementsByClassName('msgAreaParent')[0];
-            $('.msgAreaParent').scroll(function(){
-                  var y = elem.scrollTop;
-                  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
-                  var h = Math.round(hInit);
-                  var range = h - 200;
-                  $scope.atBottom = range <= y && y <= h;
-            });
-            if($scope.atBottom == true){
-                $(".msgAreaParent").animate({
-                     scrollTop: elem.scrollHeight
-                 }, 600);
-            }
-        })
+	
+    $scope.sendMessage = function(event){
+		if($scope.message.text != "" && event.keyCode === 13){
+			var cb = function(res){
+				var dt = new Date(res.sentAt);
+				res.date = getDate(dt);
+				res.editing = false;
+				console.log(res)
+				$scope.messages.push(res);
+			}
+			interface.send($scope.message.text, cb);
+			$scope.message.text = "";
+			$('.msgAreaParent, .messageChatArea, .messages').ready(function(){
+				var elem = document.getElementsByClassName('msgAreaParent')[0];
+				$('.msgAreaParent').scroll(function(){
+					  var y = elem.scrollTop;
+					  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+					  var h = Math.round(hInit);
+					  var range = h - 200;
+					  $scope.atBottom = range <= y && y <= h;
+				});
+				if($scope.atBottom == true){
+					$(".msgAreaParent").animate({
+						 scrollTop: elem.scrollHeight
+					 }, 600);
+				}
+			})
+		}
     }
     var getDate = function (date) {
               var year = date.getFullYear();
@@ -255,6 +258,13 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
               var strTime = hours + ':' + minutes + ' ' + ampm;
               return monthNames[month - 1] + ' ' + Math.round(day) + ', ' + year + ' ' + strTime;
     };
+	$('.msgAreaParent').scroll(function(){
+                  var y = elem.scrollTop;
+                  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+                  var h = Math.round(hInit);
+                  var range = h - 200;
+                  $scope.atBottom = range <= y && y <= h;
+            });
     var msgCb = function(msgData){
         var dt = new Date(Date.now());
         msgData.date = getDate(dt);
@@ -263,13 +273,13 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         $scope.$apply();
         $('.msgAreaParent, .messageChatArea, .messages').ready(function(){
             var elem = document.getElementsByClassName('msgAreaParent')[0];
-            $('.msgAreaParent').scroll(function(){
-                  var y = elem.scrollTop;
-                  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
-                  var h = Math.round(hInit);
-                  var range = h - 200;
-                  $scope.atBottom = range <= y && y <= h;
-            });
+			$('.msgAreaParent').scroll(function(){
+					  var y = elem.scrollTop;
+					  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+					  var h = Math.round(hInit);
+					  var range = h - 200;
+					  $scope.atBottom = range <= y && y <= h;
+			});
             if($scope.atBottom == true){
                 $(".msgAreaParent").animate({
                      scrollTop: elem.scrollHeight
@@ -331,8 +341,8 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         console.log(id + '  ' + text + ' ' + parts) 
         $scope.messages.map(function(e, i){
             if(e._id == id){
-                e.parts = parts;
-                e.text = text;
+                $scope.messages[i].parts = parts;
+                $scope.messages[i].text = text;
                 $scope.$apply();
             }
         })

@@ -5,7 +5,7 @@
 <div ng-if="joined != false">
 <div class="chatInputArea">
 <div class="wrapper">   
-<input type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><button ng-click="sendMessage()">Send Message</button><button ng-click="leaveChat()">Leave Chat Room</button></div></div>        
+<input ng-keypress="sendMessage($event)" type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><button ng-click="leaveChat()">Leave Chat Room</button></div></div>        
 <chat-messages id="msgAreaParent" class="msgAreaParent" messages="messages" authorize="trustUrl(url)" editmessage="editMessage(query, pos)" delmessage="deleteMessage(query)"></chat-messages>        
 </div>
 <div ng-if="adding == true && joined == false && editing == false">
