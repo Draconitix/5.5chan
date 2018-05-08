@@ -206,13 +206,14 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     }
     
     // Messaging
-   
+    
     $scope.messages = [];
     $scope.trustUrl = function(url){
         return $sce.trustAsResourceUrl(url);
     };
     $scope.message = { text: "" };
     $scope.atBottom = false;
+    
     $scope.sendMessage = function(){
         var cb = function(res){
             var dt = new Date(res.sentAt);
