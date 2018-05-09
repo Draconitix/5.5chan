@@ -5,25 +5,153 @@
 .messageChatArea iframe {
     width: 560px;
     height: 315px;
+    background-color: grey;
 }
 
 .messageChatArea ul {
     list-style: none;
 }
 
-.messageChatArea {
-    text-align: left;
-    color: #fff;
+.chatSidebar {
+	height: 100vh;
+	width: 20vw;
+	min-width: 350px;
+	background-color: #404040;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2000;
+    transition: all 0.6s;
     list-style-type: none;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+.chatSidebar h1{
+    text-align: center;
+    color: green;
+}
+.chatSidebar span{
+    text-align: center;
+    color: darkgreen;
+}
+
+.sidebarProfileImg {
+    width: 70px;
+    height: 70px;
+    background-size:cover;
+    border-radius: 100%;
+}
+
+.chatSidebar ul {
+	list-style-type: none;
+	position: relative;
+	width: 80%;
+	padding: 0;
+	margin: 50px 0px 0px 0px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.chatSidebarDivider {
+	width: 80%;
+	height: 1px;
+	background-color: #fff;
+	position: absolute;
+	/* margin: 1px 0px 10px 0px; */
+	left: 50%;
+	transform: translateX(-50%);
+	margin-top: 100px;
+	top: 0;
+}
+
+.chatSidebar li {
+    display: inline-block;
     width: 100%;
-    margin: 0;
+    position: relative;
+    margin-top: 20px;
+}
+
+.chatSidebar h3 {
+	display: inline-block;
+	font-size: 23px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	margin-left: 100px;
+}
+
+.chatSidebarWrapper {
+	width: 90%;
+	height: 90%;
+	position: absolute;
+	top: 50%;
+	transform: ~"translateY(-50%) translateX(-50%)";
+	left: 50%;
+}
+.sidebarExpanded {
+    margin: 0px 0px 0px 0px;
+    transition: all 0.6s;
+}
+
+.expandSidebar {
+    background:  -webkit-linear-gradient(left, rgba(0,0,0,0.65) 58%,rgba(0,0,0,0) 100%);
+    width: 50px;
+    height: ~"calc(100% - 60px)";
+    opacity: 0;
+    transition: opacity 0.6s;
+    z-index: 2000;
     position: absolute;
-    left: 0;
-    z-index: 0;
     top: 0;
-    padding-left: 0px;
-    padding: 20px 0px 20px 0px;
-    /*height: 100%;*/
+    left: 0;
+}
+
+.expandSidebar:hover {
+    background:  -webkit-linear-gradient(left, rgba(0,0,0,0.65) 58%,rgba(0,0,0,0) 100%);
+    width: 50px;
+    height: ~"calc(100% - 60px)";
+    opacity: 1;
+    transition: opacity 0.6s;
+    transition-delay: 1s;
+    z-index: 2000;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.expandSidebar i {
+    color: white;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    margin-left: 13px;
+    font-size: 21px;
+}
+
+.expandSidebarHover {
+    transition-delay: 1s !important;
+    transition: all 0.6s;
+    margin-left: 50px !important;
+}
+
+.sidebarCollapsed {
+    margin: 0px 0px 0px -20vw;
+    transition: all 0.6s;
+}
+
+.chatAreaWindow {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all 0.6s;
+}
+
+.chatWindowExpanded {
+    width: 80vw;
+    transition: all 0.6s;
 }
 
 .msgAreaParent {
@@ -34,6 +162,9 @@
 	width: 100%;
     overflow-y: scroll;
     height: ~"calc(100% - 60px)";
+    z-index: 0;
+    background-size: cover;
+    background-image: url('/images/defaultChatBg.jpg');
 }
 
 .message {
@@ -42,13 +173,15 @@
     margin-bottom: 20px;
     font-size: 14px;
     font-family: sans-serif;
+    transition: all 0.6s;
+    transition-delay: 0s;
 }
 .msgParts li {
     padding: 0;
 }
 
 .editMsgIcon {
-    opacity: 0.04;
+    opacity: 0.05;
     transition: opacity 0.4s;
 }
 
@@ -58,7 +191,7 @@
 }
 
 .deleteMsgIcon {
-    opacity: 0.02;
+    opacity: 0.05;
     margin-left: 20px;
     transition: opacity 0.4s;
 }
@@ -81,6 +214,17 @@
 
 .msgEditArea{
 
+}
+
+.messageRoomJoin {
+    font-size: 17px;
+    font-style: italic;
+}
+
+.messageRoomJoin span{
+    color: skyblue;
+    font-style: italic;
+    font-weight: bold;
 }
 
 .msgEditArea textarea{
@@ -110,6 +254,42 @@
     padding: 0;
 }
 
+.chatAreaOverlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0; 
+    background-color: #000000;
+    opacity: 0.35;
+    z-index: 1;
+}
+
+/*.chatAreaBody {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background-image: url('images/defaultChatBg.jpg');
+}*/
+
+.messageChatArea {
+    text-align: left;
+    color: #fff;
+    list-style-type: none;
+    width: 100%;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    z-index: 5;
+    top: 0;
+    padding-left: 0px;
+    padding: 20px 0px 20px 0px;
+    /*height: 100%;*/
+}
+
 .messageChatArea p{
     text-align: left;
 }
@@ -119,12 +299,17 @@
     text-align: left;
 }
 
+.chatCurrentUser {
+    color: lightgreen;
+    text-align: left;
+}
+
 .chatInputArea {
     width: 100%;
     height: 60px;
     position: fixed;
     bottom: 0;
-    z-index: 1;
+    z-index: 1000;
     background-color: #898989;
 }
 

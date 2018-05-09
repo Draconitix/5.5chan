@@ -47,7 +47,13 @@ app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cook
                      }, 0);
                 })    
             }
-            scroll();     
+            scroll();   
+            $('.expandSidebar').hover(function(){
+                    $('.message').addClass('expandSidebarHover');
+            });
+            $('.expandSidebar').mouseleave(function(){
+                    $('.message').removeClass('expandSidebarHover');
+            });
         }
     }
 });

@@ -51,7 +51,7 @@ io.on('connection', function(socket){
                                   joinedChat = data.chatroom; 
                                   var chatUserList = getUsers();
                                   socket.emit('chatPromise', { name: data.chatroom, users: chatUserList });
-                                  socket.broadcast.to(joinedChat).emit('roomUpdate', { addUser: true, user: socket.request.user.username })
+                                  socket.broadcast.to(data.chatroom).emit('roomUpdate', { addUser: true, user: socket.request.user.username })
                               } else {
                                   socket.emit('chatPromise', { error: 'You are not in this private chat.' });
                               }   
@@ -67,9 +67,9 @@ io.on('connection', function(socket){
         }
     });
     socket.on('chatLeave', function(data){
-        socket.leave(data.chatroom);
-        joinedChat = undefined; 
         socket.broadcast.to(joinedChat).emit('roomUpdate', { addUser: false, user: socket.request.user.username })
+        socket.leave(data.chatroom); 
+        joinedChat = undefined;
     })
     socket.on('sendMessage', function(data){
         socket.broadcast.to(joinedChat).emit('message', { parts: data.parts, user: socket.request.user.username, text: data.text, sentAt: data.sentAt, chatroom: joinedChat });    

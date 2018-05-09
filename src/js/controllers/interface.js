@@ -8,10 +8,13 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
 		$cookies.remove('accessToken');
 		$state.go('login');
 	};
+    
+    
     // Chat data
     var failed = false;
     $scope.chatrooms = [];
     $scope.joined = $cookies.get('chatroom') != undefined ? $cookies.get('chatroom') : false;
+    $scope.joinedUsers = [];
 	$scope.posts = [];
     $scope.joinChat = function(name){
         $scope.messages = [];
@@ -30,6 +33,39 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         $scope.joined = false;
         $scope.messages = [];
     };
+    
+    var userCb = function(data){
+        if(data.addUser == true) { 
+            console.log(data.user.username);
+            var existsNum = 0;
+            $scope.joinedUsers.map(function(e, i){
+                if(e.username == data.user.username){
+                    existsNum++;
+                    console.log('exists')
+                }
+            })
+        if(existsNum == 0){
+            var dt = new Date(Date.now());
+            $scope.joinedUsers.push({ username: data.user.username, uri: data.user.uri, type: data.user.type });  
+            $scope.messages.push({ date: getDate(dt), sentAt: Date.now(), parts: [{ type: 'alert' , user: data.user.username, alert: 'has joined the chatroom.'}], editing: false })
+            $scope.$apply();                                                                       
+        } 
+        };
+        if(data.addUser == false){ $scope.joinedUsers.map(function(e, i){ if(e.username == data.user.username){ 
+            var dt = new Date(Date.now());
+            $scope.joinedUsers.splice(i, 1); 
+            $scope.messages.push({ date: getDate(dt), sentAt: Date.now(), parts: [{ type: 'alert' , user: data.user.username, alert: 'has left the chatroom.' }], editing: false })
+            $scope.$apply();                                                                                 
+        } }); }
+        if(data.addUser === 'multiple'){ 
+            $scope.joinedUsers = data.users;
+        };
+        //console.log(data)
+        //console.log('meep')
+    }
+    
+    interface.userPromiseCb(userCb)
+    
     // Cht error handling
     var refreshJoined = function(){ 
         $scope.joined = $cookies.get('chatroom');
@@ -352,6 +388,22 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     
     interface.msgDelPromise(msgDelCb);
     
+    // Sidebar 
+    
+    $scope.sidebarExpanded = false;
+    $scope.sidebarToggle = function(){
+        if($scope.sidebarExpanded == false){
+            $scope.sidebarExpanded = true;
+            $('.chatAreaWindow').addClass('chatWindowExpanded');
+            $('.chatSidebar').addClass('sidebarExpanded');
+            $('.chatSidebar').removeClass('sidebarCollapsed');
+        } else if($scope.sidebarExpanded == true){
+            $scope.sidebarExpanded = false;
+            $('.chatAreaWindow').removeClass('chatWindowExpanded');
+            $('.chatSidebar').removeClass('sidebarExpanded');
+            $('.chatSidebar').addClass('sidebarCollapsed');
+        }
+    };
     // Form validation
     $scope.validate = function(input, field){
         var obj = {};

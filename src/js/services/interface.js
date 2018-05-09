@@ -1,4 +1,4 @@
-app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser){
+app.service('interface', function($cookies, $http, $q, jwtHelper, assets, messageParser){
     var token = $cookies.get('accessToken');
     var user = jwtHelper.decodeToken(token);
     var socket = io.connect('', {
@@ -128,6 +128,35 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
     
     // User methods
     
+    var getUsersObjsLoop = function(users, cb){
+        var usersDataArr = [];
+        var i = 0;
+        console.log(users)
+        var max = users.length;
+        var main = function(){
+            var currentUser = users[i];
+            assets.get(users[i], 'profile').then(function(res){
+                usersDataArr.push({ username: currentUser, uri: res.uri, thumb: res.thumb, type: res.type });
+                //console.log(res.uri)
+                loop();
+            }, function(err){
+                loop();
+            })
+            i++;
+        }
+        var loop = function(){
+            if(i <= max - 1){
+                main();
+                //loop();
+            }
+            if(i == max){
+                cb(usersDataArr);
+                console.log('max')
+            }
+        };
+        main();
+    }
+    
     var getUsers = function(){
         var deferred = $q.defer();
         $http({ method: 'GET', url: 'chat/user/list'}).then(function(res){
@@ -160,6 +189,17 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
         cbPromise(err)
     };
     
+    // Chat user promise
+    
+    var userPromiseMain = function(cb){
+        userCbPromise = cb;
+    };
+    
+    var userCbPromise;
+    
+    var userPromiseCb = function(data){
+        userCbPromise(data)
+    };
     
     // New Msg
      
@@ -203,9 +243,14 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
             promiseCb(data.error);
         } else {
             $cookies.put('chatroom', data.name);
-            chatRoomUsers = data.users;
-            console.log(chatRoomUsers);
             promiseCb();
+            var cb = function(dataArr){
+                var nData = { users: dataArr };
+                //console.log(dataArr)
+                nData.addUser = "multiple"
+                userPromiseCb(nData);
+            }
+            getUsersObjsLoop(data.users, cb)
         }
     });
     
@@ -223,9 +268,19 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, messageParser)
     })
     
     socket.on('roomUpdate', function(data){
-        if(data.addUser == true) { if(chatRoomUsers.indexOf(data.user) == -1){ chatRoomUsers.push(data.user) } };
-        if(data.addUser == false){ chatRoomUsers.map(function(e, i){ if(e == data.user){ chatRoomUsers.splice(i, 1) } }); }
+        var cb = function(dataArr){
+           // console.log(dataArr)
+            //console.log('roomUpdate')
+                var nData = { user: dataArr[0] };
+                nData.addUser = data.addUser;
+                userPromiseCb(nData);
+        }
+        if(data.user != undefined){
+        var users = [];
+        users.push(data.user)    
+        getUsersObjsLoop(users, cb)
+        }
     });
     
-    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, users: chatRoomUsers, getMessages: getMessages, msgPromise: msgPromiseMain, editMessage: editMessage, delMessage: delMessage, msgDelPromise: msgDeleteMain, msgEditPromise: msgEditMain };
+    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, userPromiseCb: userPromiseMain, getMessages: getMessages, msgPromise: msgPromiseMain, editMessage: editMessage, delMessage: delMessage, msgDelPromise: msgDeleteMain, msgEditPromise: msgEditMain };
 });

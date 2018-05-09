@@ -2,12 +2,26 @@
 <li ng-repeat="room in chatrooms track by $index"><button ng-click="joinChat(room.name)">{[{ room.name }]}</button><button ng-click="toggleEdit($index)" ng-if="room.user == user.username">Edit Room</button></li>
 <button ng-click="toggleCreate()">+</button>    
 </ul>
-<div ng-if="joined != false">
+<div ng-if="joined != false">    
+<div class="chatSidebar sidebarCollapsed">
+<div class="chatSidebarWrapper">
+<h1><span>#</span> {[{ joined }]}</h1>
+<div class="chatSidebarDivider"></div>    
+<ul>
+<li ng-repeat="arrUser in joinedUsers | orderBy : 'username'">
+<div class="sidebarProfileImg" style="background-image: url({[{ arrUser.uri }]}thumb.{[{ arrUser.type }]}) "></div><h3 ng-class="arrUser.username == user.username ? 'chatCurrentUser' : 'chatUsername'">{[{ arrUser.username }]}</h3>    
+</li>    
+</ul>    
+</div>
+</div>
+<div class="chatAreaWindow">
+<div class="expandSidebar"><i ng-if="sidebarExpanded == false" ng-click="sidebarToggle()" class="fas fa-chevron-right"></i><i ng-if="sidebarExpanded == true" ng-click="sidebarToggle()" class="fas fa-chevron-left"></i></div>      
 <div class="chatInputArea">
 <div class="wrapper">   
 <input ng-keypress="sendMessage($event)" type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><button ng-click="leaveChat()">Leave Chat Room</button></div></div>        
-<chat-messages id="msgAreaParent" class="msgAreaParent" messages="messages" authorize="trustUrl(url)" editmessage="editMessage(query, pos)" delmessage="deleteMessage(query)"></chat-messages>        
+<chat-messages id="msgAreaParent" class="msgAreaParent" messages="messages" authorize="trustUrl(url)" editmessage="editMessage(query, pos)" delmessage="deleteMessage(query)"></chat-messages> 
 </div>
+</div>        
 <div ng-if="adding == true && joined == false && editing == false">
 <button ng-click="toggleCreate()">Stop Adding</button>    
 <form>   
