@@ -128,6 +128,21 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, assets, messag
     
     // User methods
     
+    var getUsersProfile = function(){
+        var completeArr = [];
+        var deferred = $q.defer();
+        assets.get('', 'profile').then(function(res){
+            var arr = res.map(function(e, i){
+                return { username: e.user, uri: e.uri, type: e.type, thumb: e.thumb, cropped: e.cropped };
+            })
+            //console.log(res)
+            deferred.resolve(arr);
+        }, function(err){
+            deferred.reject(err);
+        })
+        return deferred.promise;
+    }
+    
     var getUsersObjsLoop = function(users, cb){
         var usersDataArr = [];
         var i = 0;
@@ -282,5 +297,5 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, assets, messag
         }
     });
     
-    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, userPromiseCb: userPromiseMain, getMessages: getMessages, msgPromise: msgPromiseMain, editMessage: editMessage, delMessage: delMessage, msgDelPromise: msgDeleteMain, msgEditPromise: msgEditMain };
+    return { promise: promiseMain, join: joinChat, getRooms: getRooms, createRoom: createRoom, deleteRoom: deleteRoom, editRoom: editRoom, getUsers: getUsers, leave: leaveChat, send: sendMessage, incoming: messageMain, getUsersProfile: getUsersProfile, userPromiseCb: userPromiseMain, getMessages: getMessages, msgPromise: msgPromiseMain, editMessage: editMessage, delMessage: delMessage, msgDelPromise: msgDeleteMain, msgEditPromise: msgEditMain };
 });

@@ -13,15 +13,25 @@ app.service('assets', function($cookies, $http, $q){
     
     var getAsset = function(username, locat){
         var deferred = $q.defer();
-        $http({ method: 'GET', url: 'chat/asset/lst', params: { user: username, location: locat }, headers: { 'Authorization': 'Bearer ' + token }}).then(function(response){
-            if(locat == 'profile'){
-                deferred.resolve(response.data[0]);
-            } else {
+        if(username.length > 0){
+            $http({ method: 'GET', url: 'chat/asset/lst', params: { user: username, location: locat }, headers: { 'Authorization': 'Bearer ' + token }}).then(function(response){
+                if(locat == 'profile'){
+                    deferred.resolve(response.data[0]);
+                } else {
+                    deferred.resolve(response.data);
+                }
+            }, function(err){
+                deferred.reject(err);
+            });
+        } else {
+            console.log('no username passed')
+            $http({ method: 'GET', url: 'chat/asset/lst', params: { location: locat }, headers: { 'Authorization': 'Bearer ' + token }}).then(function(response){
                 deferred.resolve(response.data);
-            }
+                console.log('test')
         }, function(err){
             deferred.reject(err);
         });
+        }
         return deferred.promise;
     };
     

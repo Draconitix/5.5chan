@@ -1,7 +1,8 @@
 <div class="chatAreaOverlay"></div>  
 <ul id="messageChatArea" class="messageChatArea">
     <li class="message" ng-repeat="msg in messages | orderBy : 'sentAt' ">
-    <h3 ng-if="msg.user == undefined" class="chatInfo">{[{ msg.date }]}</h3><h3 ng-class="msg.user == user ? 'chatCurrentUser chatInfo' : 'chatUsername chatInfo'">{[{ msg.user }]}</h3><h4 ng-if="msg.user" class="chatInfo">{[{ msg.date }]}</h4><i class="fas fa-edit editMsgIcon" ng-if="msg.user == user" ng-click="toggleEdit($index)"></i><i class="fas fa-trash-alt deleteMsgIcon" ng-if="msg.user == user && msg.editing == false" ng-click="delmessage({query: msg})"></i>
+    <div class="messageInfoWrapper"><div class="chatProfileImg" style="background-image: url({[{ geturi({ username: msg.user}) }]}) "></div>
+    <h3 ng-if="msg.user == undefined" class="chatInfo">{[{ msg.date }]}</h3><h3 ng-class="msg.user == user ? 'chatCurrentUser chatInfo' : 'chatUsername chatInfo'">{[{ msg.user }]}</h3><h4 ng-if="msg.user" class="chatInfo">{[{ msg.date }]}</h4><i class="fas fa-edit editMsgIcon chatInfo" ng-if="msg.user == user" ng-click="toggleEdit($index)"></i><i class="fas fa-trash-alt deleteMsgIcon chatInfo" ng-if="msg.user == user && msg.editing == false" ng-click="delmessage({query: msg})"></i></div>
     <div ng-if="msg.editing == true" class="msgEditArea"><textarea ng-model="msg.edit" type="text"></textarea><button ng-click="editmessage({ query: msg, pos: $index })">Edit</button></div> 
     <ul ng-if="msg.editing == false" class="msgParts"><li ng-repeat="part in msg.parts">
     <p ng-if="part.type == 'text'">{[{ part.text }]}</p>

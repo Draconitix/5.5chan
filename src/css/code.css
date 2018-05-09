@@ -346,7 +346,7 @@ body {
 }
 .chatSidebar {
   height: 100vh;
-  width: 20vw;
+  width: 24vw;
   min-width: 350px;
   background-color: #404040;
   position: absolute;
@@ -456,7 +456,7 @@ body {
   margin-left: 50px !important;
 }
 .sidebarCollapsed {
-  margin: 0px 0px 0px -20vw;
+  margin: 0px 0px 0px -24vw;
   transition: all 0.6s;
 }
 .chatAreaWindow {
@@ -468,7 +468,7 @@ body {
   transition: all 0.6s;
 }
 .chatWindowExpanded {
-  width: 80vw;
+  width: 76vw;
   transition: all 0.6s;
 }
 .msgAreaParent {
@@ -496,7 +496,7 @@ body {
   padding: 0;
 }
 .editMsgIcon {
-  opacity: 0.05;
+  opacity: 0.15;
   transition: opacity 0.4s;
 }
 .chatLeaveIcon {
@@ -507,12 +507,24 @@ body {
   top: 50%;
   transform: translateY(-50%);
 }
+.messageInfoWrapper {
+  margin: 0px 0px 20px;
+  position: relative;
+}
 .editMsgIcon:hover {
   opacity: 1;
   transition: opacity 0.4s;
 }
+.chatProfileImg {
+  background-size: cover;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  margin: 0px 0px 0px 0px;
+  border-radius: 100%;
+}
 .deleteMsgIcon {
-  opacity: 0.05;
+  opacity: 0.15;
   margin-left: 20px;
   transition: opacity 0.4s;
 }
@@ -526,7 +538,11 @@ body {
 }
 .chatInfo {
   display: inline-block;
-  margin: 0px 20px 20px 0px;
+  margin: 0 0px 0px 20px;
+  padding: 0;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
 }
 .messageRoomJoin {
   font-size: 17px;

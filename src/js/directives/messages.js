@@ -23,7 +23,8 @@ app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cook
             messages: '=messages',
             authorize: '&',
             editmessage: '&',
-            delmessage: '&'
+            delmessage: '&',
+            geturi: '&'
         },
         templateUrl: 'partials/directives/chat-message.html',
         link: function(scope, ele, attrs){

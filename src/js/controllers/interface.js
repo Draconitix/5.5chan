@@ -27,7 +27,29 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
                  e.editing = false;
              })
         })
+        
     };
+    interface.getUsersProfile().then(function(res){   
+    $scope.usersUriArr = res;
+    console.log(res)
+    $scope.getProfileUri = function(username){
+        var test;
+        $scope.usersUriArr.map(function(e, i){
+            if(e.username == username){
+                if(e.cropped == true){
+                    test = e.uri + 'cropped.png'; 
+                } else if(e.thumb == true) {
+                    test = e.uri + 'thumb.' + e.type; 
+                } else {
+                    test = e.uri + 'original.' + e.type; 
+                }
+            }
+        });
+        return test;
+    }
+    }, function(err){
+        console.log(err);
+    });
     $scope.leaveChat = function(){
         interface.leave($scope.joined);
         $scope.joined = false;
