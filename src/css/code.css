@@ -499,6 +499,14 @@ body {
   opacity: 0.05;
   transition: opacity 0.4s;
 }
+.chatLeaveIcon {
+  color: #fff;
+  margin-left: 10px;
+  font-size: 21px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
 .editMsgIcon:hover {
   opacity: 1;
   transition: opacity 0.4s;

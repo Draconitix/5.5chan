@@ -18,7 +18,7 @@
 <div class="expandSidebar"><i ng-if="sidebarExpanded == false" ng-click="sidebarToggle()" class="fas fa-chevron-right"></i><i ng-if="sidebarExpanded == true" ng-click="sidebarToggle()" class="fas fa-chevron-left"></i></div>      
 <div class="chatInputArea">
 <div class="wrapper">   
-<input ng-keypress="sendMessage($event)" type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><button ng-click="leaveChat()">Leave Chat Room</button></div></div>        
+<input ng-keypress="sendMessage($event)" type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><i class="fas fa-sign-out-alt chatLeaveIcon" ng-click="leaveChat()"></i></div></div>        
 <chat-messages id="msgAreaParent" class="msgAreaParent" messages="messages" authorize="trustUrl(url)" editmessage="editMessage(query, pos)" delmessage="deleteMessage(query)"></chat-messages> 
 </div>
 </div>        
