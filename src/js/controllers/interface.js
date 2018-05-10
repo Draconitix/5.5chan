@@ -1,5 +1,15 @@
 // JavaScript Document
-app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser, $window){
+app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser, $window, mediaApi){
+    mediaApi.videos('you could stop at five or six stores').then(function(res){
+        console.log(res);
+    }, function(err){
+        console.log(err);
+    })
+    mediaApi.images('cats').then(function(res){
+        console.log(res);
+    }, function(err){
+        console.log(err);
+    })
     // User data
     var token = $cookies.get('accessToken');
     if(typeof token === 'undefined'){ $state.go('login'); };
@@ -66,12 +76,12 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
                     console.log('exists')
                 }
             })
-        if(existsNum == 0){
-            var dt = new Date(Date.now());
-            $scope.joinedUsers.push({ username: data.user.username, uri: data.user.uri, type: data.user.type });  
-            $scope.messages.push({ date: getDate(dt), sentAt: Date.now(), parts: [{ type: 'alert' , user: data.user.username, alert: 'has joined the chatroom.'}], editing: false })
-            $scope.$apply();                                                                       
-        } 
+            if(existsNum == 0){
+                var dt = new Date(Date.now());
+                $scope.joinedUsers.push({ username: data.user.username, uri: data.user.uri, type: data.user.type });  
+                $scope.messages.push({ date: getDate(dt), sentAt: Date.now(), parts: [{ type: 'alert' , user: data.user.username, alert: 'has joined the chatroom.'}], editing: false })
+                $scope.$apply();                                                                       
+            } 
         };
         if(data.addUser == false){ $scope.joinedUsers.map(function(e, i){ if(e.username == data.user.username){ 
             var dt = new Date(Date.now());

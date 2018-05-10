@@ -1,0 +1,28 @@
+<div class="apiSearchArea">
+<div class="apiSearchInputArea">
+<input type="text" ng-placeholder="Search for {[{ mediatype }]}">
+<i class="fas fa-search apiSearchIcon"></i>    
+</div>    
+<ul class="apiSearchWrapper">
+<li ng-repeat="result in results">
+<div ng-if="result.type == 'video'" class="apiSearchVideos">
+    <iframe ng-if="result.viewed == true" ng-src="{[{ authorize({ url: result.uri }) }]}" allowfullscreen></iframe>
+    <div ng-if="result.viewed == false" style="background-image: url({[{ result.thumbnailUri }]})"; class="apiSearchVideosThumbnail">
+    <div class="overlay"></div>
+    <div class="infoWrapper">
+        <h3>{[{ result.title }]}</h3>
+            <div class="playIconArea">
+                <i class="fas fa-play playIcon"></i>    
+            </div>    
+        </div>
+    </div>
+</div>
+<div ng-if="result.type == 'image'" style="background-image: url({[{ result.image.thumbnailLink }]}); width: {[{ result.image.thumbnailWidth }]}px; height: : {[{ result.image.thumbnailHeight }]}px" class="apiSearchImage">
+    <div class="apiSearchImageDimensions">
+        {[{ result.image.thumbnailWidth }]} x {[{ result.image.thumbnailHeight }]}
+    </div>    
+</div>
+<i class="fas fa-plus-square apiSearchAddIcon"></i>    
+</li>
+</ul>
+</div>
