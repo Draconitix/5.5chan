@@ -1,7 +1,11 @@
-<div class="apiSearchArea">
+<div ng-if="toggle == true" class="apiSearchArea">
 <div class="apiSearchInputArea">
-<input type="text" ng-placeholder="Search for {[{ mediatype }]}">
-<i class="fas fa-search apiSearchIcon"></i>    
+<input type="text" ng-model="input.keyword" ng-placeholder="Search for {[{ searchType }]}">
+<i ng-click="search(input.keyword)" class="fas fa-search apiSearchIcon"></i> 
+<i ng-click="setSearchType('video')" class="fas fa-video apiSearchIcon"></i> 
+<i ng-click="setSearchType('image')" class="fas fa-image apiSearchIcon"></i> 
+<i ng-click="setSearchType('all')" class="far fa-clone apiSearchIcon"></i>    
+<p>{[{ searchError }]}</p>    
 </div>    
 <ul class="apiSearchWrapper">
 <li ng-repeat="result in results">
@@ -22,7 +26,7 @@
         {[{ result.image.thumbnailWidth }]} x {[{ result.image.thumbnailHeight }]}
     </div>    
 </div>
-<i class="fas fa-plus-square apiSearchAddIcon"></i>    
+<i ng-click="contentclick({ uri: result.uri })" class="fas fa-plus-square apiSearchAddIcon"></i>    
 </li>
 </ul>
 </div>

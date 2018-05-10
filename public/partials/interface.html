@@ -18,9 +18,11 @@
 <div class="expandSidebar"><i ng-if="sidebarExpanded == false" ng-click="sidebarToggle()" class="fas fa-chevron-right"></i><i ng-if="sidebarExpanded == true" ng-click="sidebarToggle()" class="fas fa-chevron-left"></i></div>      
 <div class="chatInputArea">
 <div class="wrapper">   
-<input ng-keypress="sendMessage($event)" type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><i class="fas fa-sign-out-alt chatLeaveIcon" ng-click="leaveChat()"></i></div></div>        
+<input ng-keypress="sendMessage($event)" type="text" ng-model="message.text" maxlength="15000" placeholder="Got something to say?" /><i class="fas fa-search chatSearchIcon" ng-click="searchToggle()"></i><i class="fas fa-sign-out-alt chatLeaveIcon" ng-click="leaveChat()"></i></div>
+</div>        
 <chat-messages id="msgAreaParent" class="msgAreaParent" messages="messages" authorize="trustUrl(url)" editmessage="editMessage(query, pos)" delmessage="deleteMessage(query)" geturi="getProfileUri(username)"></chat-messages> 
 </div>
+<api-search results="apiResults" contentclick="addToMsg(uri)" searchVideos="vidSearch(keyword)" searchImages="imgSearch(keyword)" authorize="trustUrl(url)" toggle="searchToggleBool"></api-search>      
 </div>        
 <div ng-if="adding == true && joined == false && editing == false">
 <button ng-click="toggleCreate()">Stop Adding</button>    

@@ -1,15 +1,5 @@
 // JavaScript Document
 app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser, $window, mediaApi){
-    mediaApi.videos('you could stop at five or six stores').then(function(res){
-        console.log(res);
-    }, function(err){
-        console.log(err);
-    })
-    mediaApi.images('cats').then(function(res){
-        console.log(res);
-    }, function(err){
-        console.log(err);
-    })
     // User data
     var token = $cookies.get('accessToken');
     if(typeof token === 'undefined'){ $state.go('login'); };
@@ -436,6 +426,38 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
             $('.chatSidebar').addClass('sidebarCollapsed');
         }
     };
+    
+    // Image/Video Search Api
+    
+    $scope.apiResults = [];
+    $scope.searchToggleBool = false;
+    $scope.searchToggle = function(){
+        if($scope.searchToggleBool == false){
+            $scope.searchToggleBool = false;
+        } else {
+            $scope.searchToggleBool = false;
+        }
+    };
+    $scope.vidSearch = function(keyword){
+        mediaApi.videos(keyword).then(function(res){
+            $scope.apiResults.concat(res);
+        }, function(err){
+            console.log(err);
+        })
+    }
+    $scope.imgSearch = function(keyword){
+        mediaApi.images(keyword).then(function(res){
+            $scope.apiResults.concat(res);
+        }, function(err){
+            console.log(err);
+        })
+    };
+    
+    $scope.addToMsg = function(uri){
+        $scope.message = $scope.message + ' ' + uri;
+        $scope.searchToggleBool = false;
+    }
+    
     // Form validation
     $scope.validate = function(input, field){
         var obj = {};
