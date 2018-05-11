@@ -5,6 +5,8 @@ app.service('mediaApi', function($q, $http){
     var searchId = '001326175283701008867:blxac3r7dw0';
     var imgStart = 1;
     var imgPrevKeyword = null;
+    var gifPrevKeyword = null;
+    var gifStart = 1;
     var getYoutubeVideos = function(keyword){
         var deferred = $q.defer();
         $http({ method: 'GET', url: 'https://www.googleapis.com/youtube/v3/search', params: { part: 'snippet, id', q: keyword, type: 'video', key: youtubeDataApiKey, maxResults: 50 }}).then(function(res){
@@ -20,15 +22,25 @@ app.service('mediaApi', function($q, $http){
     };
     var getGifs = function(keyword){
         var deferred = $q.defer();
-        $http({ method: 'GET', url: 'http://api.giphy.com/v1/gifs/search', params: { q: keyword, api_key: giphyApiKey, rating: 'pg-13', lang: 'en' }}).then(function(res){
+        if(gifPrevKeyword == keyword){
+            gifStart = gifStart + 25;
+        } else {
+            gifStart = 1;   
+        }
+        if(gifStart <= 101){
+        $http({ method: 'GET', url: 'http://api.giphy.com/v1/gifs/search', params: { q: keyword, api_key: giphyApiKey, rating: 'pg-13', lang: 'en', offset: gifStart }}).then(function(res){
             // Medium Thumbnail Iframe dimensions are height: 180px && width: 320px;
             var gifData = res.data.data.map(function(e, i){
                     return { type: 'gif', thumbnailUri: e.images.fixed_height_small.url, uri: e.images.original.url, height: e.images.fixed_height_small.height, width: e.images.fixed_height_small.width };  
             })
             deferred.resolve(gifData)
+            gifPrevKeyword = keyword;
         }, function(err){
             deferred.reject(err)
         });
+        } else {
+            deferred.reject('Maximum amount of requests fulfilled.')
+        }
         return deferred.promise;
     }
     var getGoogleImages = function(keyword){

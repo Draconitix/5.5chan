@@ -16,7 +16,7 @@
 <div class="apiSearchWrapper">
 <ul>  
 <li ng-repeat="result in results">
-<div ng-dblclick="contentclick({ uri: result.uri })" ng-if="result.type == 'video'" class="apiSearchVideos">
+<div ng-dblclick="contentclick({ uri: result.uri }); results = [];" ng-if="result.type == 'video'" class="apiSearchVideos">
     <iframe ng-if="result.viewed == true" ng-src="{[{ authorize({ url: result.uri + '?autoplay=1&controls=0' }) }]}" allowfullscreen></iframe>
     <div ng-if="result.viewed == false" style="background-image: url({[{ result.thumbnailUri }]})"; class="apiSearchVideosThumbnail">
     <div class="overlay"></div>
@@ -28,12 +28,12 @@
         </div>
     </div>
 </div>
-<div ng-click="contentclick({ uri: result.uri })" ng-if="result.type == 'image'" style="background-image: url({[{ result.image.thumbnailLink }]}); width: {[{ result.image.thumbnailWidth }]}px; height : {[{ result.image.thumbnailHeight }]}px" class="apiSearchImage">
+<div ng-click="contentclick({ uri: result.uri }); results = [];" ng-if="result.type == 'image'" style="background-image: url({[{ result.image.thumbnailLink }]}); width: {[{ result.image.thumbnailWidth }]}px; height : {[{ result.image.thumbnailHeight }]}px" class="apiSearchImage">
     <div class="apiSearchImageDimensions">
         <p>{[{ result.image.thumbnailWidth }]} x {[{ result.image.thumbnailHeight }]}</p>
     </div>    
 </div>
-<div ng-click="contentclick({ uri: result.uri })" ng-if="result.type == 'gif'" style="background-image: url({[{ result.thumbnailUri }]}); width: {[{ result.width }]}px; height : {[{ result.height }]}px" class="apiSearchImage">   
+<div ng-click="contentclick({ uri: result.uri }); results = [];" ng-if="result.type == 'gif'" style="background-image: url({[{ result.thumbnailUri }]}); width: {[{ result.width }]}px; height : {[{ result.height }]}px" class="apiSearchImage">   
 </div>    
 </li>
 </ul>      
