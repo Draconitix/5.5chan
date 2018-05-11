@@ -487,11 +487,11 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         $scope.message.text = $scope.message.text + ' ' + uri;
         $scope.apiResults.map(function(e, i){
             e.viewed = false;
-        }
+        });
         $scope.searchToggle();
         $scope.apiResults = [];
         $scope.$apply();
-        console.log()
+        console.log($scope.apiResults)
     }
     
     // Form validation

@@ -489,6 +489,7 @@ body {
   z-index: 0;
   background-size: cover;
   background-image: url('/images/defaultChatBg.jpg');
+  overflow-x: hidden;
 }
 .message {
   text-align: left;

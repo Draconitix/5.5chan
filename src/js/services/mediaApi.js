@@ -9,7 +9,7 @@ app.service('mediaApi', function($q, $http){
     var gifStart = 1;
     var getYoutubeVideos = function(keyword){
         var deferred = $q.defer();
-        $http({ method: 'GET', url: 'https://www.googleapis.com/youtube/v3/search', params: { part: 'snippet, id', q: keyword, type: 'video', key: youtubeDataApiKey, maxResults: 50 }}).then(function(res){
+        $http({ method: 'GET', url: 'https://www.googleapis.com/youtube/v3/search', params: { part: 'snippet, id', q: keyword, type: 'video', key: youtubeDataApiKey, maxResults: 50, safeSearch: 'strict' }}).then(function(res){
             // Medium Thumbnail Iframe dimensions are height: 180px && width: 320px;
             var vidData = res.data.items.map(function(e, i){
                     return { type: 'video', uri: 'https://www.youtube.com/embed/' + e.id.videoId, title: e.snippet.title, thumbnailUri: e.snippet.thumbnails.medium.url, viewed: false };  
