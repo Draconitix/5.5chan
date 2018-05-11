@@ -18,6 +18,19 @@ app.service('mediaApi', function($q, $http){
         });
         return deferred.promise;
     };
+    var getGifs = function(keyword){
+        var deferred = $q.defer();
+        $http({ method: 'GET', url: 'http://api.giphy.com/v1/gifs/search', params: { q: keyword, api_key: giphyApiKey, rating: 'pg-13', lang: 'en' }}).then(function(res){
+            // Medium Thumbnail Iframe dimensions are height: 180px && width: 320px;
+            var gifData = res.data.data.map(function(e, i){
+                    return { type: 'gif', thumbnailUri: e.images.fixed_height_small.url, uri: e.images.original.url, height: e.images.fixed_height_small.height, width: e.images.fixed_height_small.width };  
+            })
+            deferred.resolve(gifData)
+        }, function(err){
+            deferred.reject(err)
+        });
+        return deferred.promise;
+    }
     var getGoogleImages = function(keyword){
        var deferred = $q.defer();    
        if(imgPrevKeyword == keyword){
@@ -41,5 +54,5 @@ app.service('mediaApi', function($q, $http){
         return deferred.promise;
     }
 
-    return { videos: getYoutubeVideos, images: getGoogleImages }
+    return { videos: getYoutubeVideos, images: getGoogleImages, gifs: getGifs }
 });

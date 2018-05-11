@@ -9,6 +9,11 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
 		$state.go('login');
 	};
     
+    /*mediaApi.gifs('left 4 dead').then(function(res){
+        console.log(res)
+    }, function(err){
+        console.log(err)
+    })*/
     
     // Chat data
     var failed = false;
@@ -417,11 +422,13 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         if($scope.sidebarExpanded == false){
             $scope.sidebarExpanded = true;
             $('.chatAreaWindow').addClass('chatWindowExpanded');
+            $('.apiSearchArea').addClass('chatWindowExpanded');
             $('.chatSidebar').addClass('sidebarExpanded');
             $('.chatSidebar').removeClass('sidebarCollapsed');
         } else if($scope.sidebarExpanded == true){
             $scope.sidebarExpanded = false;
             $('.chatAreaWindow').removeClass('chatWindowExpanded');
+            $('.apiSearchArea').removeClass('chatWindowExpanded');
             $('.chatSidebar').removeClass('sidebarExpanded');
             $('.chatSidebar').addClass('sidebarCollapsed');
         }
@@ -433,29 +440,56 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     $scope.searchToggleBool = false;
     $scope.searchToggle = function(){
         if($scope.searchToggleBool == false){
-            $scope.searchToggleBool = false;
+            $scope.searchToggleBool = true;
         } else {
             $scope.searchToggleBool = false;
         }
     };
     $scope.vidSearch = function(keyword){
         mediaApi.videos(keyword).then(function(res){
-            $scope.apiResults.concat(res);
+            console.log(res);
+            if($scope.apiResults.length > 0 && $scope.apiResults.length < 50){
+                $scope.apiResults = $scope.apiResults.concat(res);
+            } else {
+                $scope.apiResults = res;
+            };
         }, function(err){
             console.log(err);
         })
     }
     $scope.imgSearch = function(keyword){
         mediaApi.images(keyword).then(function(res){
-            $scope.apiResults.concat(res);
+            console.log(res);
+           if($scope.apiResults.length > 0){
+                $scope.apiResults = $scope.apiResults.concat(res);
+            } else {
+                $scope.apiResults = res;
+            };
+        }, function(err){
+            console.log(err);
+        })
+    };
+    
+    $scope.gifSearch = function(keyword){
+        mediaApi.gifs(keyword).then(function(res){
+            console.log(res);
+           if($scope.apiResults.length > 0){
+                $scope.apiResults = $scope.apiResults.concat(res);
+            } else {
+                $scope.apiResults = res;
+            };
         }, function(err){
             console.log(err);
         })
     };
     
     $scope.addToMsg = function(uri){
-        $scope.message = $scope.message + ' ' + uri;
-        $scope.searchToggleBool = false;
+        $scope.message.text = $scope.message.text + ' ' + uri;
+        $scope.apiResults.map(function(e, i){
+            e.viewed = false;
+        })
+        
+        $scope.searchToggle();
     }
     
     // Form validation

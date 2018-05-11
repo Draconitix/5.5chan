@@ -1,32 +1,41 @@
-<div ng-if="toggle == true" class="apiSearchArea">
+<div ng-class="toggle ? 'apiSearchArea' : 'apiSearchArea apiSearchAreaCollapsed'">
 <div class="apiSearchInputArea">
-<input type="text" ng-model="input.keyword" ng-placeholder="Search for {[{ searchType }]}">
-<i ng-click="search(input.keyword)" class="fas fa-search apiSearchIcon"></i> 
+<div class="wrapper">  
+<input type="text" ng-model="keyword.input" placeholder="Search for {[{ searchType }]} content">
+<div class="apiSearchMethodsWrapper">
+<i ng-click="search(keyword.input)" class="fas fa-search apiSearchIcon"></i> 
 <i ng-click="setSearchType('video')" class="fas fa-video apiSearchIcon"></i> 
 <i ng-click="setSearchType('image')" class="fas fa-image apiSearchIcon"></i> 
-<i ng-click="setSearchType('all')" class="far fa-clone apiSearchIcon"></i>    
-<p>{[{ searchError }]}</p>    
+<i ng-click="setSearchType('gif')" class="far fa-clone apiSearchIcon"></i> 
+<!-- <i ng-click="contentclick({ uri: searchType })" class="fas fa-search apiSearchIcon"></i> -->     
+</div>        
+<p class="apiSearchError" ng-if="searchError.length > 0">{[{ searchError }]}</p>    
 </div>    
-<ul class="apiSearchWrapper">
+</div> 
+    
+<div class="apiSearchWrapper">
+<ul>  
 <li ng-repeat="result in results">
-<div ng-if="result.type == 'video'" class="apiSearchVideos">
-    <iframe ng-if="result.viewed == true" ng-src="{[{ authorize({ url: result.uri }) }]}" allowfullscreen></iframe>
+<div ng-dblclick="contentclick({ uri: result.uri })" ng-if="result.type == 'video'" class="apiSearchVideos">
+    <iframe ng-if="result.viewed == true" ng-src="{[{ authorize({ url: result.uri + '?autoplay=1&controls=0' }) }]}" allowfullscreen></iframe>
     <div ng-if="result.viewed == false" style="background-image: url({[{ result.thumbnailUri }]})"; class="apiSearchVideosThumbnail">
     <div class="overlay"></div>
     <div class="infoWrapper">
         <h3>{[{ result.title }]}</h3>
-            <div class="playIconArea">
+            <div ng-click="result.viewed = true" class="playIconArea">
                 <i class="fas fa-play playIcon"></i>    
             </div>    
         </div>
     </div>
 </div>
-<div ng-if="result.type == 'image'" style="background-image: url({[{ result.image.thumbnailLink }]}); width: {[{ result.image.thumbnailWidth }]}px; height: : {[{ result.image.thumbnailHeight }]}px" class="apiSearchImage">
+<div ng-click="contentclick({ uri: result.uri })" ng-if="result.type == 'image'" style="background-image: url({[{ result.image.thumbnailLink }]}); width: {[{ result.image.thumbnailWidth }]}px; height : {[{ result.image.thumbnailHeight }]}px" class="apiSearchImage">
     <div class="apiSearchImageDimensions">
-        {[{ result.image.thumbnailWidth }]} x {[{ result.image.thumbnailHeight }]}
+        <p>{[{ result.image.thumbnailWidth }]} x {[{ result.image.thumbnailHeight }]}</p>
     </div>    
 </div>
-<i ng-click="contentclick({ uri: result.uri })" class="fas fa-plus-square apiSearchAddIcon"></i>    
+<div ng-click="contentclick({ uri: result.uri })" ng-if="result.type == 'gif'" style="background-image: url({[{ result.thumbnailUri }]}); width: {[{ result.width }]}px; height : {[{ result.height }]}px" class="apiSearchImage">   
+</div>    
 </li>
-</ul>
+</ul>      
+</div>
 </div>
