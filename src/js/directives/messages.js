@@ -1,4 +1,4 @@
-app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cookies, jwtHelper){
+app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cookies, jwtHelper, $rootScope){
     var token = $cookies.get('accessToken');
     var user = jwtHelper.decodeToken(token);
     var getDate = function (date) {
@@ -43,7 +43,9 @@ app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cook
                       var h = Math.round(hInit);
                       var range = h - 350;
                       //scope.atBottom = range <= y && y <= h;
+                      
                       if(range <= y && y <= h){
+                          $rootScope.newMsgCount = 0;
                           $('.chatScrollToBottom').addClass('chatScrollToBottomHidden')
                       } else {
                           $('.chatScrollToBottom').removeClass('chatScrollToBottomHidden');

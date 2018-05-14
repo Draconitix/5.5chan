@@ -1,5 +1,5 @@
 // JavaScript Document
-app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser, $window, mediaApi){
+app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser, $window, mediaApi, $rootScope){
     // User data
     var token = $cookies.get('accessToken');
    
@@ -307,13 +307,13 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
                      scrollTop: elem.scrollHeight
                  }, 600);
             } else {
-                $scope.newMsgCount++;
+                $rootScope.newMsgCount++;
                 $scope.$apply();
             }
         });
     }
     
-    $scope.newMsgCount = 0;
+    $rootScope.newMsgCount = 0;
     $scope.atBottom == true;
     $scope.scrollToBottom = function(){
         var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
@@ -324,7 +324,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     }
     $scope.$watch('atBottom', function(newV, oldV){
         if(oldV == false && newV == true){
-            $scope.newMsgCount = 0;
+            $rootScope.newMsgCount = 0;
             console.log('reset new msg count')
         }
     })
