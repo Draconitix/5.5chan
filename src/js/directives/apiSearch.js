@@ -14,6 +14,9 @@ app.directive('apiSearch', function(){
         link: function(scope, elem, attrs){
             console.log('apiSearch directive ready')
             scope.searchType = 'video';
+            $('.apiSearchWrapper').ready(function(){
+                new PerfectScrollbar('.apiSearchWrapper');
+            })
             scope.setSearchType = function(type){
                 scope.searchType = type;
             };

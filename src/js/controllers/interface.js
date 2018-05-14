@@ -291,6 +291,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     $('.messageChatArea, .msgAreaParent, .message').ready(function(){
         // Set msg chat area height to height of all messages combined
         messageScroll = new PerfectScrollbar('.msgAreaParent', { wheelSpeed: 3 });
+        
     })
     var scroll = function(){
         messageScroll.update();
@@ -299,7 +300,8 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
             var y = $('.msgAreaParent').scrollTop();
             var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
             var h = Math.round(hInit);
-            var range = h - 350;
+            var range = h - 400;
+            console.log(h + '\n' + y)
             $scope.atBottom = range <= y && y <= h;
             if($scope.atBottom == true){
                 console.log('scrolled to bottom')
@@ -378,6 +380,18 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
   
     $('#msgAreaParent').scroll(function(){
         var elem = document.getElementById('msgAreaParent');
+        var y = $('.msgAreaParent').scrollTop();
+          var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+          var h = Math.round(hInit);
+          var range = h - 400;
+          //scope.atBottom = range <= y && y <= h;
+
+          if(range <= y && y <= h){
+              $rootScope.newMsgCount = 0;
+              $('.chatScrollToBottom').addClass('chatScrollToBottomHidden')
+          } else {
+              $('.chatScrollToBottom').removeClass('chatScrollToBottomHidden');
+          }
     })
     interface.incoming(msgCb);
     $scope.editMessage = function(query, pos){

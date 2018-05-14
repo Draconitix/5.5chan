@@ -41,7 +41,7 @@ app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cook
                       var y = $('.msgAreaParent').scrollTop();
                       var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
                       var h = Math.round(hInit);
-                      var range = h - 350;
+                      var range = h - 400;
                       //scope.atBottom = range <= y && y <= h;
                       
                       if(range <= y && y <= h){
