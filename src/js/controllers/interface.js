@@ -2,6 +2,7 @@
 app.controller('interfaceState', function($scope, $state, $cookies, interface, jwtHelper, formInputValidate, $sce, messageParser, $window, mediaApi){
     // User data
     var token = $cookies.get('accessToken');
+   
     if(typeof token === 'undefined'){ $state.go('login'); };
     $scope.user = jwtHelper.decodeToken(token);
     $scope.logout = function(){
@@ -17,6 +18,8 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
     
     // Chat data
     var failed = false;
+    var currentReqStart = 0;
+    var currentReqEnd = 0;
     $scope.chatrooms = [];
     $scope.joined = $cookies.get('chatroom') != undefined ? $cookies.get('chatroom') : false;
     $scope.joinedUsers = [];
@@ -25,7 +28,14 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         $scope.messages = [];
         interface.join(name);
         interface.getMessages(name).then(function(res){
-            $scope.messages = res;
+            currentReqStart = res.length;
+            currentReqEnd = currentReqStart - 30;
+            res.map(function(e, i){
+                if(i >= currentReqEnd && i <= currentReqStart){
+                    $scope.messages.push(e);
+                    //console.log(i);
+                }
+            });
             $scope.messages.map(function(e, i){
                  var time = new Date(e.sentAt)
                  e.date = getDate(time);
@@ -258,7 +268,15 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         };*/
         interface.join($scope.joined);
         interface.getMessages($scope.joined).then(function(res){
-            $scope.messages = res;
+            $scope.messages = [];
+            currentReqStart = res.length;
+            currentReqEnd = currentReqStart - 25;
+            res.map(function(e, i){
+                if(i >= currentReqEnd && i <= currentReqStart){
+                    $scope.messages.push(e);
+                    //console.log(i);
+                }
+            });
             $scope.messages.map(function(e, i){
                  var time = new Date(e.sentAt)
                  e.date = getDate(time);
@@ -268,6 +286,49 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         })
     }
     
+    // Scrolling
+    var messageScroll;
+    $('.messageChatArea, .msgAreaParent, .message').ready(function(){
+        // Set msg chat area height to height of all messages combined
+        messageScroll = new PerfectScrollbar('.msgAreaParent', { wheelSpeed: 3 });
+    })
+    var scroll = function(){
+        messageScroll.update();
+         $('.messageAreaParent, .messageChatArea, .message').ready(function(){
+            var elem = document.getElementsByClassName('msgAreaParent')[0];
+            var y = $('.msgAreaParent').scrollTop();
+            var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+            var h = Math.round(hInit);
+            var range = h - 350;
+            $scope.atBottom = range <= y && y <= h;
+            if($scope.atBottom == true){
+                console.log('scrolled to bottom')
+                $(".msgAreaParent").animate({
+                     scrollTop: elem.scrollHeight
+                 }, 600);
+            } else {
+                $scope.newMsgCount++;
+                $scope.$apply();
+            }
+        });
+    }
+    
+    $scope.newMsgCount = 0;
+    $scope.atBottom == true;
+    $scope.scrollToBottom = function(){
+        var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+        var h = Math.round(hInit);
+        $(".msgAreaParent").animate({
+             scrollTop: h
+        }, 600);
+    }
+    $scope.$watch('atBottom', function(newV, oldV){
+        if(oldV == false && newV == true){
+            $scope.newMsgCount = 0;
+            console.log('reset new msg count')
+        }
+    })
+    
     // Messaging
     
     $scope.messages = [];
@@ -275,8 +336,6 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
         return $sce.trustAsResourceUrl(url);
     };
     $scope.message = { text: "" };
-    $scope.atBottom = false;
-	
     $scope.sendMessage = function(event){
 		if($scope.message.text != "" && event.keyCode === 13){
 			var cb = function(res){
@@ -288,21 +347,7 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
 			}
 			interface.send($scope.message.text, cb);
 			$scope.message.text = "";
-			$('.msgAreaParent, .messageChatArea, .messages').ready(function(){
-				var elem = document.getElementsByClassName('msgAreaParent')[0];
-				$('.msgAreaParent').scroll(function(){
-					  var y = elem.scrollTop;
-					  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
-					  var h = Math.round(hInit);
-					  var range = h - 200;
-					  $scope.atBottom = range <= y && y <= h;
-				});
-				if($scope.atBottom == true){
-					$(".msgAreaParent").animate({
-						 scrollTop: elem.scrollHeight
-					 }, 600);
-				}
-			})
+            scroll();
 		}
     }
     var getDate = function (date) {
@@ -321,34 +366,13 @@ app.controller('interfaceState', function($scope, $state, $cookies, interface, j
               var strTime = hours + ':' + minutes + ' ' + ampm;
               return monthNames[month - 1] + ' ' + Math.round(day) + ', ' + year + ' ' + strTime;
     };
-	$('.msgAreaParent').scroll(function(){
-                  var y = elem.scrollTop;
-                  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
-                  var h = Math.round(hInit);
-                  var range = h - 200;
-                  $scope.atBottom = range <= y && y <= h;
-            });
     var msgCb = function(msgData){
         var dt = new Date(Date.now());
         msgData.date = getDate(dt);
         msgData.editing = false;
         $scope.messages.push(msgData);
         $scope.$apply();
-        $('.msgAreaParent, .messageChatArea, .messages').ready(function(){
-            var elem = document.getElementsByClassName('msgAreaParent')[0];
-			$('.msgAreaParent').scroll(function(){
-					  var y = elem.scrollTop;
-					  var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
-					  var h = Math.round(hInit);
-					  var range = h - 200;
-					  $scope.atBottom = range <= y && y <= h;
-			});
-            if($scope.atBottom == true){
-                $(".msgAreaParent").animate({
-                     scrollTop: elem.scrollHeight
-                 }, 600);
-            }
-    })
+        scroll();
     }
  
   

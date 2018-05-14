@@ -22,6 +22,10 @@
 </div>        
 <chat-messages id="msgAreaParent" class="msgAreaParent" messages="messages" authorize="trustUrl(url)" editmessage="editMessage(query, pos)" delmessage="deleteMessage(query)" geturi="getProfileUri(username)"></chat-messages> 
 </div>
+<div class="chatScrollToBottom chatScrollToBottomHidden">
+<i ng-click="scrollToBottom()" class="fas fa-angle-double-down"></i><p>{[{ newMsgCount }]} new message(s)</p>    
+<div class="clear"></div>    
+</div> 
 <api-search results="apiResults" contentclick="addToMsg(uri)" searchgifs="gifSearch(keyword)" searchvids="vidSearch(keyword)" searchimgs="imgSearch(keyword)" authorize="trustUrl(url)" toggle="searchToggleBool"></api-search>      
 </div>        
 <div ng-if="adding == true && joined == false && editing == false">

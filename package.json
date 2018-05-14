@@ -36,7 +36,8 @@
     "randomstring": "*",
     "rimraf": "*",
     "jquery": "*",
-    "mongodb": "*"
+    "mongodb": "*",
+    "perfect-scrollbar": "*"
   },
   "devDependencies": {
     "grunt": "latest",

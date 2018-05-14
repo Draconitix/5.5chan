@@ -28,6 +28,28 @@ app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cook
         },
         templateUrl: 'partials/directives/chat-message.html',
         link: function(scope, ele, attrs){
+            var messageScroll;
+            var elem = document.getElementsByClassName('msgAreaParent')[0];
+            $('.messageChatArea, .msgAreaParent').ready(function(){
+                // Set msg chat area height to height of all messages combined
+                new PerfectScrollbar('.msgAreaParent', { wheelSpeed: 3 });
+                var h = $('.messageChatArea').height();
+                //console.log('msgChatArea height: ' + h)
+                $(".msgAreaParent").scrollTop(h)
+                 var container = document.getElementById('msgAreaParent');
+                    container.addEventListener('ps-scroll-y', function(){
+                      var y = $('.msgAreaParent').scrollTop();
+                      var hInit = $('.messageChatArea').innerHeight() - $('.msgAreaParent').outerHeight();
+                      var h = Math.round(hInit);
+                      var range = h - 350;
+                      //scope.atBottom = range <= y && y <= h;
+                      if(range <= y && y <= h){
+                          $('.chatScrollToBottom').addClass('chatScrollToBottomHidden')
+                      } else {
+                          $('.chatScrollToBottom').removeClass('chatScrollToBottomHidden');
+                      }
+                    }); 
+            }) 
             scope.user = user.username;
             scope.toggleEdit = function(index){
                 if(scope.messages[index].editing == false){
@@ -36,19 +58,7 @@ app.directive('chatMessages', function($location, $anchorScroll, $timeout, $cook
                 } else {
                     scope.messages[index].editing = false;    
                 }
-            }; 
-            var scroll = function(){
-                $timeout(function(){
-                    //window.location.hash = "";
-                    //$location.hash('bottomMessage')
-                    //$anchorScroll();
-                    var elem = document.getElementById('msgAreaParent');
-                    $(".msgAreaParent").animate({
-                         scrollTop: elem.scrollHeight
-                     }, 0);
-                })    
-            }
-            scroll();   
+            };  
             $('.expandSidebar').hover(function(){
                     $('.message').addClass('expandSidebarHover');
             });

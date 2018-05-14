@@ -151,8 +151,12 @@ app.service('interface', function($cookies, $http, $q, jwtHelper, assets, messag
         var main = function(){
             var currentUser = users[i];
             assets.get(users[i], 'profile').then(function(res){
-                usersDataArr.push({ username: currentUser, uri: res.uri, thumb: res.thumb, type: res.type });
-                //console.log(res.uri)
+                if(res.length > 0){
+                    usersDataArr.push({ username: currentUser, uri: res.uri, thumb: res.thumb, type: res.type, cropped: res.cropped });
+                } else {
+                     usersDataArr.push({ username: currentUser, uri: 'images/defaultUserBg', thumb: false, type: 'png', cropped: false, default: true });
+                    console.log('no img found')
+                }
                 loop();
             }, function(err){
                 loop();
